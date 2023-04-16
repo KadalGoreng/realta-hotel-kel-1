@@ -12,7 +12,7 @@ export default function OrderSummary(props) {
   };
 
   return (
-    <div className="flex flex-col gap-5 rounded-xl w-96 bg-white shadow-xl p-4">
+    <div className="flex flex-col gap-5 rounded-xl w-96 h-96 bg-white shadow-xl p-4">
       <Space direction="vertical">
         <RangePicker style={{ width: "100%" }} />
       </Space>

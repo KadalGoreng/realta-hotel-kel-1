@@ -1,20 +1,19 @@
+import { GetBookingHotelRequest } from "@/Redux/Actions/BookingHotelAction";
 import Card from "@/components/booking/Card";
 import Filter from "@/components/booking/Filter";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Booking() {
-  const [hotel, setHotel] = useState([]);
+  const { bookingHotel } = useSelector((state: any) => state.bookingHotelState);
 
-  const getHotel = () => {
-    axios
-      .get("http://localhost:3002/booking/hotels")
-      .then((res) => setHotel(res.data));
-  };
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getHotel();
+    dispatch(GetBookingHotelRequest());
   }, []);
+
+  console.log(process.env.NEXT_PUBLIC_BASE_URL_API);
 
   return (
     <div className="flex">
@@ -24,9 +23,11 @@ export default function Booking() {
           <div className="p-5">
             <div className="mb-3">Home</div>
             <div className="flex flex-col gap-10">
-              {hotel.map((item: any) => (
-                <Card {...item} />
-              ))}
+              {bookingHotel.length === 0 ? (
+                <div className="h-[100vh]">Loading...</div>
+              ) : (
+                bookingHotel.map((item: any) => <Card {...item} />)
+              )}
             </div>
           </div>
         </div>

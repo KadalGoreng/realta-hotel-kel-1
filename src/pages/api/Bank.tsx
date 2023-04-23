@@ -46,6 +46,15 @@ const deleted = async (id: any) => {
     return await error;
   }
 };
-
+const search = async (name: any) => {
+  try {
+    const result = await axios.get(
+      `${config.domain}/payment/bank/search/${name}`
+    );
+    return result.data;
+  } catch (error) {
+    return await error;
+  }
+};
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { create, read, findOne, update, deleted };
+export default { create, read, findOne, update, deleted, search };

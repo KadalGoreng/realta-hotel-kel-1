@@ -10,6 +10,8 @@ import {
   EditBankFailed,
   DelBankSuccess,
   DelBankFailed,
+  SearchBankSuccess,
+  SearchBankFailed,
 } from "../action/BankAction";
 import BankApi from "@/pages/api/Bank";
 
@@ -58,5 +60,13 @@ function* DeleteBank(action: any): any {
     yield put(DelBankFailed(error));
   }
 }
-
-export { handleBank, createBank, FindBank, EditBank, DeleteBank };
+function* SearchBank(action: any): any {
+  const { payload } = action;
+  try {
+    const result = yield call(BankApi.search, payload);
+    yield put(SearchBankSuccess(result));
+  } catch (error) {
+    yield put(SearchBankFailed(error));
+  }
+}
+export { handleBank, createBank, FindBank, EditBank, DeleteBank, SearchBank };

@@ -27,6 +27,10 @@ const FintechReduce = (state = INIT_STATE, action: any) => {
       return { ...state };
     case ActionType.DEL_FINTECH_SUCCESS:
       return DelFintechSuccessfully(state, action);
+    case ActionType.SEARCH_FINTECH_REQUEST:
+      return { ...state };
+    case ActionType.SEARCH_FINTECH_SUCCESS:
+      return SearchFintechSuccessfully(state, action);
     default:
       return { ...state };
   }
@@ -66,5 +70,11 @@ const DelFintechSuccessfully = (state: any, action: any) => {
     ...state,
   };
 };
-
+const SearchFintechSuccessfully = (state: any, action: any) => {
+  const { payload } = action;
+  return {
+    ...state,
+    fintechs: payload,
+  };
+};
 export default FintechReduce;

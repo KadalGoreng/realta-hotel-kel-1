@@ -5,6 +5,8 @@ import {
   GetTransactionRequest,
   DelTransactionRequest,
 } from "./../../../redux-saga/action/TransactionAction";
+import { paginate } from "@/utils/paginate";
+import Pagination from "@/components/Pagination";
 
 export default function TransactionViewSaga() {
   const dispatch = useDispatch();
@@ -14,9 +16,18 @@ export default function TransactionViewSaga() {
   const [displayEdit, setDisplayEdit] = useState<any>(false);
   const [id, setId] = useState();
 
+  const pageSize = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
     dispatch(GetTransactionRequest());
   }, [dispatch, refresh]);
+
+  const handlePageChange = (page: any) => {
+    setCurrentPage(page);
+  };
+
+  const trxPaginate = paginate(transactions, currentPage, pageSize);
 
   return (
     <div>
@@ -73,75 +84,91 @@ export default function TransactionViewSaga() {
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr className="border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-1 py-2">
                         Transaction Number
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-1 py-2">
                         Trx Date
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-1 py-2">
                         Debet
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-1 py-2">
                         Credit
                       </th>
                       <th scope="col" className="px-6 py-3 text-center">
                         Note
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-1 py-2">
                         Order Number
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-1 py-2">
                         Source
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-1 py-2">
                         Target
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-1 py-2">
                         Transaction Ref
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-1 py-2">
                         Type
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-1 py-2">
                         User
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {transactions &&
-                      transactions.map((item: any) => {
-                        return (
-                          <>
-                            <tr
-                              className="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
-                              key={item.patrId}
-                            >
-                              <th scope="row" className="px-6 py-4">
-                                {item.patrTrxId}
-                              </th>
-                              <th scope="row" className="px-6 py-4">
-                                {item.patrModifiedDate}
-                              </th>
-                              <td className="px-6 py-4">{item.patrDebet}</td>
-                              <td className="px-6 py-4">{item.patrCredit}</td>
-                              <td className="px-6 py-4">{item.patrNote}</td>
-                              <td className="px-6 py-4">
-                                {item.patrOrderNumber}
-                              </td>
-                              <td className="px-6 py-4">{item.patrSourceId}</td>
-                              <td className="px-6 py-4">{item.patrTargetId}</td>
-                              <td className="px-6 py-4">
-                                {item.patrTrxNumberRef}
-                              </td>
-                              <td className="px-6 py-4">{item.patrtype}</td>
-                              <td className="px-6 py-4">{item.patrUser}</td>
-                            </tr>
-                          </>
-                        );
-                      })}
+                    {trxPaginate.map((item: any) => {
+                      return (
+                        <>
+                          <tr
+                            className="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
+                            key={item.patrId}
+                          >
+                            <th scope="row" className="px-1 py-2">
+                              {item.patrTrxId}
+                            </th>
+                            <th scope="row" className="px-1 py-2">
+                              {Date(item.patrModifiedDate)
+                                .toString()
+                                .slice(0, 10)}
+                            </th>
+                            <td className="px-1 py-2">
+                              {item.patrDebet != 0 ? item.patrDebet : " "}
+                            </td>
+                            <td className="px-1 py-2">
+                              {item.patrCredit != "0" ? item.patrCredit : " "}
+                            </td>
+                            <td className="px-1 py-2">{item.patrNote}</td>
+                            <td className="px-1 py-2">
+                              {item.patrOrderNumber}
+                            </td>
+                            <td className="px-1 py-2">{item.patrSourceId}</td>
+                            <td className="px-1 py-2">{item.patrTargetId}</td>
+                            <td className="px-1 py-2">
+                              {item.patrTrxNumberRef}
+                            </td>
+                            <td className="px-1 py-2">{item.patrType}</td>
+                            <td className="px-1 py-2">
+                              {item.patrUser["userFullName"]}
+                            </td>
+                          </tr>
+                        </>
+                      );
+                    })}
                   </tbody>
                 </table>
+
+                <div className="w-full mt-8 items-center">
+                  <Pagination
+                    items={transactions.length}
+                    pageSize={pageSize}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
               </div>
             </div>
           </div>

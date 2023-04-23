@@ -7,6 +7,8 @@ import {
   GetAccountRequest,
   DelAccountRequest,
 } from "./../../../redux-saga/action/AccountAction";
+import { paginate } from "@/utils/paginate";
+import Pagination from "@/components/Pagination";
 
 export default function AccountViewSaga() {
   const dispatch = useDispatch();
@@ -15,7 +17,8 @@ export default function AccountViewSaga() {
   const [display, setDisplay] = useState<any>(false);
   const [displayEdit, setDisplayEdit] = useState<any>(false);
   const [id, setId] = useState();
-
+  const pageSize = 10;
+  const [currentPage, setCurrentPage] = useState(1);
   useEffect(() => {
     dispatch(GetAccountRequest());
   }, [dispatch, refresh]);
@@ -34,6 +37,13 @@ export default function AccountViewSaga() {
       setRefresh(true);
     }
   };
+
+  const handlePageChange = (page: any) => {
+    setCurrentPage(page);
+  };
+
+  const accountPaginate = paginate(accounts, currentPage, pageSize);
+
   return (
     <div>
       <Layout>
@@ -137,52 +147,63 @@ export default function AccountViewSaga() {
                         </tr>
                       </thead>
                       <tbody>
-                        {accounts &&
-                          accounts.map((item: any) => {
-                            return (
-                              <>
-                                <tr
-                                  className="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
-                                  key={item.usacEntityId}
-                                >
-                                  <th scope="row" className="px-6 py-4">
-                                    {item.usacAccountNumber}
-                                  </th>
-                                  <td className="px-6 py-4">{item.usacType}</td>
-                                  <td className="px-6 py-4">
-                                    {item.usacSaldo}
-                                  </td>
-                                  <td className="px-6 py-4">{item.usacType}</td>
-                                  <td className="px-6 py-4 text-center">
-                                    <button
-                                      type="submit"
-                                      onClick={() =>
-                                        onUpdate(
-                                          item.usacEntityId,
-                                          item.usacUserId,
-                                          item.usacAccountNumber
-                                        )
-                                      }
-                                      className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-                                    >
-                                      Edit
-                                    </button>
-                                    <button
-                                      type="submit"
-                                      onClick={() =>
-                                        onDelete(item.AccountEntityId)
-                                      }
-                                      className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                                    >
-                                      Delete
-                                    </button>
-                                  </td>
-                                </tr>
-                              </>
-                            );
-                          })}
+                        {accountPaginate.map((item: any) => {
+                          return (
+                            <>
+                              <tr
+                                className="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
+                                key={item.usacEntityId}
+                              >
+                                <th scope="row" className="px-6 py-4">
+                                  {item.usacAccountNumber}
+                                </th>
+                                <td className="px-6 py-4">
+                                  {item.usacEntity["bank"] !== null
+                                    ? item.usacEntity["bank"]["bankName"]
+                                    : item.usacEntity["paymentGateway"][
+                                        "pagaName"
+                                      ]}
+                                </td>
+                                <td className="px-6 py-4">{item.usacSaldo}</td>
+                                <td className="px-6 py-4">{item.usacType}</td>
+                                <td className="px-6 py-4 text-center">
+                                  <button
+                                    type="submit"
+                                    onClick={() =>
+                                      onUpdate(
+                                        item.usacEntityId,
+                                        item.usacUserId,
+                                        item.usacAccountNumber
+                                      )
+                                    }
+                                    className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                                  >
+                                    Edit
+                                  </button>
+                                  <button
+                                    type="submit"
+                                    onClick={() =>
+                                      onDelete(item.AccountEntityId)
+                                    }
+                                    className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                                  >
+                                    Delete
+                                  </button>
+                                </td>
+                              </tr>
+                            </>
+                          );
+                        })}
                       </tbody>
                     </table>
+                    <div className="w-full mt-8 items-center">
+                      <Pagination
+                        items={accounts.length}
+                        pageSize={pageSize}
+                        currentPage={currentPage}
+                        onPageChange={handlePageChange}
+                      />
+                    </div>
                   </div>
                   {/* Main modal */}
                   <div

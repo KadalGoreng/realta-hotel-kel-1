@@ -17,3 +17,7 @@ export const DEL_FINTECH_FAILED = "fintech/del/failed";
 export const FIND_FINTECH_REQUEST = "fintech/find/request";
 export const FIND_FINTECH_SUCCESS = "fintech/find/success";
 export const FIND_FINTECH_FAILED = "fintech/find/failed";
+
+export const SEARCH_FINTECH_REQUEST = "fintech/search/request";
+export const SEARCH_FINTECH_SUCCESS = "fintech/search/success";
+export const SEARCH_FINTECH_FAILED = "fintech/search/failed";

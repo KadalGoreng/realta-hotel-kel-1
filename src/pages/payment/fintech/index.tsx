@@ -6,7 +6,11 @@ import FintechCreateForm from "./FintechCreateForm";
 import {
   GetFintechRequest,
   DelFintechRequest,
+  SearchFintechRequest,
 } from "./../../../redux-saga/action/FintechAction";
+import { useFormik } from "formik";
+import { paginate } from "@/utils/paginate";
+import Pagination from "@/components/Pagination";
 
 export default function FintechViewSaga() {
   const dispatch = useDispatch();
@@ -15,6 +19,22 @@ export default function FintechViewSaga() {
   const [display, setDisplay] = useState<any>(false);
   const [displayEdit, setDisplayEdit] = useState<any>(false);
   const [id, setId] = useState();
+  const pageSize = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const formik = useFormik({
+    initialValues: {
+      keyword: "",
+    },
+    onSubmit: async (values) => {
+      let keyword = values.keyword;
+      if (keyword == "") {
+        dispatch(GetFintechRequest());
+      } else {
+        dispatch(SearchFintechRequest(keyword));
+      }
+      setRefresh(true);
+    },
+  });
 
   useEffect(() => {
     dispatch(GetFintechRequest());
@@ -34,6 +54,13 @@ export default function FintechViewSaga() {
       setRefresh(true);
     }
   };
+
+  const handlePageChange = (page: any) => {
+    setCurrentPage(page);
+  };
+
+  const fintechPaginate = paginate(fintechs, currentPage, pageSize);
+
   return (
     <div>
       <Layout>
@@ -53,50 +80,60 @@ export default function FintechViewSaga() {
                 />
               ) : (
                 <>
-                  <nav className="flex mt-4 mx-8" aria-label="Breadcrumb">
-                    <ol className="inline-flex items-center space-x-1 md:space-x-3">
-                      <li className="inline-flex items-center">
-                        <a
-                          href="#"
-                          className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+                  <div className="flex mx-8 my-4 mr-px-8 items-center">
+                    <label htmlFor="voice-search" className="sr-only">
+                      Search
+                    </label>
+                    <div className="relative w-full">
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <svg
+                          aria-hidden="true"
+                          className="w-5 h-5 text-gray-500 dark:text-gray-400"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
                         >
-                          <svg
-                            aria-hidden="true"
-                            className="w-4 h-4 mr-2"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-                          </svg>
-                          Home
-                        </a>
-                      </li>
-                      <li>
-                        <div className="flex items-center">
-                          <svg
-                            aria-hidden="true"
-                            className="w-6 h-6 text-gray-400"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                              clip-rule="evenodd"
-                            ></path>
-                          </svg>
-                          <a
-                            href="#"
-                            className="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white"
-                          >
-                            Fintech
-                          </a>
-                        </div>
-                      </li>
-                    </ol>
-                  </nav>
+                          <path
+                            fill-rule="evenodd"
+                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                            clip-rule="evenodd"
+                          ></path>
+                        </svg>
+                      </div>
+                      <input
+                        type="text"
+                        name="keyword"
+                        id="voice-search"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="Search Fintech..."
+                        value={formik.values.keyword}
+                        onChange={formik.handleChange}
+                        required
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      onClick={() => formik.handleSubmit()}
+                      className="inline-flex items-center py-2.5 px-3 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        className="w-5 h-5 mr-2 -ml-1"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                        ></path>
+                      </svg>
+                      Search
+                    </button>
+                  </div>
 
                   <div className="relative overflow-x-auto shadow-md sm:rounded-lg m-8">
                     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -131,154 +168,46 @@ export default function FintechViewSaga() {
                         </tr>
                       </thead>
                       <tbody>
-                        {fintechs &&
-                          fintechs.map((item: any) => {
-                            return (
-                              <>
-                                <tr
-                                  className="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
-                                  key={item.pagaEntityId}
-                                >
-                                  <th scope="row" className="px-6 py-4">
-                                    {item.pagaCode}
-                                  </th>
-                                  <td className="px-6 py-4">{item.pagaName}</td>
-                                  <td className="px-6 py-4 text-center">
-                                    <button
-                                      type="submit"
-                                      onClick={() =>
-                                        onUpdate(item.pagaEntityId)
-                                      }
-                                      className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-                                    >
-                                      Edit
-                                    </button>
-                                    <button
-                                      type="submit"
-                                      onClick={() =>
-                                        onDelete(item.pagaEntityId)
-                                      }
-                                      className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                                    >
-                                      Delete
-                                    </button>
-                                  </td>
-                                </tr>
-                              </>
-                            );
-                          })}
+                        {fintechPaginate.map((item: any) => {
+                          return (
+                            <>
+                              <tr
+                                className="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
+                                key={item.pagaEntityId}
+                              >
+                                <th scope="row" className="px-6 py-4">
+                                  {item.pagaCode}
+                                </th>
+                                <td className="px-6 py-4">{item.pagaName}</td>
+                                <td className="px-6 py-4 text-center">
+                                  <button
+                                    type="submit"
+                                    onClick={() => onUpdate(item.pagaEntityId)}
+                                    className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                                  >
+                                    Edit
+                                  </button>
+                                  <button
+                                    type="submit"
+                                    onClick={() => onDelete(item.pagaEntityId)}
+                                    className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                                  >
+                                    Delete
+                                  </button>
+                                </td>
+                              </tr>
+                            </>
+                          );
+                        })}
                       </tbody>
                     </table>
-                  </div>
-                  {/* Main modal */}
-                  <div
-                    id="authentication-modal"
-                    aria-hidden="true"
-                    className="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
-                  >
-                    <div className="relative w-full max-w-md max-h-full">
-                      {/* Modal content */}
-                      <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                        <button
-                          type="button"
-                          className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-                          data-modal-hide="authentication-modal"
-                        >
-                          <svg
-                            aria-hidden="true"
-                            className="w-5 h-5"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                              clip-rule="evenodd"
-                            ></path>
-                          </svg>
-                          <span className="sr-only">Close modal</span>
-                        </button>
-                        <div className="px-6 py-6 lg:px-8">
-                          <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
-                            Sign in to our platform
-                          </h3>
-                          <form className="space-y-6" action="#">
-                            <div>
-                              <label
-                                htmlFor="email"
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                              >
-                                Your email
-                              </label>
-                              <input
-                                type="email"
-                                name="email"
-                                id="email"
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                placeholder="name@company.com"
-                                required
-                              />
-                            </div>
-                            <div>
-                              <label
-                                htmlFor="password"
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                              >
-                                Your password
-                              </label>
-                              <input
-                                type="password"
-                                name="password"
-                                id="password"
-                                placeholder="••••••••"
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                required
-                              />
-                            </div>
-                            <div className="flex justify-between">
-                              <div className="flex items-start">
-                                <div className="flex items-center h-5">
-                                  <input
-                                    id="remember"
-                                    type="checkbox"
-                                    value=""
-                                    className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-                                    required
-                                  />
-                                </div>
-                                <label
-                                  htmlFor="remember"
-                                  className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                >
-                                  Remember me
-                                </label>
-                              </div>
-                              <a
-                                href="#"
-                                className="text-sm text-blue-700 hover:underline dark:text-blue-500"
-                              >
-                                Lost Password?
-                              </a>
-                            </div>
-                            <button
-                              type="submit"
-                              className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            >
-                              Login to your account
-                            </button>
-                            <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
-                              Not registered?{" "}
-                              <a
-                                href="#"
-                                className="text-blue-700 hover:underline dark:text-blue-500"
-                              >
-                                Create account
-                              </a>
-                            </div>
-                          </form>
-                        </div>
-                      </div>
+                    <div className="w-full mt-8 items-center">
+                      <Pagination
+                        items={fintechs.length}
+                        pageSize={pageSize}
+                        currentPage={currentPage}
+                        onPageChange={handlePageChange}
+                      />
                     </div>
                   </div>
                 </>

@@ -27,6 +27,10 @@ const BankReduce = (state = INIT_STATE, action: any) => {
       return { ...state };
     case ActionType.DEL_BANK_SUCCESS:
       return DelBankSuccessfully(state, action);
+    case ActionType.SEARCH_BANK_REQUEST:
+      return { ...state };
+    case ActionType.SEARCH_BANK_SUCCESS:
+      return SearchBankSuccessfully(state, action);
     default:
       return { ...state };
   }
@@ -67,4 +71,11 @@ const DelBankSuccessfully = (state: any, action: any) => {
   };
 };
 
+const SearchBankSuccessfully = (state: any, action: any) => {
+  const { payload } = action;
+  return {
+    ...state,
+    banks: payload,
+  };
+};
 export default BankReduce;

@@ -11,6 +11,7 @@ import {
   DeleteBank,
   FindBank,
   EditBank,
+  SearchBank,
 } from "./BankSaga";
 
 import {
@@ -27,6 +28,7 @@ import {
   DeleteFintech,
   FindFintech,
   EditFintech,
+  SearchFintech,
 } from "./FintechSaga";
 
 import {
@@ -44,6 +46,7 @@ function* watchAll() {
     takeEvery(ActionBank.FIND_BANK_REQUEST, FindBank),
     takeEvery(ActionBank.EDIT_BANK_REQUEST, EditBank),
     takeEvery(ActionBank.DEL_BANK_REQUEST, DeleteBank),
+    takeEvery(ActionBank.SEARCH_BANK_REQUEST, SearchBank),
 
     takeEvery(ActionAccount.GET_ACCOUNT_REQUEST, handleAccount),
     takeEvery(ActionAccount.ADD_ACCOUNT_REQUEST, createAccount),
@@ -56,6 +59,7 @@ function* watchAll() {
     takeEvery(ActionFintech.FIND_FINTECH_REQUEST, FindFintech),
     takeEvery(ActionFintech.EDIT_FINTECH_REQUEST, EditFintech),
     takeEvery(ActionFintech.DEL_FINTECH_REQUEST, DeleteFintech),
+    takeEvery(ActionFintech.SEARCH_FINTECH_REQUEST, SearchFintech),
 
     takeEvery(ActionTransaction.GET_TRANSACTION_REQUEST, handleTransaction),
     takeEvery(ActionTransaction.ADD_TRANSACTION_REQUEST, createTransaction),

@@ -10,6 +10,8 @@ import {
   EditFintechFailed,
   DelFintechSuccess,
   DelFintechFailed,
+  SearchFintechSuccess,
+  SearchFintechFailed,
 } from "../action/FintechAction";
 import FintechApi from "@/pages/api/PaymentGateway";
 
@@ -58,6 +60,15 @@ function* DeleteFintech(action: any): any {
     yield put(DelFintechFailed(error));
   }
 }
+function* SearchFintech(action: any): any {
+  const { payload } = action;
+  try {
+    const result = yield call(FintechApi.search, payload);
+    yield put(SearchFintechSuccess(result));
+  } catch (error) {
+    yield put(SearchFintechFailed(error));
+  }
+}
 
 export {
   handleFintech,
@@ -65,4 +76,5 @@ export {
   FindFintech,
   EditFintech,
   DeleteFintech,
+  SearchFintech,
 };

@@ -1,4 +1,3 @@
-
 import * as ActionType from "../constant/BankConstant";
 export const GetBankRequest = () => ({
   type: ActionType.GET_BANK_REQUEST,
@@ -71,5 +70,19 @@ export const FindBankSuccess = (payload: any) => ({
 
 export const FindBankFailed = (payload: any) => ({
   type: ActionType.FIND_BANK_FAILED,
+  payload,
+});
+export const SearchBankRequest = (payload: any) => ({
+  type: ActionType.SEARCH_BANK_REQUEST,
+  payload,
+});
+
+export const SearchBankSuccess = (payload: any) => ({
+  type: ActionType.SEARCH_BANK_SUCCESS,
+  payload,
+});
+
+export const SearchBankFailed = (payload: any) => ({
+  type: ActionType.SEARCH_BANK_FAILED,
   payload,
 });

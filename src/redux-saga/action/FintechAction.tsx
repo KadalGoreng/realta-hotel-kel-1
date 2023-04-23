@@ -72,3 +72,18 @@ export const FindFintechFailed = (payload: any) => ({
   type: ActionType.FIND_FINTECH_FAILED,
   payload,
 });
+
+export const SearchFintechRequest = (payload: any) => ({
+  type: ActionType.SEARCH_FINTECH_REQUEST,
+  payload,
+});
+
+export const SearchFintechSuccess = (payload: any) => ({
+  type: ActionType.SEARCH_FINTECH_SUCCESS,
+  payload,
+});
+
+export const SearchFintechFailed = (payload: any) => ({
+  type: ActionType.SEARCH_FINTECH_FAILED,
+  payload,
+});

@@ -11,7 +11,6 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 
 const navigation = [
-  { name: "Payment", href: "/", current: false },
   { name: "Bank", href: "/payment/bank", current: false },
   { name: "Fintech", href: "/payment/fintech", current: false },
   { name: "Accounts", href: "/payment/account", current: false },
@@ -49,26 +48,14 @@ export default function Layout(props: LayoutProps) {
                 <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                   <div className="flex flex-shrink-0 items-center">
                     <img
-                      className="block h-8 w-auto lg:hidden"
-                      src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                      alt="Your Company"
-                    /><h2>Realta</h2>
-                    <img
                       className="hidden h-8 w-auto lg:block"
                       src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
                       alt="Your Company"
                     />
+                    <h2> REALTA </h2>
                   </div>
                 </div>
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                  <button
-                    type="button"
-                    className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                  >
-                    <span className="sr-only">View notifications</span>
-                    <BellIcon className="h-6 w-6" aria-hidden="true" />
-                  </button>
-
                   {/* Profile dropdown */}
                   <Menu as="div" className="relative ml-3">
                     <div>
@@ -139,10 +126,10 @@ export default function Layout(props: LayoutProps) {
         )}
       </Disclosure>
 
-      <div className="flex flex-col md:flex-row flex-1">
+      <div className="flex flex-col md:flex-row overflow-y-auto flex-1">
         <aside
           id="default-sidebar"
-          className="top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
+          className="top-0 left-0 z-40 w-64 overflow-y-auto transition-transform -translate-x-full sm:translate-x-0"
           aria-label="Sidebar"
         >
           <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
@@ -179,7 +166,42 @@ export default function Layout(props: LayoutProps) {
             </ul>
           </div>
         </aside>
-        <main className="flex-1 h-screen ">{children}</main>
+        <main className="flex-1 overflow-y-auto ">
+          {children}
+          <footer className="bg-white shadow dark:bg-gray-800">
+            <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+              <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
+                © 2023{" "}
+                <a href="https://flowbite.com/" className="hover:underline">
+                  Realte Hotel™
+                </a>
+                . All Rights Reserved.
+              </span>
+              <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
+                <li>
+                  <a href="#" className="mr-4 hover:underline md:mr-6 ">
+                    About
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="mr-4 hover:underline md:mr-6">
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="mr-4 hover:underline md:mr-6">
+                    Licensing
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:underline">
+                    Contact
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </footer>
+        </main>
       </div>
     </div>
   );

@@ -1,7 +1,9 @@
 import OrderSummary from "@/components/booking/OrderSummary";
 import React from "react";
+import { useSelector } from "react-redux";
 
 export default function Order() {
+  const { coupon } = useSelector((state: any) => state.bookingHotelState);
   return (
     <div className="flex flex-col">
       <div className="my-[56px] mx-auto w-[1130px] ">
@@ -59,7 +61,7 @@ export default function Order() {
             </div>
           </div>
         </div>
-        <OrderSummary />
+        {/* <OrderSummary labelBtn="Create Booking Order" coupon={coupon} /> */}
       </div>
     </div>
   );

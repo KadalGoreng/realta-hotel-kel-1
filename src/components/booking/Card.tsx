@@ -1,67 +1,23 @@
 import React from "react";
-import { AiFillCar } from "react-icons/ai";
+import { AiFillCar, AiFillStar } from "react-icons/ai";
 import { GiCoffeeCup } from "react-icons/gi";
 import { FaCartPlus } from "react-icons/fa";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import {
+  CarOutlined,
+  CoffeeOutlined,
+  ShoppingCartOutlined,
+  StarOutlined,
+} from "@ant-design/icons";
+import { formatHotelRating } from "@/utils/helpers";
 
 export default function Card(props: any) {
-  const { hotelId, hotelName } = props;
+  const { hotelId, hotelName, hotelRatingStar, hotelReviews } = props;
 
-  const router = useRouter();
-
-  const { id } = router.query;
-
-  const hotels = [
-    {
-      id: 1,
-      name: "Ciputra",
-      image: "https://dummyimage.com/300x220/8f8f8f/ffffff.jpg&text=image+1",
-      near: "Near Simpang Lima",
-      price: 900000,
-      rating: 757,
-    },
-    {
-      id: 2,
-      name: "Aston Sentul Hotel",
-      image: "https://dummyimage.com/300x220/8f8f8f/ffffff.jpg&text=image+1",
-      near: "Near Simpang Lima",
-      price: 900000,
-      rating: 757,
-    },
-    {
-      id: 3,
-      name: "Aston Sentul Hotel",
-      image: "https://dummyimage.com/300x220/8f8f8f/ffffff.jpg&text=image+1",
-      near: "Near Simpang Lima",
-      price: 900000,
-      rating: 757,
-    },
-    {
-      id: 4,
-      name: "Aston Sentul Hotel",
-      image: "https://dummyimage.com/300x220/8f8f8f/ffffff.jpg&text=image+1",
-      near: "Near Simpang Lima",
-      price: 900000,
-      rating: 757,
-    },
-    {
-      id: 5,
-      name: "Aston Sentul Hotel",
-      image: "https://dummyimage.com/300x220/8f8f8f/ffffff.jpg&text=image+1",
-      near: "Near Simpang Lima",
-      price: 900000,
-      rating: 757,
-    },
-    {
-      id: 6,
-      name: "Aston Sentul Hotel",
-      image: "https://dummyimage.com/300x220/8f8f8f/ffffff.jpg&text=image+1",
-      near: "Near Simpang Lima",
-      price: 900000,
-      rating: 757,
-    },
-  ];
+  const { hotelFacility } = useSelector(
+    (state: any) => state.bookingHotelState
+  );
 
   return (
     <div key={hotelId}>
@@ -160,44 +116,58 @@ export default function Card(props: any) {
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-7 justify-between">
+        <div className="flex flex-col gap-4 justify-between">
           <div>
             <div className="title">
               <p className="text-xl font-bold">{hotelName}</p>
               <span className="font-light">Near Sentul Golf</span>
             </div>
             <div className="flex gap-2 mt-2 items-center">
-              <span className="badge">4.5</span>
-              <span className="font-thin">(114 Ratings)</span>
-              <span className="font-light">Good</span>
+              <span className="badge">
+                {hotelRatingStar} <StarOutlined className="ml-2" />
+              </span>
+              <span className="font-thin">
+                ({(hotelReviews && hotelReviews.length) || 0} Ratings)
+              </span>
+              <span className="font-light">
+                {formatHotelRating(hotelRatingStar)}
+              </span>
             </div>
             <div className="flex gap-2 mt-2 items-center">
               <div className="flex items-center gap-1">
-                <AiFillCar size={"25"} />
+                {/* <AiFillCar size={"25"} /> */}
+                <CarOutlined style={{ fontSize: "20px" }} />
                 <span className="font-thin">Parking</span>
               </div>
               <div className="flex items-center gap-1">
-                <GiCoffeeCup size={"25"} />
+                {/* <GiCoffeeCup size={"25"} /> */}
+                <CoffeeOutlined style={{ fontSize: "20px" }} />
                 <span className="font-thin">Coffee/Tea</span>
               </div>
               <div className="flex items-center gap-1">
-                <FaCartPlus size={"23"} />
+                <ShoppingCartOutlined style={{ fontSize: "20px" }} />
+                {/* <FaCartPlus size={"23"} /> */}
                 <span className="font-thin">Market</span>
               </div>
             </div>
           </div>
-          <div className="flex gap-7">
-            <div className="flex flex-col justify-around">
-              <span className="font-bold">Rp. 99.999</span>
-              <span className="font-thin text-sm">per room per night</span>
+          {hotelFacility.length !== 0 && (
+            <div className="flex gap-7">
+              <div className="flex flex-col justify-around">
+                <span className="font-bold">{hotelFacility[0].faciName}</span>
+                <span className="font-bold">
+                  {hotelFacility[0].faciLowPrice}
+                </span>
+                <span className="font-thin text-sm">per room per night</span>
+              </div>
+              <div className="flex items-end gap-5">
+                <Link href={`/booking/room/${hotelId}`}>
+                  <button className="btn btn-sm">View Details</button>
+                </Link>
+                <button className="btn btn-sm">Book Now</button>
+              </div>
             </div>
-            <div className="flex items-end gap-5">
-              <Link href={`/booking/room/${hotelId}`}>
-                <button className="btn btn-sm">View Details</button>
-              </Link>
-              <button className="btn btn-sm">Book Now</button>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

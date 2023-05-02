@@ -10,14 +10,14 @@ import {
   ShoppingCartOutlined,
   StarOutlined,
 } from "@ant-design/icons";
-import { formatHotelRating } from "@/utils/helpers";
+import { calculateRating, formatHotelRating } from "@/utils/helpers";
 
 export default function Card(props: any) {
-  const { hotelId, hotelName, hotelRatingStar, hotelReviews } = props;
+  const { hotelId, hotelName, hotelReviews, hotelAddr, facilities } = props;
 
-  const { hotelFacility } = useSelector(
-    (state: any) => state.bookingHotelState
-  );
+  // const { hotelFacility } = useSelector(
+  //   (state: any) => state.bookingHotelState
+  // );
 
   return (
     <div key={hotelId}>
@@ -120,17 +120,18 @@ export default function Card(props: any) {
           <div>
             <div className="title">
               <p className="text-xl font-bold">{hotelName}</p>
-              <span className="font-light">Near Sentul Golf</span>
+              <span className="font-light">{`${hotelAddr.addrPostalCode}, ${hotelAddr.addrLine1}, ${hotelAddr.addrLine2}`}</span>
             </div>
             <div className="flex gap-2 mt-2 items-center">
               <span className="badge">
-                {hotelRatingStar} <StarOutlined className="ml-2" />
+                {calculateRating(hotelReviews)}{" "}
+                <StarOutlined className="ml-2" />
               </span>
               <span className="font-thin">
                 ({(hotelReviews && hotelReviews.length) || 0} Ratings)
               </span>
               <span className="font-light">
-                {formatHotelRating(hotelRatingStar)}
+                {formatHotelRating(calculateRating(hotelReviews))}
               </span>
             </div>
             <div className="flex gap-2 mt-2 items-center">
@@ -151,13 +152,11 @@ export default function Card(props: any) {
               </div>
             </div>
           </div>
-          {hotelFacility.length !== 0 && (
+          {facilities.length !== 0 && (
             <div className="flex gap-7">
               <div className="flex flex-col justify-around">
-                <span className="font-bold">{hotelFacility[0].faciName}</span>
-                <span className="font-bold">
-                  {hotelFacility[0].faciLowPrice}
-                </span>
+                <span className="font-bold">{facilities[0].faciName}</span>
+                <span className="font-bold">{facilities[0].faciRatePrice}</span>
                 <span className="font-thin text-sm">per room per night</span>
               </div>
               <div className="flex items-end gap-5">

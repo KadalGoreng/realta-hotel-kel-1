@@ -6,8 +6,8 @@ export default function Order() {
   const { coupon } = useSelector((state: any) => state.bookingHotelState);
   return (
     <div className="flex flex-col">
-      <div className="my-[56px] mx-auto w-[1130px] ">
-        <span className="text-2xl font-bold">Modify your booking</span>
+      <div className="my-[56px] mx-auto">
+        {/* <span className="text-2xl font-bold">Modify your booking</span> */}
       </div>
       <div className="flex justify-center gap-10">
         <div className="flex flex-col w-[700px] gap-5">
@@ -61,7 +61,10 @@ export default function Order() {
             </div>
           </div>
         </div>
-        {/* <OrderSummary labelBtn="Create Booking Order" coupon={coupon} /> */}
+        <div>
+          <div>Order Summary</div>
+        </div>
+        {/* <OrderSummary /> */}
       </div>
     </div>
   );

@@ -1,6 +1,8 @@
-import { convertPrice } from "@/utils/helpers";
+import { bookingDays, convertPrice } from "@/utils/helpers";
 import { DatePicker, Space } from "antd";
+import Link from "next/link";
 import React, { useState } from "react";
+import dayjs from "dayjs";
 
 export default function OrderSummary(props: any) {
   const [couponDiscount, setCouponDiscount] = useState({
@@ -15,10 +17,11 @@ export default function OrderSummary(props: any) {
     spofMaxQty: 0,
     spofModifiedDate: "",
   });
-  const { labelBtn, coupon, faciLowPrice, faciName } = props;
+  const { labelBtn, coupon, faciRatePrice, faciName, id } = props;
   const { RangePicker } = DatePicker;
 
   const [openModal, setOpenModal] = useState(false);
+  const [totalBooking, setTotalBooking] = useState(1);
 
   const handleOpenModal = () => {
     setOpenModal(!openModal);
@@ -43,10 +46,17 @@ export default function OrderSummary(props: any) {
   return (
     <div className="flex flex-col gap-5 rounded-xl w-[100%] h-96 bg-white shadow-xl p-4">
       <Space direction="vertical">
-        <RangePicker style={{ width: "100%" }} />
+        <RangePicker
+          style={{ width: "100%" }}
+          onChange={(value, dateString) => {
+            setTotalBooking(bookingDays(dateString[0], dateString[1]));
+          }}
+        />
       </Space>
       <div>
-        <p className="card-title">{`Rp. ${convertPrice(faciLowPrice)}`}</p>
+        <p className="card-title">{`Rp. ${
+          convertPrice(faciRatePrice) * totalBooking
+        }`}</p>
         <p className="text-sm font-thin">termasuk pajak</p>
         <p className="text-sm font-thin">{faciName}</p>
       </div>
@@ -114,15 +124,17 @@ export default function OrderSummary(props: any) {
           <p className="text-sm">
             {couponDiscount.spofDiscount !== ""
               ? `Rp. ${
-                  convertPrice(faciLowPrice) -
+                  convertPrice(faciRatePrice) * totalBooking -
                   convertPrice(couponDiscount.spofDiscount)
                 }`
-              : `Rp. ${convertPrice(faciLowPrice)}`}
+              : `Rp. ${convertPrice(faciRatePrice) * totalBooking}`}
           </p>
         </div>
       </div>
       <div className="card-actions">
-        <button className="btn w-full">{labelBtn}</button>
+        <Link href={`${id}/order`} className="w-full">
+          <button className="btn w-full">{labelBtn}</button>
+        </Link>
       </div>
     </div>
   );

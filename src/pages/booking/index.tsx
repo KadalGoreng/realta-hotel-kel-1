@@ -1,7 +1,4 @@
-import {
-  GetBookingHotelRequest,
-  GetFacilityRequest,
-} from "@/Redux/Actions/BookingHotelAction";
+import { GetBookingHotelRequest } from "@/Redux/Actions/BookingHotelAction";
 import Card from "@/components/booking/Card";
 import Filter from "@/components/booking/Filter";
 import React, { useEffect } from "react";
@@ -14,7 +11,6 @@ export default function Booking() {
 
   useEffect(() => {
     dispatch(GetBookingHotelRequest());
-    dispatch(GetFacilityRequest());
   }, []);
 
   return (

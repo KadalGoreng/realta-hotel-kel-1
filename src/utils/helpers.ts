@@ -26,3 +26,18 @@ export function formatHotelRating(rating: number) {
       return "Best";
   }
 }
+
+export function bookingDays(start: string, end: string) {
+  const startDate: any = new Date(start);
+  const endDate: any = new Date(end);
+  const diff = (endDate - startDate) / 1000;
+  const result = Math.ceil(diff / (60 * 60 * 24));
+
+  return isNaN(result) || result == 0 ? 1 : result;
+}
+
+export function calculateRating(rating: any) {
+  let total = rating.reduce((prev: any, cur: any) => prev + cur.horeRating, 0);
+
+  return total / rating.length;
+}

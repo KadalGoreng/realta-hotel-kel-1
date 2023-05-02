@@ -1,7 +1,8 @@
 import { GetCouponRequest } from "@/Redux/Actions/BookingHotelAction";
 import AnotherRoom from "@/components/booking/AnotherRoom";
+import OrderCard from "@/components/booking/OrderCard";
 import OrderSummary from "@/components/booking/OrderSummary";
-import { formatDate } from "@/utils/helpers";
+import { calculateRating, formatDate } from "@/utils/helpers";
 import {
   CarOutlined,
   CoffeeOutlined,
@@ -9,7 +10,7 @@ import {
   StarOutlined,
 } from "@ant-design/icons";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { AiFillCar } from "react-icons/ai";
 import { FaCartPlus } from "react-icons/fa";
 import { GiCoffeeCup } from "react-icons/gi";
@@ -22,16 +23,24 @@ export default function BookingRoom() {
 
   const { bookingHotel } = useSelector((state: any) => state.bookingHotelState);
   const { coupon } = useSelector((state: any) => state.bookingHotelState);
-  const { hotelFacility } = useSelector(
-    (state: any) => state.bookingHotelState
-  );
 
   const data = bookingHotel.find((item: any) => item.hotelId == id);
+
+  const { hotelReviews } = data;
+  const { facilities } = data;
+
+  const [selected, setSelected] = useState(facilities[0].faciName);
+
+  const room = facilities.filter((item: any) => item.faciCagro.cagroId == 1);
+  const facilitySelected = facilities.find(
+    (item: any) => item.faciName === selected
+  );
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(GetCouponRequest());
+    // dispatch(GetFacilityByHotelRequest(id));
   }, []);
 
   return (
@@ -62,7 +71,7 @@ export default function BookingRoom() {
                 {data && data.hotelName}
               </span>
               <span className="flex items-center gap-1 font-bold badge badge-lg">
-                5 <StarOutlined />
+                {calculateRating(hotelReviews)} <StarOutlined />
               </span>
             </div>
             <span className="font-light">
@@ -97,24 +106,40 @@ export default function BookingRoom() {
           <div className="mt-2">
             <p className="font-bold text-xl my-3">Another Rooms</p>
             <div className="flex flex-col gap-3">
-              <AnotherRoom />
-              <AnotherRoom />
+              {room &&
+                room.map((item: any, index: any) => (
+                  <AnotherRoom
+                    {...item}
+                    setSelected={setSelected}
+                    selected={selected}
+                  />
+                ))}
             </div>
           </div>
           <div className="mt-2">
-            <p className="mb-2 font-bold text-xl">Rating and Reviews</p>
-            {data &&
-              data.hotelReviews.map((item: any) => (
-                <>
-                  <span className="font-semibold">
-                    {`${item.horeUser.userFullName} · `}
-                  </span>
-                  <span className="font-light">{`${formatDate(
-                    item.horeCreatedOn
-                  )}`}</span>
-                  <p>{item.horeUserReview}</p>
-                </>
-              ))}
+            <p className="mb-3 font-bold text-xl">Rating and Reviews</p>
+            <div className="flex flex-col gap-2">
+              {data &&
+                hotelReviews.map((item: any) => (
+                  <div>
+                    <div className="flex justify-between">
+                      <div>
+                        <span className="font-semibold">
+                          {`${item.horeUser.userFullName} · `}
+                        </span>
+                        <span className="font-light">{`${formatDate(
+                          item.horeCreatedOn
+                        )}`}</span>
+                      </div>
+                      <span className="flex items-center gap-1 font-bold badge">
+                        {item.horeRating}
+                        <StarOutlined />
+                      </span>
+                    </div>
+                    <p>{item.horeUserReview}</p>
+                  </div>
+                ))}
+            </div>
           </div>
           <div className="mt-2">
             <p className="mb-2 font-bold text-xl">Hotel Policies</p>
@@ -130,7 +155,8 @@ export default function BookingRoom() {
           <OrderSummary
             labelBtn="Continue to Book"
             coupon={coupon}
-            {...hotelFacility[0]}
+            id={id}
+            {...facilitySelected}
           />
         </div>
       </div>

@@ -1,26 +1,31 @@
 import React from "react";
-import { AiFillCar, AiFillStar } from "react-icons/ai";
-import { GiCoffeeCup } from "react-icons/gi";
-import { FaCartPlus } from "react-icons/fa";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import {
   CarOutlined,
   CoffeeOutlined,
   ShoppingCartOutlined,
-  StarOutlined,
+  StarFilled,
 } from "@ant-design/icons";
-import { calculateRating, formatHotelRating } from "@/utils/helpers";
+import {
+  calculateRating,
+  convertPrice,
+  formatHotelRating,
+  formatPrice,
+  removeDuplicates,
+} from "@/utils/helpers";
+import Button from "./Button";
+import ButtonOutline from "./ButtonOutline";
 
 export default function Card(props: any) {
   const { hotelId, hotelName, hotelReviews, hotelAddr, facilities } = props;
 
-  // const { hotelFacility } = useSelector(
-  //   (state: any) => state.bookingHotelState
-  // );
+  const aminities = removeDuplicates([...facilities]);
+
+  const moreFacility = aminities.length - 3;
 
   return (
-    <div key={hotelId}>
+    <div key={hotelId} className="border-b-[2px] pb-4">
       <div className="flex gap-5">
         <div className="carousel w-[20%]">
           <div
@@ -28,7 +33,7 @@ export default function Card(props: any) {
             className="carousel-item relative w-full"
           >
             <img
-              src="https://dummyimage.com/300x220/8f8f8f/ffffff.jpg&text=image+1"
+              src="https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-masonry-100.jpg"
               className="w-full"
             />
             <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
@@ -51,7 +56,7 @@ export default function Card(props: any) {
             className="carousel-item relative w-full"
           >
             <img
-              src="https://dummyimage.com/300x220/8f8f8f/ffffff.jpg&text=image+2"
+              src="https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-masonry-100.jpg"
               className="w-full"
             />
             <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
@@ -74,7 +79,7 @@ export default function Card(props: any) {
             className="carousel-item relative w-full"
           >
             <img
-              src="https://dummyimage.com/300x220/8f8f8f/ffffff.jpg&text=image+3"
+              src="https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-masonry-100.jpg"
               className="w-full"
             />
             <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
@@ -97,7 +102,7 @@ export default function Card(props: any) {
             className="carousel-item relative w-full"
           >
             <img
-              src="https://dummyimage.com/300x220/8f8f8f/ffffff.jpg&text=image+4"
+              src="https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-masonry-100.jpg"
               className="w-full"
             />
             <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
@@ -123,9 +128,8 @@ export default function Card(props: any) {
               <span className="font-light">{`${hotelAddr.addrPostalCode}, ${hotelAddr.addrLine1}, ${hotelAddr.addrLine2}`}</span>
             </div>
             <div className="flex gap-2 mt-2 items-center">
-              <span className="badge">
-                {calculateRating(hotelReviews)}{" "}
-                <StarOutlined className="ml-2" />
+              <span className="badge rounded-md bg-[#c78e3c] border-none">
+                {calculateRating(hotelReviews)} <StarFilled className="ml-2" />
               </span>
               <span className="font-thin">
                 ({(hotelReviews && hotelReviews.length) || 0} Ratings)
@@ -135,35 +139,49 @@ export default function Card(props: any) {
               </span>
             </div>
             <div className="flex gap-2 mt-2 items-center">
-              <div className="flex items-center gap-1">
-                {/* <AiFillCar size={"25"} /> */}
+              {aminities.map(
+                (facility: any, index: number) =>
+                  index < 3 && (
+                    <div className="flex items-center gap-1">
+                      <CarOutlined style={{ fontSize: "20px" }} />
+                      <span className="font-thin">
+                        {facility.faciCagro.cagroName}
+                      </span>
+                    </div>
+                  )
+              )}
+              {moreFacility > 0 && <span>+ {moreFacility} more</span>}
+              {/* <div className="flex items-center gap-1">
                 <CarOutlined style={{ fontSize: "20px" }} />
                 <span className="font-thin">Parking</span>
               </div>
               <div className="flex items-center gap-1">
-                {/* <GiCoffeeCup size={"25"} /> */}
                 <CoffeeOutlined style={{ fontSize: "20px" }} />
                 <span className="font-thin">Coffee/Tea</span>
               </div>
               <div className="flex items-center gap-1">
                 <ShoppingCartOutlined style={{ fontSize: "20px" }} />
-                {/* <FaCartPlus size={"23"} /> */}
                 <span className="font-thin">Market</span>
-              </div>
+              </div> */}
             </div>
           </div>
           {facilities.length !== 0 && (
             <div className="flex gap-7">
               <div className="flex flex-col justify-around">
                 <span className="font-bold">{facilities[0].faciName}</span>
-                <span className="font-bold">{facilities[0].faciRatePrice}</span>
+                {/* <span className="font-bold text-[#B82B18] text-[20px]"> */}
+                <span className="font-bold text-red-600 text-[20px]">
+                  {`Rp. ${formatPrice(
+                    convertPrice(facilities[0].faciRatePrice)
+                  )}`}
+                </span>
                 <span className="font-thin text-sm">per room per night</span>
               </div>
               <div className="flex items-end gap-5">
                 <Link href={`/booking/room/${hotelId}`}>
-                  <button className="btn btn-sm">View Details</button>
+                  <ButtonOutline label="View Details" />
                 </Link>
-                <button className="btn btn-sm">Book Now</button>
+                <Button label="Book Now" btnSmall />
               </div>
             </div>
           )}

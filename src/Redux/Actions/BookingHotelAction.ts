@@ -41,3 +41,8 @@ export const GetCouponFailed = (payload: any) => ({
   type: ActionType.GET_COUPON_FAILED,
   payload,
 });
+
+export const CreateBoSuccess = (payload: any) => ({
+  type: ActionType.CREATE_BOOKINGORDER_SUCCESS,
+  payload,
+});

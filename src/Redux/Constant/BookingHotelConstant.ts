@@ -9,3 +9,5 @@ export const GET_FACILITY_FAILED = "get/facility/failed";
 export const GET_COUPON_REQUEST = "get/coupon/request";
 export const GET_COUPON_SUCCESS = "get/coupon/success";
 export const GET_COUPON_FAILED = "get/coupon/failed";
+
+export const CREATE_BOOKINGORDER_SUCCESS = "create/bo/success";

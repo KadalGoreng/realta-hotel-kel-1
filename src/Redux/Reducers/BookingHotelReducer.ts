@@ -4,6 +4,7 @@ const INIT_STATE = {
   bookingHotel: [],
   hotelFacility: [],
   coupon: [],
+  bookingOrder: {},
 };
 
 const BookingHotelReducer = (state = INIT_STATE, action: any) => {
@@ -20,6 +21,8 @@ const BookingHotelReducer = (state = INIT_STATE, action: any) => {
       return { ...state };
     case ActionType.GET_COUPON_SUCCESS:
       return getCoupon(state, action);
+    case ActionType.CREATE_BOOKINGORDER_SUCCESS:
+      return createOrder(state, action);
     default:
       return { ...state };
   }
@@ -43,6 +46,13 @@ const getCoupon = (state: any, action: any) => {
   return {
     ...state,
     coupon: action.payload,
+  };
+};
+
+const createOrder = (state: any, action: any) => {
+  return {
+    ...state,
+    bookingOrder: action.payload,
   };
 };
 

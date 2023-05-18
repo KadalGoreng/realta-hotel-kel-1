@@ -6,14 +6,10 @@ export const ADD_TRANSACTION_REQUEST = "transaction/add/request";
 export const ADD_TRANSACTION_SUCCESS = "transaction/add/success";
 export const ADD_TRANSACTION_FAILED = "transaction/add/failed";
 
-export const EDIT_TRANSACTION_REQUEST = "transaction/edit/request";
-export const EDIT_TRANSACTION_SUCCESS = "transaction/edit/success";
-export const EDIT_TRANSACTION_FAILED = "transaction/edit/failed";
-
-export const DEL_TRANSACTION_REQUEST = "transaction/del/request";
-export const DEL_TRANSACTION_SUCCESS = "transaction/del/success";
-export const DEL_TRANSACTION_FAILED = "transaction/del/failed";
-
 export const FIND_TRANSACTION_REQUEST = "transaction/find/request";
 export const FIND_TRANSACTION_SUCCESS = "transaction/find/success";
 export const FIND_TRANSACTION_FAILED = "transaction/find/failed";
+
+export const SEARCH_TRANSACTION_REQUEST = "transaction/search/request";
+export const SEARCH_TRANSACTION_SUCCESS = "transaction/search/success";
+export const SEARCH_TRANSACTION_FAILED = "transaction/search/failed";

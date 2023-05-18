@@ -1,4 +1,4 @@
-import * as ActionType from "../constant/FintechConstant";
+import * as ActionType from "../../constant/payment/FintechConstant";
 export const GetFintechRequest = () => ({
   type: ActionType.GET_FINTECH_REQUEST,
 });

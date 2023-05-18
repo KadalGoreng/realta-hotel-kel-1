@@ -10,7 +10,7 @@ import {
   EditAccountFailed,
   DelAccountSuccess,
   DelAccountFailed,
-} from "../action/AccountAction";
+} from "../../action/payment/AccountAction";
 import AccountApi from "@/pages/api/UserAccount";
 
 function* handleAccount(): any {

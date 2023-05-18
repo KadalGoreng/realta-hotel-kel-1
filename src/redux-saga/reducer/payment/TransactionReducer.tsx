@@ -1,4 +1,4 @@
-import * as ActionType from "../constant/TransactionConstant";
+import * as ActionType from "../../constant/payment/TransactionConstant";
 
 const INIT_STATE = {
   transactions: [],
@@ -19,14 +19,10 @@ const TransactionReduce = (state = INIT_STATE, action: any) => {
       return { ...state };
     case ActionType.FIND_TRANSACTION_SUCCESS:
       return FindTransactionSuccessfully(state, action);
-    case ActionType.EDIT_TRANSACTION_REQUEST:
+    case ActionType.SEARCH_TRANSACTION_REQUEST:
       return { ...state };
-    case ActionType.EDIT_TRANSACTION_SUCCESS:
-      return EditTransactionSuccessfully(state, action);
-    case ActionType.DEL_TRANSACTION_REQUEST:
-      return { ...state };
-    case ActionType.DEL_TRANSACTION_SUCCESS:
-      return DelTransactionSuccessfully(state, action);
+    case ActionType.SEARCH_TRANSACTION_SUCCESS:
+      return SearchTransactionSuccessfully(state, action);
     default:
       return { ...state };
   }
@@ -55,15 +51,11 @@ const FindTransactionSuccessfully = (state: any, action: any) => {
   };
 };
 
-const EditTransactionSuccessfully = (state: any, action: any) => {
+const SearchTransactionSuccessfully = (state: any, action: any) => {
+  const { payload } = action;
   return {
     ...state,
-  };
-};
-
-const DelTransactionSuccessfully = (state: any, action: any) => {
-  return {
-    ...state,
+    transactions: payload,
   };
 };
 

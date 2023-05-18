@@ -6,11 +6,9 @@ import {
   AddTransactionFailed,
   FindTransactionSuccess,
   FindTransactionFailed,
-  EditTransactionSuccess,
-  EditTransactionFailed,
-  DelTransactionSuccess,
-  DelTransactionFailed,
-} from "../action/TransactionAction";
+  SearchTransactionSuccess,
+  SearchTransactionFailed,
+} from "../../action/payment/TransactionAction";
 import TransactionApi from "@/pages/api/PaymentTransaction";
 
 function* handleTransaction(): any {
@@ -39,23 +37,14 @@ function* FindTransaction(action: any): any {
     yield put(FindTransactionFailed(error));
   }
 }
-function* EditTransaction(action: any): any {
-  const { payload } = action;
-  try {
-    const result = yield call(TransactionApi.update, payload);
-    yield put(EditTransactionSuccess(result.data));
-  } catch (error) {
-    yield put(EditTransactionFailed(error));
-  }
-}
 
-function* DeleteTransaction(action: any): any {
+function* SearchTransaction(action: any): any {
   const { payload } = action;
   try {
-    const result = yield call(TransactionApi.deleted, payload);
-    yield put(DelTransactionSuccess(result.data));
+    const result = yield call(TransactionApi.search, payload);
+    yield put(SearchTransactionSuccess(result));
   } catch (error) {
-    yield put(DelTransactionFailed(error));
+    yield put(SearchTransactionFailed(error));
   }
 }
 
@@ -63,6 +52,5 @@ export {
   handleTransaction,
   createTransaction,
   FindTransaction,
-  EditTransaction,
-  DeleteTransaction,
+  SearchTransaction,
 };

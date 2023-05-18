@@ -1,21 +1,18 @@
 import React, { ReactNode } from "react";
-import Header from "../header";
-import Footer from "../footer";
-import Sidebar from "../sidebar";
 import { Fragment, useEffect } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
-// import { doSignoutRequest } from "@/redux-saga/action/UserAction";
-import Link from "next/link";
 
 const navigation = [
   { name: "Bank", href: "/payment/bank", current: false },
   { name: "Fintech", href: "/payment/fintech", current: false },
-  { name: "Accounts", href: "/payment/account", current: false },
-  { name: "Topup", href: "/payment/topup", current: false },
-  { name: "Transaction", href: "/payment/transaction", current: false },
+  { name: "Accounts", href: "/payment/accounts", current: false },
+  { name: "Topup", href: "/payment/accounts/Topup", current: false },
+  {
+    name: "Transaction",
+    href: "/payment/accounts/Transaction",
+    current: false,
+  },
 ];
 
 function classNames(...classes: any) {
@@ -52,7 +49,10 @@ export default function Layout(props: LayoutProps) {
                       src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
                       alt="Your Company"
                     />
-                    <h2> REALTA </h2>
+                    <h2 className="space-y-2 ml-4 font-medium text-white">
+                      {" "}
+                      REALTA{" "}
+                    </h2>
                   </div>
                 </div>
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
@@ -77,14 +77,14 @@ export default function Layout(props: LayoutProps) {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                      <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-dark py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-light py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <Menu.Item>
                           {({ active }) => (
                             <a
                               href="#"
                               className={classNames(
                                 active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-white-700"
+                                "block px-4 py-2 text-sm text-gray-700"
                               )}
                             >
                               Your Profile
@@ -97,7 +97,7 @@ export default function Layout(props: LayoutProps) {
                               href="#"
                               className={classNames(
                                 active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-white-700"
+                                "block px-4 py-2 text-sm text-gray-700"
                               )}
                             >
                               Settings
@@ -109,7 +109,7 @@ export default function Layout(props: LayoutProps) {
                             <a
                               className={classNames(
                                 active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-white-700"
+                                "block px-4 py-2 text-sm text-gray-700"
                               )}
                             >
                               Sign out
@@ -129,10 +129,10 @@ export default function Layout(props: LayoutProps) {
       <div className="flex flex-col md:flex-row overflow-y-auto flex-1">
         <aside
           id="default-sidebar"
-          className="top-0 left-0 z-40 w-64 overflow-y-auto transition-transform -translate-x-full sm:translate-x-0"
+          className="top-0 left-0 w-64 overflow-y-auto transition-transform -translate-x-full sm:translate-x-0"
           aria-label="Sidebar"
         >
-          <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+          <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 light:bg-gray-800">
             <ul className="space-y-2 font-medium">
               {navigation.map((item) => (
                 <>
@@ -143,13 +143,13 @@ export default function Layout(props: LayoutProps) {
                         item.current
                           ? "bg-gray-900 text-white"
                           : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                        "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                        "flex items-center p-2 text-gray-900 rounded-lg light:text-white hover:bg-gray-100 light:hover:bg-gray-700"
                       )}
                       aria-current={item.current ? "page" : undefined}
                     >
                       <svg
                         aria-hidden="true"
-                        className="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                        className="w-6 h-6 text-gray-500 transition duration-75 light:text-gray-400 group-hover:text-gray-900 light:group-hover:text-white"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                         xmlns="http://www.w3.org/2000/svg"
@@ -166,18 +166,21 @@ export default function Layout(props: LayoutProps) {
             </ul>
           </div>
         </aside>
-        <main className="flex-1 overflow-y-auto ">
+        <main
+          className="flex-1 overflow-y-auto"
+          style={{ backgroundColor: "#e4eaf2" }}
+        >
           {children}
-          <footer className="bg-white shadow dark:bg-gray-800">
+          <footer className="bg-white shadow light:bg-gray-800">
             <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
-              <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
+              <span className="text-sm text-gray-500 sm:text-center light:text-gray-400">
                 © 2023{" "}
                 <a href="https://flowbite.com/" className="hover:underline">
-                  Realte Hotel™
+                  Realta Hotel™
                 </a>
                 . All Rights Reserved.
               </span>
-              <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
+              <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 light:text-gray-400 sm:mt-0">
                 <li>
                   <a href="#" className="mr-4 hover:underline md:mr-6 ">
                     About

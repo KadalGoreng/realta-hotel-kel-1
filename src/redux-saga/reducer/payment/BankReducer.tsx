@@ -1,4 +1,4 @@
-import * as ActionType from "../constant/BankConstant";
+import * as ActionType from "../../constant/payment/BankConstant";
 
 const INIT_STATE = {
   banks: [],

@@ -12,7 +12,7 @@ import {
   DelBankFailed,
   SearchBankSuccess,
   SearchBankFailed,
-} from "../action/BankAction";
+} from "../../action/payment/BankAction";
 import BankApi from "@/pages/api/Bank";
 
 function* handleBank(): any {

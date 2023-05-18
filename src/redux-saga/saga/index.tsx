@@ -1,9 +1,9 @@
 import { takeEvery, all } from "redux-saga/effects";
 
-import * as ActionBank from "../constant/BankConstant";
-import * as ActionAccount from "../constant/AccountConstant";
-import * as ActionFintech from "../constant/FintechConstant";
-import * as ActionTransaction from "../constant/TransactionConstant";
+import * as ActionBank from "../constant/payment/BankConstant";
+import * as ActionAccount from "../constant/payment/AccountConstant";
+import * as ActionFintech from "../constant/payment/FintechConstant";
+import * as ActionTransaction from "../constant/payment/TransactionConstant";
 
 import {
   handleBank,
@@ -12,7 +12,7 @@ import {
   FindBank,
   EditBank,
   SearchBank,
-} from "./BankSaga";
+} from "./payment/BankSaga";
 
 import {
   handleAccount,
@@ -20,7 +20,7 @@ import {
   DeleteAccount,
   FindAccount,
   EditAccount,
-} from "./AccountSaga";
+} from "./payment/AccountSaga";
 
 import {
   handleFintech,
@@ -29,15 +29,14 @@ import {
   FindFintech,
   EditFintech,
   SearchFintech,
-} from "./FintechSaga";
+} from "./payment/FintechSaga";
 
 import {
   handleTransaction,
   createTransaction,
-  DeleteTransaction,
   FindTransaction,
-  EditTransaction,
-} from "./TransactionSaga";
+  SearchTransaction,
+} from "./payment/TransactionSaga";
 
 function* watchAll() {
   yield all([
@@ -64,8 +63,7 @@ function* watchAll() {
     takeEvery(ActionTransaction.GET_TRANSACTION_REQUEST, handleTransaction),
     takeEvery(ActionTransaction.ADD_TRANSACTION_REQUEST, createTransaction),
     takeEvery(ActionTransaction.FIND_TRANSACTION_REQUEST, FindTransaction),
-    takeEvery(ActionTransaction.EDIT_TRANSACTION_REQUEST, EditTransaction),
-    takeEvery(ActionTransaction.DEL_TRANSACTION_REQUEST, DeleteTransaction),
+    takeEvery(ActionTransaction.SEARCH_TRANSACTION_REQUEST, SearchTransaction),
   ]);
 }
 

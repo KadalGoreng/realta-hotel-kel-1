@@ -1,4 +1,4 @@
-import * as ActionType from "../constant/BankConstant";
+import * as ActionType from "../../constant/payment/BankConstant";
 export const GetBankRequest = () => ({
   type: ActionType.GET_BANK_REQUEST,
 });

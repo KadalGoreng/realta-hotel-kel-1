@@ -12,7 +12,7 @@ import {
   DelFintechFailed,
   SearchFintechSuccess,
   SearchFintechFailed,
-} from "../action/FintechAction";
+} from "../../action/payment/FintechAction";
 import FintechApi from "@/pages/api/PaymentGateway";
 
 function* handleFintech(): any {

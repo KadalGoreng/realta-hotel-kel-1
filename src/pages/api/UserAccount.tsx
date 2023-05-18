@@ -34,7 +34,7 @@ const update = async (data: any) => {
   // const id = parseInt(data.get("id"));
   try {
     const result = await axios.put(
-      `${config.domain}/payment/useraccount/${data.id}`,
+      `${config.domain}/payment/useraccount/${data.usac_entity_id}/${data.usac_user_id}/${data.usac_acc_number}`,
       data
     );
     return result;

@@ -1,5 +1,4 @@
-import React, { ReactNode } from "react";
-import { Fragment, useEffect } from "react";
+import React,{ Fragment, useEffect, ReactNode } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
@@ -18,6 +17,8 @@ const navigation = [
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
+import Header from "../header";
+import Footer from "../footer";
 
 interface LayoutProps {
   children: ReactNode;

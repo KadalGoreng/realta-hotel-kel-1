@@ -33,6 +33,8 @@ export default function BankViewSaga(props: any) {
   const [isOpen, setOpen] = useState<any>(false);
   const [isEdit, setEdit] = useState<any>(false);
   const cancelButtonRef = useRef<any>(null);
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState("");
   const formik = useFormik({
     initialValues: {
       keyword: "",
@@ -114,9 +116,21 @@ export default function BankViewSaga(props: any) {
 
   const handlePageChange = (page: any) => {
     setCurrentPage(page);
-  };
+  };  
 
-  const bankPaginate = paginate(banks, currentPage, pageSize);
+  const search_parameters = Object.keys(Object.assign({}, ...banks));
+
+  function search(banks: any) {
+    return banks.filter(
+      (item: any) =>
+        item.bankName.includes(filter) &&
+        search_parameters.some((parameter) =>
+          item[parameter].toString().toLowerCase().includes(query.toLowerCase())
+        )
+    );
+  }
+
+  const bankPaginate = paginate(search(banks), currentPage, pageSize);
 
   return (
     <Layout>
@@ -143,20 +157,18 @@ export default function BankViewSaga(props: any) {
                     ></path>
                   </svg>
                 </div>
-                <input
-                  type="text"
+                <input                  
                   name="keyword"
                   id="voice-search"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500"
                   placeholder="Search Bank..."
-                  value={formik.values.keyword}
-                  onChange={formik.handleChange}
+                  type="search"
+                  onChange={(e: any) => { setQuery(e.target.value); setCurrentPage(1); }}
                   required
                 />
               </div>
               <button
-                type="submit"
-                onClick={() => formik.handleSubmit()}
+                type="button"                
                 className="inline-flex items-center py-2.5 px-3 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 light:bg-blue-600 light:hover:bg-blue-700 light:focus:ring-blue-800"
               >
                 <svg
@@ -276,7 +288,7 @@ export default function BankViewSaga(props: any) {
             </div>
             <div className="w-full mb-4 justify-content-center">
               <Pagination
-                items={banks.length}
+                items={search(banks).length}
                 pageSize={pageSize}
                 currentPage={currentPage}
                 onPageChange={handlePageChange}

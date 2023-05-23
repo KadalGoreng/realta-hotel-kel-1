@@ -50,31 +50,18 @@ export default function Topup(props: any) {
         "-" +
         Math.floor(1000 + Math.random() * 9000);
       let payload = {};
-      if (source.typeAccount == "Debet" || source.typeAccount == "Payment") {
-        payload = {
-          patr_number: numb,
-          patr_debet: values.transfer,
-          patr_credit: "0",
-          patr_type: "TP",
-          patr_note: "Top Up",
-          order_number: numb,
-          source_id: values.source_account,
-          target_id: values.target_account,
-          user_id: 6,
-        };
-      } else if (source.typeAccount == "Credit Card") {
-        payload = {
-          patr_number: numb,
-          patr_debet: "0",
-          patr_credit: values.transfer,
-          patr_type: "TP",
-          patr_note: "Top Up",
-          order_number: numb,
-          source_id: values.source_account,
-          target_id: values.target_account,
-          user_id: 7,
-        };
-      }
+
+      payload = {
+        patr_number: numb,
+        nominal: values.transfer,
+        patr_type: "TP",
+        patr_note: "Top Up",
+        order_number: numb,
+        source_id: values.source_account,
+        target_id: values.target_account,
+        number_ref: "",
+        user_id: 6,
+      };
 
       dispatch(AddTransactionRequest(payload));
       setOpen(false);
@@ -140,7 +127,7 @@ export default function Topup(props: any) {
                     name="source"
                     id="source"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-600 light:border-gray-500 light:placeholder-gray-400 light:text-white"
-                    placeholder="source name"                    
+                    placeholder="source name"
                     required
                   />
                 </div>

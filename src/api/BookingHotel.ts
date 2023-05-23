@@ -33,10 +33,33 @@ const getCoupon = async () => {
   }
 };
 
+const getAddOnItem = async () => {
+  try {
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/price-items`
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
 const createOrder = async (data: any) => {
   try {
     const result = await axios.post(
       `${process.env.NEXT_PUBLIC_BASE_URL_API}/order/`,
+      data
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+const createBoex = async (data: any) => {
+  try {
+    const result = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/order-detail-extra/`,
       data
     );
     return result;
@@ -87,4 +110,6 @@ export default {
   getBookingOrderByUser,
   getBookingOrder,
   createTransaction,
+  getAddOnItem,
+  createBoex,
 };

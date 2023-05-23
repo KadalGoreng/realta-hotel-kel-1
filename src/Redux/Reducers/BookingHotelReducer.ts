@@ -4,7 +4,9 @@ const INIT_STATE = {
   bookingHotel: [],
   hotelFacility: [],
   coupon: [],
+  stocks: [],
   bookingOrder: {},
+  boex: {},
 };
 
 const BookingHotelReducer = (state = INIT_STATE, action: any) => {
@@ -21,6 +23,14 @@ const BookingHotelReducer = (state = INIT_STATE, action: any) => {
       return { ...state };
     case ActionType.GET_COUPON_SUCCESS:
       return getCoupon(state, action);
+    case ActionType.GET_STOCK_REQUEST:
+      return { ...state };
+    case ActionType.GET_STOCK_SUCCESS:
+      return getAddOnItem(state, action);
+    case ActionType.CREATE_BOEX_REQUEST:
+      return { ...state };
+    case ActionType.CREATE_BOEX_SUCCESS:
+      return createBoex(state, action);
     case ActionType.CREATE_BOOKINGORDER_SUCCESS:
       return createOrder(state, action);
     default:
@@ -49,10 +59,25 @@ const getCoupon = (state: any, action: any) => {
   };
 };
 
+const getAddOnItem = (state: any, action: any) => {
+  return {
+    ...state,
+    stocks: action.payload,
+  };
+};
+
 const createOrder = (state: any, action: any) => {
   return {
     ...state,
     bookingOrder: action.payload,
+  };
+};
+
+const createBoex = (state: any, action: any) => {
+  const { payload } = action;
+  return {
+    ...state,
+    boex: { payload },
   };
 };
 

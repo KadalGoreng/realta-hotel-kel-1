@@ -42,6 +42,35 @@ export const GetCouponFailed = (payload: any) => ({
   payload,
 });
 
+export const GetAddOnItemRequest = () => ({
+  type: ActionType.GET_STOCK_REQUEST,
+});
+
+export const GetAddOnItemSuccess = (payload: any) => ({
+  type: ActionType.GET_STOCK_SUCCESS,
+  payload,
+});
+
+export const GetAddOnItemFailed = (payload: any) => ({
+  type: ActionType.GET_STOCK_FAILED,
+  payload,
+});
+
+export const CreateBoexRequest = (payload: any) => ({
+  type: ActionType.CREATE_BOEX_REQUEST,
+  payload,
+});
+
+export const CreateBoexSuccess = (payload: any) => ({
+  type: ActionType.CREATE_BOEX_SUCCESS,
+  payload,
+});
+
+export const CreateBoexFailed = (payload: any) => ({
+  type: ActionType.CREATE_BOEX_FAILED,
+  payload,
+});
+
 export const CreateBoSuccess = (payload: any) => ({
   type: ActionType.CREATE_BOOKINGORDER_SUCCESS,
   payload,

@@ -10,4 +10,12 @@ export const GET_COUPON_REQUEST = "get/coupon/request";
 export const GET_COUPON_SUCCESS = "get/coupon/success";
 export const GET_COUPON_FAILED = "get/coupon/failed";
 
+export const GET_STOCK_REQUEST = "get/stock/request";
+export const GET_STOCK_SUCCESS = "get/stock/success";
+export const GET_STOCK_FAILED = "get/stock/failed";
+
 export const CREATE_BOOKINGORDER_SUCCESS = "create/bo/success";
+
+export const CREATE_BOEX_REQUEST = "create/boex/request";
+export const CREATE_BOEX_SUCCESS = "create/boex/success";
+export const CREATE_BOEX_FAILED = "create/boex/failed";

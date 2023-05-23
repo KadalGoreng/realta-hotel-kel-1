@@ -61,7 +61,7 @@ export const calculateRatingBySingleStar = (ratings: any) => {
 
 export const addOneDay = new Date(Date.now() + 3600 * 1000 * 24);
 
-export const reduceOneDay = new Date(Date.now() - 3600 * 1000 * 24);
+export const reduceOneDay = new Date(Date.now() - 3600 * 1000 * 12);
 
 export const removeDuplicates = (arr: any) => {
   const duplicates: any[] = [];

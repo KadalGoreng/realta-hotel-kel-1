@@ -29,7 +29,13 @@ const saga = createSagaMiddleware();
 const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) => [
-    ...getDefaultMiddleware(),
+    ...getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ["create/bo/success"],
+        ignoredActionPaths: ["meta.arg", "payload.timestamp"],
+        ignoredPaths: ["bookingHotelState.bookingOrder"],
+      },
+    }),
     saga,
     logger,
   ],

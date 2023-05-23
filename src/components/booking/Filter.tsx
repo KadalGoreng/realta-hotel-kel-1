@@ -70,7 +70,7 @@ export default function Filter(props: any) {
               <input
                 className="mr-4"
                 type="checkbox"
-                value="Room"
+                value="Ballroom"
                 onChange={handleFilterChange}
               />
               Ball Room

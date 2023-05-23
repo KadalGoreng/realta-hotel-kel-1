@@ -1,4 +1,5 @@
 import { GetCouponRequest } from "@/Redux/Actions/BookingHotelAction";
+import { GetPolicyRequest } from "@/Redux/Actions/masterAction";
 import AnotherRoom from "@/components/booking/AnotherRoom";
 import OrderSummary from "@/components/booking/OrderSummary";
 import {
@@ -15,11 +16,11 @@ import { useDispatch, useSelector } from "react-redux";
 export default function BookingRoom() {
   const router = useRouter();
 
-  console.log(router);
   const { id } = router.query;
 
   const { bookingHotel } = useSelector((state: any) => state.bookingHotelState);
   const { coupon } = useSelector((state: any) => state.bookingHotelState);
+  const { policy } = useSelector((state: any) => state.masterState);
 
   if (!id) {
     return null;
@@ -34,12 +35,12 @@ export default function BookingRoom() {
 
   const moreFacility = aminities.length - 3;
 
-  const [selected, setSelected] = useState(facilities[0].faciName);
+  const [selected, setSelected] = useState(facilities[0].faciId);
   const [showMore, setShowMore] = useState(false);
 
   const room = facilities.filter((item: any) => item.faciCagro.cagroId == 1);
   const facilitySelected = facilities.find(
-    (item: any) => item.faciName === selected
+    (item: any) => item.faciId === selected
   );
 
   const dispatch = useDispatch();
@@ -60,16 +61,14 @@ export default function BookingRoom() {
 
   useEffect(() => {
     dispatch(GetCouponRequest());
+    dispatch(GetPolicyRequest(1));
     // dispatch(GetFacilityByHotelRequest(id));
   }, []);
-  // console.log(
-  //   (hotelReviews.length / calculateRatingBySingleStar(hotelReviews)[2]) * 100
-  // );
+
   console.log(
     (calculateRatingBySingleStar(hotelReviews)[4] / hotelReviews.length) * 100
   );
 
-  // calculateRatingBySingleStar(hotelReviews);
   return (
     <div className="flex flex-col">
       <div className="flex">
@@ -94,7 +93,7 @@ export default function BookingRoom() {
         <div className="flex flex-col gap-4 w-[65%]">
           <div className="title">
             <div className="flex justify-between">
-              <span className="text-2xl font-bold mb-2">
+              <span className="text-3xl font-bold mb-2">
                 {data && data.hotelName}
               </span>
               <span
@@ -114,13 +113,13 @@ export default function BookingRoom() {
             </span>
           </div>
           <div className="items-center">
-            <p className="font-bold text-xl mb-2">Description</p>
+            <p className="font-bold text-2xl mb-2">Description</p>
             <span className="font-light text-gray-600">
               {data && data.hotelDescription}
             </span>
           </div>
           <div className="items-center leading-7">
-            <p className="font-bold text-xl mb-2">Amenities</p>
+            <p className="font-bold text-2xl mb-2">Amenities</p>
             <div className="flex flex-col gap-1">
               <div className="flex gap-4 w-[45%] flex-wrap text-gray-600">
                 {showMore
@@ -167,10 +166,10 @@ export default function BookingRoom() {
             </div>
           </div>
           <div className="">
-            <p className="font-bold text-xl my-3">Another Rooms</p>
+            <p className="font-bold text-2xl my-3">Another Rooms</p>
             <div className="flex flex-col gap-3">
               {room &&
-                room.map((item: any, index: any) => (
+                room.map((item: any) => (
                   <AnotherRoom
                     {...item}
                     setSelected={setSelected}
@@ -180,7 +179,7 @@ export default function BookingRoom() {
             </div>
           </div>
           <div>
-            <p className="mb-2 font-bold text-xl">Rating and Reviews</p>
+            <p className="mb-2 font-bold text-2xl">Rating and Reviews</p>
             <div className="flex mb-5">
               <div className="w-full">
                 {singleRating.map((rating: any, index: number) => (
@@ -190,9 +189,10 @@ export default function BookingRoom() {
                     </span>
                     <div className="w-3/4 h-1 mx-4 bg-gray-200 rounded ">
                       <div
-                        className={`h-1 bg-green-500 rounded w-[${
-                          (rating / hotelReviews.length) * 100
-                        }%]`}
+                        style={{
+                          width: `${(rating / hotelReviews.length) * 100}%`,
+                        }}
+                        className={`h-1 bg-green-500 rounded`}
                       ></div>
                     </div>
                     <span className="text-sm font-medium">
@@ -217,7 +217,7 @@ export default function BookingRoom() {
                         <span className="font-semibold">
                           {`${item.horeUser.userFullName} · `}
                         </span>
-                        <span className="font-light">{`${formatDate(
+                        <span className="font-light text-[14px]">{`${formatDate(
                           item.horeCreatedOn,
                           undefined,
                           "numeric"
@@ -233,13 +233,13 @@ export default function BookingRoom() {
             </div>
           </div>
           <div>
-            <p className="mb-2 font-bold text-xl">Hotel Policies</p>
-            <span className="text-gray-600">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eos quas
-              saepe praesentium, mollitia expedita culpa ad accusamus eum
-              nesciunt impedit maiores. Numquam fugit molestias repellendus iure
-              corporis labore officia fuga?
-            </span>
+            <p className="mb-2 font-bold text-2xl">Hotel Policies</p>
+            <ul className="list-disc pl-5">
+              {policy &&
+                policy.map((item: any) => (
+                  <li className="text-gray-600">{item.poliDescription}</li>
+                ))}
+            </ul>
           </div>
         </div>
         <div className="w-[35%]">

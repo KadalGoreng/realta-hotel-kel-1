@@ -27,16 +27,16 @@ export default function Card(props: any) {
   return (
     <div key={hotelId} className="border-b-[2px] pb-4">
       <div className="flex gap-5">
-        <div className="carousel w-[20%]">
+        <div className="flex w-[30%]">
           <div
             id={`slide1${hotelId}`}
-            className="carousel-item relative w-full"
+            // className="carousel-item relative w-full"
           >
             <img
               src="https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-masonry-100.jpg"
-              className="w-full"
+              className="w-full h-full"
             />
-            <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+            {/* <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
               <a
                 href={`#slide4${hotelId}`}
                 className="btn btn-circle opacity-50"
@@ -49,9 +49,9 @@ export default function Card(props: any) {
               >
                 ❯
               </a>
-            </div>
+            </div> */}
           </div>
-          <div
+          {/* <div
             id={`slide2${hotelId}`}
             className="carousel-item relative w-full"
           >
@@ -119,7 +119,7 @@ export default function Card(props: any) {
                 ❯
               </a>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="flex flex-col gap-4 justify-between">
           <div>

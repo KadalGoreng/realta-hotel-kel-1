@@ -9,8 +9,14 @@ import React from "react";
 import ButtonOutline from "./ButtonOutline";
 
 export default function AnotherRoom(props: any) {
-  const { faciName, faciRatePrice, faciMaxNumber, setSelected, selected } =
-    props;
+  const {
+    faciName,
+    faciId,
+    faciRatePrice,
+    faciMaxNumber,
+    setSelected,
+    selected,
+  } = props;
   return (
     <div className="flex gap-4 rounded-lg p-4 bg-white shadow-[0px_2px_10px_2px_#00000024]">
       <div className="flex justify-between w-full">
@@ -43,9 +49,9 @@ export default function AnotherRoom(props: any) {
             src="https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-masonry-100.jpg"
             alt=""
           />
-          {selected === faciName ? (
+          {selected === faciId ? (
             <ButtonOutline
-              onClick={() => setSelected(faciName)}
+              onClick={() => setSelected(faciId)}
               label={
                 <div className="flex items-center gap-2">
                   <CheckCircleFilled /> Selected
@@ -56,10 +62,7 @@ export default function AnotherRoom(props: any) {
               background
             />
           ) : (
-            <ButtonOutline
-              onClick={() => setSelected(faciName)}
-              label="Select"
-            />
+            <ButtonOutline onClick={() => setSelected(faciId)} label="Select" />
           )}
         </div>
       </div>

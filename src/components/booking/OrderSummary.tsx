@@ -15,7 +15,15 @@ import { RangePickerProps } from "antd/es/date-picker";
 import Button from "./Button";
 
 export default function OrderSummary(props: any) {
-  const { coupon, faciRatePrice, faciName, id, hotelName, faciTaxRate } = props;
+  const {
+    coupon,
+    faciRatePrice,
+    faciName,
+    faciId,
+    id,
+    hotelName,
+    faciTaxRate,
+  } = props;
 
   const dispatch = useDispatch();
 
@@ -78,6 +86,7 @@ export default function OrderSummary(props: any) {
 
   useEffect(() => {
     onChangeState("faciName", faciName);
+    onChangeState("faciId", faciId);
     onChangeState("saving", convertPrice(couponDiscount.spofDiscount));
     onChangeState("price", convertPrice(faciRatePrice) * totalBooking);
     onChangeState("faciTaxRate", convertPrice(faciTaxRate));

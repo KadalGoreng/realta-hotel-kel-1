@@ -1,15 +1,25 @@
 import OrderSummaryNotModified from "@/components/booking/OrderSummaryNotModified";
 import React, { useEffect, useState } from "react";
 import api from "@/api/BookingHotel";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   bookingOrderNumber,
+  convertPrice,
+  formatPrice,
   generateRandomString,
   transactionNumber,
 } from "@/utils/helpers";
+import {
+  CreateBoexRequest,
+  GetAddOnItemRequest,
+} from "@/Redux/Actions/BookingHotelAction";
 
 export default function Order() {
+  const dispatch = useDispatch();
+
   const { bookingOrder } = useSelector((state: any) => state.bookingHotelState);
+  const { bookingHotel } = useSelector((state: any) => state.bookingHotelState);
+  const { stocks } = useSelector((state: any) => state.bookingHotelState);
 
   const {
     hotelName,
@@ -18,10 +28,19 @@ export default function Order() {
     faciName,
     price,
     totalPrice,
+    faciId,
     saving,
     faciTaxRate,
     hotelId,
   } = bookingOrder;
+
+  const addOns = bookingHotel
+    .find((item: any) => item.hotelId === Number(hotelId))
+    .facilities.find(
+      (item: any) => item.faciId === Number(faciId)
+    ).stockDetails;
+
+  const [addOnsOrder, setAddOnsOrder] = useState<any>([]);
 
   const [payload, setPayload] = useState({
     boorOrderDate: new Date(),
@@ -47,7 +66,7 @@ export default function Order() {
   });
 
   const [payloadTrx, setPayloadTrx] = useState({
-    patr_number: transactionNumber("6"),
+    patr_number: transactionNumber("7"),
     patr_debet: 0,
     patr_credit: totalPrice,
     patr_type: "TRB",
@@ -72,26 +91,109 @@ export default function Order() {
     });
   };
 
+  const addToCart = (item: any) => {
+    const existingItem = addOnsOrder.find(
+      (cartItem: any) => cartItem.pritName === item.pritName
+    );
+
+    if (existingItem) {
+      const updatedItem = {
+        ...existingItem,
+        boexSubtotal: existingItem.boexSubtotal + convertPrice(item.pritPrice),
+        boexQty: existingItem.boexQty + 1,
+      };
+
+      const itemIndex = addOnsOrder.findIndex(
+        (cartItem: any) => cartItem.pritName === item.pritName
+      );
+
+      setAddOnsOrder([
+        ...addOnsOrder.slice(0, itemIndex),
+        updatedItem,
+        ...addOnsOrder.slice(itemIndex + 1),
+      ]);
+    } else {
+      const newItem = {
+        pritName: item.pritName,
+        boexPrice: convertPrice(item.pritPrice),
+        boexQty: 1,
+        boexSubtotal: convertPrice(item.pritPrice),
+        boexMeasureUnit: "Unit",
+        boexPrit: {
+          pritId: item.pritId,
+        },
+      };
+      setAddOnsOrder([...addOnsOrder, newItem]);
+    }
+  };
+
+  const removerItem = (item: any) => {
+    const existingItem = addOnsOrder.find(
+      (cartItem: any) => cartItem.pritName === item.pritName
+    );
+
+    if (existingItem) {
+      if (existingItem.boexQty > 1) {
+        const updatedItem = {
+          ...existingItem,
+          boexSubtotal:
+            existingItem.boexSubtotal - convertPrice(item.pritPrice),
+          boexQty: existingItem.boexQty - 1,
+        };
+
+        const itemIndex = addOnsOrder.findIndex(
+          (cartItem: any) => cartItem.pritName === item.pritName
+        );
+
+        setAddOnsOrder([
+          ...addOnsOrder.slice(0, itemIndex),
+          updatedItem,
+          ...addOnsOrder.slice(itemIndex + 1),
+        ]);
+      } else {
+        const itemIndex = addOnsOrder.findIndex(
+          (cartItem: any) => cartItem.pritName === item.pritName
+        );
+        setAddOnsOrder([
+          ...addOnsOrder.slice(0, itemIndex),
+          ...addOnsOrder.slice(itemIndex + 1),
+        ]);
+      }
+    }
+  };
+
+  const findAddOn = (item: any) => {
+    return addOnsOrder.find((order: any) => order.pritName === item.pritName);
+  };
+
   useEffect(() => {
     getOrderNumber();
+    dispatch(GetAddOnItemRequest());
   }, []);
 
   const booking = () => {
-    api.createOrder(payload).then(() => {
-      api.createTransaction(payloadTrx);
-    });
+    // api.createOrder(payload).then(() => {
+    //   api.createTransaction(payloadTrx);
+    // });
+    addOnsOrder &&
+      addOnsOrder.map((order: any) =>
+        dispatch(
+          CreateBoexRequest(Object.fromEntries(Object.entries(order).slice(1)))
+        )
+      );
+
     window.alert("Successfully Order");
   };
 
   return (
-    <div className="flex flex-col h-[100vh]">
+    <div className="flex flex-col min-h-[100vh]">
       <div className="my-[56px] mx-auto">
         {/* <span className="text-2xl font-bold">Modify your booking</span> */}
       </div>
       <div className="flex justify-center gap-10">
         <div className="flex flex-col w-[700px] gap-5">
-          <div className="border-2">
-            <div className="p-5 bg-slate-500">
+          <div className="border-2 ">
+            <div className="p-5 bg-slate-400">
               <span className="font-bold text-xl text-white">
                 1. Enter your details
               </span>
@@ -104,11 +206,7 @@ export default function Order() {
               </div>
               <div className="flex flex-col" style={{ flex: "0 1 40%" }}>
                 <label>Full Name</label>
-                <input
-                  className="input input-bordered input-sm"
-                  type="text"
-                  onChange={(e) => console.log(e.target.value)}
-                />
+                <input className="input input-bordered input-sm" type="text" />
               </div>
               <div className="flex flex-col" style={{ flex: "0 1 40%" }}>
                 <label>Email</label>
@@ -120,13 +218,80 @@ export default function Order() {
               </div>
               <div className="flex flex-col" style={{ flex: "0 1 40%" }}>
                 &nbsp;
-                <button className="btn btn-sm">Send passcode</button>
+                {/* <button className="btn btn-sm">Send passcode</button> */}
               </div>
             </div>
           </div>
           <div className="border-2">
-            <div className="p-5 bg-slate-500">
-              <span className="font-bold text-xl text-white">2. Payment</span>
+            <div className="p-5 bg-slate-400">
+              <span className="font-bold text-xl text-white">
+                2. Add your extra order
+              </span>
+            </div>
+            <div className="p-5">
+              <table className="w-2/3">
+                <thead>
+                  <tr>
+                    <th className="text-left">Item</th>
+                    <th className="text-left">Price</th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {stocks.map(
+                    (item: any, index: number) =>
+                      index < 5 && (
+                        <tr key={index}>
+                          <td>{item.pritName}</td>
+                          <td className="">
+                            Rp.
+                            {formatPrice(convertPrice(item.pritPrice))}
+                          </td>
+                          <td className="flex gap-3">
+                            <span
+                              className="btn btn-xs"
+                              onClick={() => removerItem(item)}
+                            >
+                              -
+                            </span>
+                            <span>
+                              {addOnsOrder && findAddOn(item)
+                                ? findAddOn(item).boexQty
+                                : "0"}
+                            </span>
+                            <span
+                              className="btn btn-xs"
+                              onClick={() => addToCart(item)}
+                            >
+                              +
+                            </span>
+                          </td>
+                        </tr>
+                      )
+                  )}
+                  <tr>
+                    <td className="font-bold">
+                      <span>Total Price</span>
+                    </td>
+                    <td>
+                      <span className="font-bold">
+                        Rp.
+                        {addOnsOrder &&
+                          addOnsOrder.reduce(
+                            (prev: any, curr: any) => prev + curr.boexSubtotal,
+                            0
+                          )}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div className="border-2">
+            <div className="p-5 bg-slate-400">
+              <span className="font-bold text-xl text-white">3 . Payment</span>
             </div>
             <div className="flex flex-wrap p-5 gap-3">
               <div className="flex flex-col gap-2" style={{ flex: "0 1 40%" }}>

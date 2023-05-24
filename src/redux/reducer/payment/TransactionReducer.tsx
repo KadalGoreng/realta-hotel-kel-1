@@ -39,7 +39,7 @@ const AddTransactionSuccessfully = (state: any, action: any) => {
   const { payload } = action;
   return {
     ...state,
-    transactions: [...state.Transactions, payload],
+    transactions: [...state.transactions, payload],
   };
 };
 

@@ -1,5 +1,7 @@
 import { call, put } from "redux-saga/effects";
 import {
+  GetAllAccountSuccess,
+  GetAllAccountFailed,
   GetAccountSuccess,
   GetAccountFailed,
   AddAccountSuccess,
@@ -13,9 +15,19 @@ import {
 } from "../../action/payment/AccountAction";
 import AccountApi from "@/pages/api/UserAccount";
 
-function* handleAccount(): any {
+function* GetAllAccount(): any {
   try {
     const result = yield call(AccountApi.read);
+    yield put(GetAllAccountSuccess(result));
+  } catch (error) {
+    yield put(GetAllAccountFailed(error));
+  }
+}
+
+function* handleAccount(action: any): any {
+  const { payload } = action;
+  try {
+    const result = yield call(AccountApi.readOne, payload);
     yield put(GetAccountSuccess(result));
   } catch (error) {
     yield put(GetAccountFailed(error));
@@ -60,6 +72,7 @@ function* DeleteAccount(action: any): any {
 }
 
 export {
+  GetAllAccount,
   handleAccount,
   createAccount,
   FindAccount,

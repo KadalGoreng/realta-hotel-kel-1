@@ -10,9 +10,9 @@ import {
   FindAccountRequest,
   EditAccountRequest,
   DelAccountRequest,
-} from "@/redux-saga/action/payment/AccountAction";
-import { GetBankRequest } from "@/redux-saga/action/payment/BankAction";
-import { GetFintechRequest } from "@/redux-saga/action/payment/FintechAction";
+} from "@/redux/action/payment/AccountAction";
+import { GetBankRequest } from "@/redux/action/payment/BankAction";
+import { GetFintechRequest } from "@/redux/action/payment/FintechAction";
 import { paginate } from "@/utils/paginate";
 import Pagination from "@/components/Pagination";
 
@@ -23,6 +23,7 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/20/solid";
+import { getCookie } from "cookies-next";
 
 export default function AccountViewSaga() {
   const dispatch = useDispatch();
@@ -32,6 +33,8 @@ export default function AccountViewSaga() {
 
   const { accounts } = useSelector((state: any) => state.accountState);
   const { account } = useSelector((state: any) => state.accountState);
+  const { UserProfile } = useSelector((state: any) => state.userState);
+
   const [refresh, setRefresh] = useState<any>(false);
   const [display, setDisplay] = useState<any>(false);
   const [displayEdit, setDisplayEdit] = useState<any>(false);
@@ -41,6 +44,12 @@ export default function AccountViewSaga() {
   const [isOpen, setOpen] = useState<any>(false);
   const [isEdit, setEdit] = useState<any>(false);
   const cancelButtonRef = useRef<any>(null);
+
+  useEffect(() => {
+    dispatch(GetAccountRequest(UserProfile.userId));
+    dispatch(GetBankRequest());
+    dispatch(GetFintechRequest());
+  }, [dispatch, refresh]);
 
   const formikSave = useFormik({
     initialValues: {
@@ -53,18 +62,18 @@ export default function AccountViewSaga() {
     onSubmit: async (values, { resetForm }) => {
       let payload = {
         usac_entity_id: values.entity_id,
-        usac_user_id: values.user_id,
+        usac_user_id: UserProfile.userId,
         usac_acc_number: values.account_number,
         usac_saldo: values.saldo,
         usac_type: values.type,
       };
 
       dispatch(AddAccountRequest(payload));
+      dispatch(GetAccountRequest(UserProfile.userId));
       window.alert("Data Successfully Added.");
       setRefresh(true);
       setOpen(false);
       resetForm();
-      dispatch(GetAccountRequest());
     },
   });
 
@@ -90,18 +99,12 @@ export default function AccountViewSaga() {
 
       dispatch(EditAccountRequest(payload));
       setRefresh(true);
-      dispatch(GetAccountRequest());
+      dispatch(GetAccountRequest(UserProfile.userId));
       window.alert("Data Successfully Updated.");
       setEdit(false);
       resetForm();
     },
   });
-
-  useEffect(() => {
-    dispatch(GetAccountRequest());
-    dispatch(GetBankRequest());
-    dispatch(GetFintechRequest());
-  }, [dispatch, refresh]);
 
   const onUpdate = (id: any) => {
     dispatch(FindAccountRequest(id));
@@ -131,197 +134,180 @@ export default function AccountViewSaga() {
         <>
           <div className="container">
             <div className="card mt-4 mb-4">
-              {displayEdit ? (
-                <AccountUpdateForm
-                  setRefresh={setRefresh}
-                  setDisplay={setDisplayEdit}
-                  id={id}
-                />
-              ) : display ? (
-                <AccountCreateForm
-                  setRefresh={setRefresh}
-                  setDisplay={setDisplay}
-                />
-              ) : (
-                <>
-                  <nav className="flex mt-4 mx-8" aria-label="Breadcrumb">
-                    <ol className="inline-flex items-center space-x-1 md:space-x-3">
-                      <li className="inline-flex items-center">
-                        <a
-                          href="#"
-                          className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 light:text-gray-400 light:hover:text-white"
-                        >
+              <nav className="flex mt-4 mx-8" aria-label="Breadcrumb">
+                <ol className="inline-flex items-center space-x-1 md:space-x-3">
+                  <li className="inline-flex items-center">
+                    <a
+                      href="#"
+                      className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 light:text-gray-400 light:hover:text-white"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        className="w-4 h-4 mr-2"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                      </svg>
+                      Home
+                    </a>
+                  </li>
+                  <li>
+                    <div className="flex items-center">
+                      <svg
+                        aria-hidden="true"
+                        className="w-6 h-6 text-gray-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                          clip-rule="evenodd"
+                        ></path>
+                      </svg>
+                      <a
+                        href="#"
+                        className="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 light:text-gray-400 light:hover:text-white"
+                      >
+                        User Account
+                      </a>
+                    </div>
+                  </li>
+                </ol>
+              </nav>
+
+              <div className="relative shadow-md sm:rounded-lg m-8">
+                <table className="w-full text-sm text-left text-gray-500 light:text-gray-400">
+                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 light:bg-gray-700 light:text-gray-400">
+                    <tr className="border-b bg-gray-50 light:bg-gray-800 light:border-gray-700">
+                      <th scope="col" className="px-6 py-3">
+                        Account Number
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Desc
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Saldo
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Type
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-end">
+                        <button onClick={() => setOpen(true)}>
+                          {" "}
                           <svg
-                            aria-hidden="true"
-                            className="w-4 h-4 mr-2"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-                          </svg>
-                          Home
-                        </a>
-                      </li>
-                      <li>
-                        <div className="flex items-center">
-                          <svg
-                            aria-hidden="true"
-                            className="w-6 h-6 text-gray-400"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-6 h-6"
                           >
                             <path
-                              fill-rule="evenodd"
-                              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                              clip-rule="evenodd"
-                            ></path>
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M12 4.5v15m7.5-7.5h-15"
+                            />
                           </svg>
-                          <a
-                            href="#"
-                            className="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 light:text-gray-400 light:hover:text-white"
+                          Add{" "}
+                        </button>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {accountPaginate.map((item: any) => {
+                      return (
+                        <>
+                          <tr
+                            className="bg-white border-b light:bg-gray-900 light:border-gray-700"
+                            key={item.usacEntityId}
                           >
-                            User Account
-                          </a>
-                        </div>
-                      </li>
-                    </ol>
-                  </nav>
+                            <th scope="row" className="px-6 py-4">
+                              {item.usacAccountNumber}
+                            </th>
+                            <td className="px-6 py-4">
+                              {item.usacEntity["bank"] !== null
+                                ? item.usacEntity["bank"]["bankName"]
+                                : item.usacEntity["paymentGateway"]["pagaName"]}
+                            </td>
+                            <td className="px-6 py-4">{Intl.NumberFormat("id-ID", {style: "currency", currency: "idr"}).format(item.usacSaldo)}</td>
+                            <td className="px-6 py-4">{item.usacType}</td>
+                            <td className="px-6 py-4 text-end">
+                              <Menu
+                                as="div"
+                                className="relative inline-block text-left"
+                              >
+                                <div>
+                                  <Menu.Button>
+                                    <EllipsisVerticalIcon
+                                      className="-mr-1 h-7 w-7 text-gray-400"
+                                      aria-hidden="true"
+                                    />
+                                  </Menu.Button>
+                                </div>
 
-                  <div className="relative shadow-md sm:rounded-lg m-8">
-                    <table className="w-full text-sm text-left text-gray-500 light:text-gray-400">
-                      <thead className="text-xs text-gray-700 uppercase bg-gray-50 light:bg-gray-700 light:text-gray-400">
-                        <tr className="border-b bg-gray-50 light:bg-gray-800 light:border-gray-700">
-                          <th scope="col" className="px-6 py-3">
-                            Account Number
-                          </th>
-                          <th scope="col" className="px-6 py-3">
-                            Desc
-                          </th>
-                          <th scope="col" className="px-6 py-3">
-                            Saldo
-                          </th>
-                          <th scope="col" className="px-6 py-3">
-                            Type
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-end">
-                            <button onClick={() => setOpen(true)}>
-                              {" "}
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="w-6 h-6"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M12 4.5v15m7.5-7.5h-15"
-                                />
-                              </svg>
-                              Add{" "}
-                            </button>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {accountPaginate.map((item: any) => {
-                          return (
-                            <>
-                              <tr
-                                className="bg-white border-b light:bg-gray-900 light:border-gray-700"
-                                key={item.usacEntityId}
-                              >
-                                <th scope="row" className="px-6 py-4">
-                                  {item.usacAccountNumber}
-                                </th>
-                                <td className="px-6 py-4">
-                                  {item.usacEntity["bank"] !== null
-                                    ? item.usacEntity["bank"]["bankName"]
-                                    : item.usacEntity["paymentGateway"][
-                                        "pagaName"
-                                      ]}
-                                </td>
-                                <td className="px-6 py-4">{item.usacSaldo}</td>
-                                <td className="px-6 py-4">{item.usacType}</td>
-                                <td className="px-6 py-4 text-end">
-                                  <Menu
-                                    as="div"
-                                    className="relative inline-block text-left"
-                                  >
-                                    <div>
-                                      <Menu.Button>
-                                        <EllipsisVerticalIcon
-                                          className="-mr-1 h-7 w-7 text-gray-400"
-                                          aria-hidden="true"
-                                        />
-                                      </Menu.Button>
+                                <Transition
+                                  as={Fragment}
+                                  enter="transition ease-out duration-100"
+                                  enterFrom="transform opacity-0 scale-95"
+                                  enterTo="transform opacity-100 scale-100"
+                                  leave="transition ease-in duration-75"
+                                  leaveFrom="transform opacity-100 scale-100"
+                                  leaveTo="transform opacity-0 scale-95"
+                                >
+                                  <Menu.Items className="absolute right-0 z-10 mt-2 w-44 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                    <div className="py-1">
+                                      <Menu.Item>
+                                        <a
+                                          href="#"
+                                          onClick={() =>
+                                            onUpdate(item.usacAccountNumber)
+                                          }
+                                          className="flex text-gray-700 block px-4 py-2 text-sm"
+                                        >
+                                          <PencilSquareIcon className="w-4 h-4 ml-1" />
+                                          <span className="flex-1 ml-3 whitespace-nowrap">
+                                            Edit
+                                          </span>
+                                        </a>
+                                      </Menu.Item>
+                                      <Menu.Item>
+                                        <a
+                                          href="#"
+                                          onClick={() =>
+                                            onDelete(item.usacAccountNumber)
+                                          }
+                                          className="flex text-gray-700 block px-4 py-2 text-sm"
+                                        >
+                                          <TrashIcon className="inline-flex w-4 h-4 ml-1" />
+                                          <span className="flex-1 ml-3 whitespace-nowrap">
+                                            Delete
+                                          </span>
+                                        </a>
+                                      </Menu.Item>
                                     </div>
-
-                                    <Transition
-                                      as={Fragment}
-                                      enter="transition ease-out duration-100"
-                                      enterFrom="transform opacity-0 scale-95"
-                                      enterTo="transform opacity-100 scale-100"
-                                      leave="transition ease-in duration-75"
-                                      leaveFrom="transform opacity-100 scale-100"
-                                      leaveTo="transform opacity-0 scale-95"
-                                    >
-                                      <Menu.Items className="absolute right-0 z-10 mt-2 w-44 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                        <div className="py-1">
-                                          <Menu.Item>
-                                            <a
-                                              href="#"
-                                              onClick={() =>
-                                                onUpdate(item.usacAccountNumber)
-                                              }
-                                              className="flex text-gray-700 block px-4 py-2 text-sm"
-                                            >
-                                              <PencilSquareIcon className="w-4 h-4 ml-1" />
-                                              <span className="flex-1 ml-3 whitespace-nowrap">
-                                                Edit
-                                              </span>
-                                            </a>
-                                          </Menu.Item>
-                                          <Menu.Item>
-                                            <a
-                                              href="#"
-                                              onClick={() =>
-                                                onDelete(item.usacAccountNumber)
-                                              }
-                                              className="flex text-gray-700 block px-4 py-2 text-sm"
-                                            >
-                                              <TrashIcon className="inline-flex w-4 h-4 ml-1" />
-                                              <span className="flex-1 ml-3 whitespace-nowrap">
-                                                Delete
-                                              </span>
-                                            </a>
-                                          </Menu.Item>
-                                        </div>
-                                      </Menu.Items>
-                                    </Transition>
-                                  </Menu>
-                                </td>
-                              </tr>
-                            </>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                  <div className="w-full mt-2 mb-4 items-center">
-                    <Pagination
-                      items={accounts.length}
-                      pageSize={pageSize}
-                      currentPage={currentPage}
-                      onPageChange={handlePageChange}
-                    />
-                  </div>
-                </>
-              )}
+                                  </Menu.Items>
+                                </Transition>
+                              </Menu>
+                            </td>
+                          </tr>
+                        </>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <div className="w-full mt-2 mb-4 items-center">
+                <Pagination
+                  items={accounts.length}
+                  pageSize={pageSize}
+                  currentPage={currentPage}
+                  onPageChange={handlePageChange}
+                />
+              </div>
             </div>
           </div>
         </>
@@ -365,19 +351,7 @@ export default function AccountViewSaga() {
                       >
                         Add Account Number
                       </Dialog.Title>
-                      <div className="mt-4 pr-6">
-                        <label className="block mb-2 text-sm font-medium text-gray-900 light:text-white">
-                          Usac User ID
-                        </label>
-                        <input
-                          type="number"
-                          name="user_id"
-                          id="user_id"
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500"
-                          value={formikSave.values.user_id}
-                          onChange={formikSave.handleChange}
-                        />
-                      </div>
+
                       <div className="mt-4 pr-6">
                         <label className="block mb-2 text-sm font-medium text-gray-900 light:text-white">
                           Account
@@ -527,19 +501,6 @@ export default function AccountViewSaga() {
                       >
                         Edit Account Number
                       </Dialog.Title>
-                      <div className="mt-4 pr-6">
-                        <label className="block mb-2 text-sm font-medium text-gray-900 light:text-white">
-                          Usac User ID
-                        </label>
-                        <input
-                          type="number"
-                          name="user_id"
-                          id="user_id"
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500"
-                          value={formikEdit.values.user_id}
-                          onChange={formikEdit.handleChange}
-                        />
-                      </div>
                       <div className="mt-4 pr-6">
                         <label className="block mb-2 text-sm font-medium text-gray-900 light:text-white">
                           Account

@@ -4,8 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import Layout from "@/components/layout";
 import {
   GetTransactionRequest,
+  FindTransactionRequest,
   SearchTransactionRequest,
-} from "@/redux-saga/action/payment/TransactionAction";
+} from "@/redux/action/payment/TransactionAction";
 import { paginate } from "@/utils/paginate";
 import Pagination from "@/components/Pagination";
 import PaymentTransaction from "@/pages/api/PaymentTransaction";
@@ -15,42 +16,43 @@ import { PlusIcon, EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 
 export default function Transaction() {
   const dispatch = useDispatch();
-  let { transactions } = useSelector((state: any) => state.transactionState);
+  const { transaction } = useSelector((state: any) => state.transactionState);
   const [refresh, setRefresh] = useState<any>(false);
   const pageSize = 10;
   const [currentPage, setCurrentPage] = useState(1);
-
+  const { UserProfile } = useSelector((state: any) => state.userState);
   const [transaksi, setTransaksi] = useState(0);
 
-  const formik = useFormik({
-    initialValues: {
-      keyword: "",
-    },
-    onSubmit: async (values) => {
-      let keyword = values.keyword;
-      if (keyword == "" || keyword == " ") {
-        dispatch(GetTransactionRequest());
-      } else {
-        dispatch(SearchTransactionRequest(keyword));
-      }
-      setTransaksi(transactions);
-      setRefresh(true);
-      setCurrentPage(1);
-    },
-  });
-
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState("");
+  
   const handlePageChange = (page: any) => {
     setCurrentPage(page);
   };
 
   useEffect(() => {
-    dispatch(GetTransactionRequest());
-    setTransaksi(transactions);
-    setCurrentPage(1);
+    dispatch(FindTransactionRequest(UserProfile.userId));
   }, [dispatch, refresh]);
+ 
+  function search(transaksi: any) {
+    if(filter === 'debet'){
+      return transaksi.filter(
+        (item: any) => item.patrDebet !== null
+      );
+    } else if(filter === 'credit'){
+      return transaksi.filter(
+        (item: any) => item.patrCredit !== null
+      );
+    } else {
+      return transaksi.filter(
+        (item: any) =>
+          item.patrTrxId.toString().toLowerCase().includes(query)        
+      );
+    }
+  }
 
-  const trxPaginate = paginate(transaksi, currentPage, pageSize);
-
+  const trxPaginate = paginate(search(transaction), currentPage, pageSize);
+      
   return (
     <div>
       <Layout>
@@ -134,15 +136,11 @@ export default function Transaction() {
                     <Menu.Item>
                       <a
                         href="#"
+                        className="block px-4 py-2 hover:bg-gray-100 light:hover:bg-gray-600 light:hover:text-white"
                         onClick={() => {
-                          setTransaksi(
-                            transactions.filter(
-                              (item: any) => item.patrDebet != 0
-                            )
-                          );
+                          setFilter('debet');
                           setCurrentPage(1);
                         }}
-                        className="block px-4 py-2 hover:bg-gray-100 light:hover:bg-gray-600 light:hover:text-white"
                       >
                         Debet
                       </a>
@@ -151,11 +149,7 @@ export default function Transaction() {
                       <a
                         href="#"
                         onClick={() => {
-                          setTransaksi(
-                            transactions.filter(
-                              (item: any) => item.patrCredit != 0
-                            )
-                          );
+                          setFilter('credit');
                           setCurrentPage(1);
                         }}
                         className="block px-4 py-2 hover:bg-gray-100 light:hover:bg-gray-600 light:hover:text-white"
@@ -167,8 +161,8 @@ export default function Transaction() {
                       <a
                         href="#"
                         onClick={() => {
-                          dispatch(GetTransactionRequest());
-                          setTransaksi(transactions);
+                          setFilter('');
+                          dispatch(FindTransactionRequest(UserProfile.userId));
                           setCurrentPage(1);
                         }}
                         className="block text-center bg-white hover:bg-gray-100 light:hover:bg-gray-600 light:hover:text-white"
@@ -189,18 +183,20 @@ export default function Transaction() {
                 </Menu>
                 <div className="relative w-full">
                   <input
-                    type="text"
+                    type="search"
                     id="keyword"
                     className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-100 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:border-blue-500"
                     name="keyword"
                     placeholder="Transaction Number"
-                    value={formik.values.keyword}
-                    onChange={formik.handleChange}
+                    onChange={(e: any) => {
+                      setFilter('');
+                      setQuery(e.target.value);
+                      setCurrentPage(1);
+                    }}
                     required
                   />
                   <button
                     type="submit"
-                    onClick={() => formik.handleSubmit()}
                     className="absolute top-0 right-0 p-2.5 text-sm font-medium text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 light:bg-blue-600 light:hover:bg-blue-700 light:focus:ring-blue-800"
                   >
                     <svg
@@ -276,10 +272,12 @@ export default function Transaction() {
                               {item.patrModifiedDate.slice(0, 10)}
                             </td>
                             <td className="px-1 py-2">
-                              {item.patrDebet != 0 ? item.patrDebet : " "}
+                              {item.patrDebet != null ? 
+                              Intl.NumberFormat("id-ID", {style: "currency", currency: "idr"}).format(item.patrDebet) : " "}
                             </td>
                             <td className="px-1 py-2">
-                              {item.patrCredit != "0" ? item.patrCredit : " "}
+                              {item.patrCredit != null ? 
+                              Intl.NumberFormat("id-ID", {style: "currency", currency: "idr"}).format(item.patrCredit) : " "}
                             </td>
                             <td className="px-1 py-2">{item.patrNote}</td>
                             <td className="px-1 py-2">
@@ -305,7 +303,7 @@ export default function Transaction() {
           </div>
           <div className="w-full mt-8 mb-8 items-center">
             <Pagination
-              items={transaksi.length}
+              items={search(transaction).length}
               pageSize={pageSize}
               currentPage={currentPage}
               onPageChange={handlePageChange}

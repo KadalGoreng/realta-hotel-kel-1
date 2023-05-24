@@ -20,6 +20,16 @@ const read = async () => {
     return await error;
   }
 };
+const readOne = async (id: any) => {
+  try {
+    const result = await axios.get(
+      `${config.domain}/payment/useraccount/user/${id}`
+    );
+    return result.data;
+  } catch (error) {
+    return await error;
+  }
+};
 const findOne = async (id: any) => {
   try {
     const result = await axios.get(
@@ -55,4 +65,4 @@ const deleted = async (id: any) => {
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { create, read, findOne, update, deleted };
+export default { create, read, readOne, findOne, update, deleted };

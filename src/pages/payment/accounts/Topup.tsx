@@ -1,28 +1,29 @@
 import { useFormik } from "formik";
 import React, { Fragment, useRef, useEffect, useState } from "react";
-import { useDispatch, useSelector, shallowEqual } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Layout from "@/components/layout";
+import { useRouter } from "next/router";
 import { Dialog, Transition } from "@headlessui/react";
-import {
-  GetTransactionRequest,
-  AddTransactionRequest,
-} from "@/redux-saga/action/payment/TransactionAction";
+import { AddTransactionRequest } from "@/redux/action/payment/TransactionAction";
 import {
   GetAccountRequest,
-  FindAccountRequest,
-  FindAccountSuccess,
-} from "@/redux-saga/action/payment/AccountAction";
-import { FindBankRequest } from "@/redux-saga/action/payment/BankAction";
-import { FindFintechRequest } from "@/redux-saga/action/payment/FintechAction";
+  GetAllAccountRequest,
+} from "@/redux/action/payment/AccountAction";
 import UserAccount from "@/pages/api/UserAccount";
-import Bank from "@/pages/api/Bank";
 import moment from "moment";
 
 export default function Topup(props: any) {
   const dispatch = useDispatch();
-  const { accounts } = useSelector((state: any) => state.accountState);
+  const router = useRouter();
+  const { accounts, allAccounts } = useSelector(
+    (state: any) => state.accountState
+  );
+  const { UserProfile } = useSelector((state: any) => state.userState);
+
   const [refresh, setRefresh] = useState<any>(false);
   const [isOpen, setOpen] = useState<any>(false);
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState("");
   const [source, setSource] = useState({
     account: undefined,
     saldo: undefined,
@@ -53,14 +54,12 @@ export default function Topup(props: any) {
 
       payload = {
         patr_number: numb,
-        nominal: values.transfer,
+        nominal: values.transfer.toString(),
         patr_type: "TP",
         patr_note: "Top Up",
         order_number: numb,
         source_id: values.source_account,
         target_id: values.target_account,
-        number_ref: "",
-        user_id: 6,
       };
 
       dispatch(AddTransactionRequest(payload));
@@ -68,6 +67,7 @@ export default function Topup(props: any) {
       window.alert("Data Successfully Added.");
       setRefresh(true);
       resetForm();
+      router.push("/payment/accounts/Transaction");
     },
   });
   const HandleChange = (name: any) => (event: any) => {
@@ -77,7 +77,7 @@ export default function Topup(props: any) {
         setSource({
           ...source,
           account: event.target.value,
-          saldo: data.usacSaldo,
+          saldo: Intl.NumberFormat("id-ID", {style: "currency", currency: "idr"}).format(data.usacSaldo),
           typeAccount: data.usacType,
           bank:
             data.usacEntity["bank"] !== null
@@ -90,7 +90,7 @@ export default function Topup(props: any) {
       UserAccount.findOne(event.target.value).then((data) => {
         setTarget({
           ...target,
-          saldo: data.usacSaldo,
+          saldo: Intl.NumberFormat("id-ID", {style: "currency", currency: "idr"}).format(data.usacSaldo),
           typeAccount: data.usacType,
           bank:
             data.usacEntity["bank"] !== null
@@ -101,8 +101,37 @@ export default function Topup(props: any) {
     }
   };
 
+  function search(accounts: any) {
+    return accounts.filter((item: any) =>
+      item.usacEntity["bank"] !== null
+        ? item.usacEntity["bank"]["bankName"]
+            .toString()
+            .toLowerCase()
+            .includes(query.toLowerCase())
+        : item.usacEntity["paymentGateway"]["pagaName"]
+            .toString()
+            .toLowerCase()
+            .includes(query.toLowerCase())
+    );
+  }
+
+  function searchAcc(accounts: any) {
+    return accounts.filter((item: any) =>
+      item.usacEntity["bank"] !== null
+        ? item.usacEntity["bank"]["bankName"]
+            .toString()
+            .toLowerCase()
+            .includes(filter.toLowerCase())
+        : item.usacEntity["paymentGateway"]["pagaName"]
+            .toString()
+            .toLowerCase()
+            .includes(filter.toLowerCase())
+    );
+  }
+
   useEffect(() => {
-    dispatch(GetAccountRequest());
+    dispatch(GetAccountRequest(UserProfile.userId));
+    dispatch(GetAllAccountRequest());
   }, [dispatch, refresh]);
 
   return (
@@ -123,11 +152,14 @@ export default function Topup(props: any) {
                     Source Name
                   </label>
                   <input
-                    type="text"
+                    type="search"
                     name="source"
                     id="source"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-600 light:border-gray-500 light:placeholder-gray-400 light:text-white"
                     placeholder="source name"
+                    onChange={(e: any) => {
+                      setQuery(e.target.value);
+                    }}
                     required
                   />
                 </div>
@@ -146,19 +178,18 @@ export default function Topup(props: any) {
                     required
                   >
                     <option disabled>--Select Account--</option>
-                    {accounts &&
-                      accounts.map((item: any) => {
-                        return (
-                          <>
-                            <option value={item.usacAccountNumber}>
-                              {item.usacAccountNumber} ||{" "}
-                              {item.usacEntity["bank"] !== null
-                                ? item.usacEntity["bank"]["bankName"]
-                                : item.usacEntity["paymentGateway"]["pagaName"]}
-                            </option>
-                          </>
-                        );
-                      })}
+                    {search(accounts).map((item: any) => {
+                      return (
+                        <>
+                          <option value={item.usacAccountNumber}>
+                            {item.usacAccountNumber} ||{" "}
+                            {item.usacEntity["bank"] !== null
+                              ? item.usacEntity["bank"]["bankName"]
+                              : item.usacEntity["paymentGateway"]["pagaName"]}
+                          </option>
+                        </>
+                      );
+                    })}
                   </select>
                 </div>
                 <div className="mb-4">
@@ -213,11 +244,14 @@ export default function Topup(props: any) {
                     Target Name
                   </label>
                   <input
-                    type="text"
+                    type="search"
                     name="target"
                     id="target"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-600 light:border-gray-500 light:placeholder-gray-400 light:text-white"
                     placeholder="target name"
+                    onChange={(e: any) => {
+                      setFilter(e.target.value);
+                    }}
                   />
                 </div>
                 <div>
@@ -235,19 +269,18 @@ export default function Topup(props: any) {
                     required
                   >
                     <option disabled>--Select Account--</option>
-                    {accounts &&
-                      accounts.map((item: any) => {
-                        return (
-                          <>
-                            <option value={item.usacAccountNumber}>
-                              {item.usacAccountNumber} ||{" "}
-                              {item.usacEntity["bank"] !== null
-                                ? item.usacEntity["bank"]["bankName"]
-                                : item.usacEntity["paymentGateway"]["pagaName"]}
-                            </option>
-                          </>
-                        );
-                      })}
+                    {searchAcc(allAccounts).map((item: any) => {
+                      return (
+                        <>
+                          <option value={item.usacAccountNumber}>
+                            {item.usacAccountNumber} ||{" "}
+                            {item.usacEntity["bank"] !== null
+                              ? item.usacEntity["bank"]["bankName"]
+                              : item.usacEntity["paymentGateway"]["pagaName"]}
+                          </option>
+                        </>
+                      );
+                    })}
                   </select>
                 </div>
                 <div>

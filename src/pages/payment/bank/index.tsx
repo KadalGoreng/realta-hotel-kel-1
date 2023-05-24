@@ -3,8 +3,6 @@ import React, { Fragment, useRef, useEffect, useState } from "react";
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import Layout from "@/components/layout";
 import { Dialog, Transition, Menu } from "@headlessui/react";
-import BankUpdateForm from "./BankUpdateForm";
-import BankCreateForm from "./BankCreateForm";
 import {
   GetBankRequest,
   AddBankRequest,
@@ -12,7 +10,7 @@ import {
   EditBankRequest,
   SearchBankRequest,
   DelBankRequest,
-} from "@/redux-saga/action/payment/BankAction";
+} from "@/redux/action/payment/BankAction";
 import { paginate } from "@/utils/paginate";
 import Pagination from "@/components/Pagination";
 import {
@@ -21,6 +19,9 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/20/solid";
+
+import { getCookie } from "cookies-next";
+import { GetUsersRequest } from "@/redux/action/users/usersAction";
 
 export default function BankViewSaga(props: any) {
   const dispatch = useDispatch();
@@ -95,6 +96,7 @@ export default function BankViewSaga(props: any) {
 
   useEffect(() => {
     dispatch(GetBankRequest());
+    dispatch(GetUsersRequest());
   }, [dispatch, refresh]);
 
   const onUpdate = (id: any) => {
@@ -116,7 +118,7 @@ export default function BankViewSaga(props: any) {
 
   const handlePageChange = (page: any) => {
     setCurrentPage(page);
-  };  
+  };
 
   const search_parameters = Object.keys(Object.assign({}, ...banks));
 
@@ -157,18 +159,21 @@ export default function BankViewSaga(props: any) {
                     ></path>
                   </svg>
                 </div>
-                <input                  
+                <input
                   name="keyword"
                   id="voice-search"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500"
                   placeholder="Search Bank..."
                   type="search"
-                  onChange={(e: any) => { setQuery(e.target.value); setCurrentPage(1); }}
+                  onChange={(e: any) => {
+                    setQuery(e.target.value);
+                    setCurrentPage(1);
+                  }}
                   required
                 />
               </div>
               <button
-                type="button"                
+                type="button"
                 className="inline-flex items-center py-2.5 px-3 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 light:bg-blue-600 light:hover:bg-blue-700 light:focus:ring-blue-800"
               >
                 <svg

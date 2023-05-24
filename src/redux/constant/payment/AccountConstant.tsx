@@ -1,3 +1,7 @@
+export const GET_ALL_ACCOUNT_REQUEST = "account/get/all/request";
+export const GET_ALL_ACCOUNT_SUCCESS = "account/get/all/success";
+export const GET_ALL_ACCOUNT_FAILED = "account/get/all/failed";
+
 export const GET_ACCOUNT_REQUEST = "account/get/request";
 export const GET_ACCOUNT_SUCCESS = "account/get/success";
 export const GET_ACCOUNT_FAILED = "account/get/failed";

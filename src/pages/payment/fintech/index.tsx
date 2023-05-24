@@ -1,8 +1,6 @@
 import React, { Fragment, useRef, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Layout from "@/components/layout";
-import FintechUpdateForm from "./FintechUpdateForm";
-import FintechCreateForm from "./FintechCreateForm";
 import {
   GetFintechRequest,
   AddFintechRequest,
@@ -10,7 +8,7 @@ import {
   EditFintechRequest,
   DelFintechRequest,
   SearchFintechRequest,
-} from "@/redux-saga/action/payment/FintechAction";
+} from "@/redux/action/payment/FintechAction";
 import { useFormik } from "formik";
 import { paginate } from "@/utils/paginate";
 import Pagination from "@/components/Pagination";
@@ -115,7 +113,7 @@ export default function FintechViewSaga() {
 
   const handlePageChange = (page: any) => {
     setCurrentPage(page);
-  };  
+  };
 
   const search_parameters = Object.keys(Object.assign({}, ...fintechs));
 
@@ -137,191 +135,179 @@ export default function FintechViewSaga() {
         <>
           <div className="container">
             <div className="card mt-4 mb-4">
-              {displayEdit ? (
-                <FintechUpdateForm
-                  setRefresh={setRefresh}
-                  setDisplay={setDisplayEdit}
-                  id={id}
-                />
-              ) : display ? (
-                <FintechCreateForm
-                  setRefresh={setRefresh}
-                  setDisplay={setDisplay}
-                />
-              ) : (
-                <>
-                  <div className="flex mx-8 my-4 mr-px-8 items-center">
-                    <label htmlFor="voice-search" className="sr-only">
-                      Search
-                    </label>
-                    <div className="relative w-full">
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <svg
-                          aria-hidden="true"
-                          className="w-5 h-5 text-gray-500 light:text-gray-400"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                            clip-rule="evenodd"
-                          ></path>
-                        </svg>
-                      </div>
-                      <input
-                        type="search"
-                        name="keyword"
-                        id="voice-search"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500"
-                        placeholder="Search Fintech..."
-                        onChange={(e: any) => { setQuery(e.target.value); setCurrentPage(1); }}
-                        required
-                      />
-                    </div>
-                    <button
-                      type="button"
-                      className="inline-flex items-center py-2.5 px-3 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 light:bg-blue-600 light:hover:bg-blue-700 light:focus:ring-blue-800"
+              <div className="flex mx-8 my-4 mr-px-8 items-center">
+                <label htmlFor="voice-search" className="sr-only">
+                  Search
+                </label>
+                <div className="relative w-full">
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <svg
+                      aria-hidden="true"
+                      className="w-5 h-5 text-gray-500 light:text-gray-400"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
                     >
-                      <svg
-                        aria-hidden="true"
-                        className="w-5 h-5 mr-2 -ml-1"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                        ></path>
-                      </svg>
-                      Search
-                    </button>
+                      <path
+                        fill-rule="evenodd"
+                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
                   </div>
+                  <input
+                    type="search"
+                    name="keyword"
+                    id="voice-search"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500"
+                    placeholder="Search Fintech..."
+                    onChange={(e: any) => {
+                      setQuery(e.target.value);
+                      setCurrentPage(1);
+                    }}
+                    required
+                  />
+                </div>
+                <button
+                  type="button"
+                  className="inline-flex items-center py-2.5 px-3 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 light:bg-blue-600 light:hover:bg-blue-700 light:focus:ring-blue-800"
+                >
+                  <svg
+                    aria-hidden="true"
+                    className="w-5 h-5 mr-2 -ml-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    ></path>
+                  </svg>
+                  Search
+                </button>
+              </div>
 
-                  <div className="relative shadow-md sm:rounded-lg mx-8 mr-x-8 mb-4">
-                    <table className="w-full text-sm text-left text-gray-500 light:text-gray-400">
-                      <thead className="text-xs text-gray-700 uppercase bg-gray-50 light:bg-gray-700 light:text-gray-400">
-                        <tr className="border-b bg-gray-50 light:bg-gray-800 light:border-gray-700">
-                          <th scope="col" className="px-6 py-3">
-                            Code
-                          </th>
-                          <th scope="col" className="px-6 py-3">
-                            Fintech
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-end">
-                            <button onClick={() => setOpen(true)}>
-                              {" "}
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="w-6 h-6"
+              <div className="relative shadow-md sm:rounded-lg mx-8 mr-x-8 mb-4">
+                <table className="w-full text-sm text-left text-gray-500 light:text-gray-400">
+                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 light:bg-gray-700 light:text-gray-400">
+                    <tr className="border-b bg-gray-50 light:bg-gray-800 light:border-gray-700">
+                      <th scope="col" className="px-6 py-3">
+                        Code
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Fintech
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-end">
+                        <button onClick={() => setOpen(true)}>
+                          {" "}
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-6 h-6"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M12 4.5v15m7.5-7.5h-15"
+                            />
+                          </svg>
+                          Add{" "}
+                        </button>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {fintechPaginate.map((item: any) => {
+                      return (
+                        <>
+                          <tr
+                            className="bg-white border-b light:bg-gray-900 light:border-gray-700"
+                            key={item.pagaEntityId}
+                          >
+                            <th scope="row" className="px-6 py-4">
+                              {item.pagaCode}
+                            </th>
+                            <td className="px-6 py-4">{item.pagaName}</td>
+                            <td className="px-6 py-4 text-end">
+                              <Menu
+                                as="div"
+                                className="relative inline-block text-left"
                               >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M12 4.5v15m7.5-7.5h-15"
-                                />
-                              </svg>
-                              Add{" "}
-                            </button>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {fintechPaginate.map((item: any) => {
-                          return (
-                            <>
-                              <tr
-                                className="bg-white border-b light:bg-gray-900 light:border-gray-700"
-                                key={item.pagaEntityId}
-                              >
-                                <th scope="row" className="px-6 py-4">
-                                  {item.pagaCode}
-                                </th>
-                                <td className="px-6 py-4">{item.pagaName}</td>
-                                <td className="px-6 py-4 text-end">
-                                  <Menu
-                                    as="div"
-                                    className="relative inline-block text-left"
-                                  >
-                                    <div>
-                                      <Menu.Button>
-                                        <EllipsisVerticalIcon
-                                          className="-mr-1 h-7 w-7 text-gray-400"
-                                          aria-hidden="true"
-                                        />
-                                      </Menu.Button>
+                                <div>
+                                  <Menu.Button>
+                                    <EllipsisVerticalIcon
+                                      className="-mr-1 h-7 w-7 text-gray-400"
+                                      aria-hidden="true"
+                                    />
+                                  </Menu.Button>
+                                </div>
+
+                                <Transition
+                                  as={Fragment}
+                                  enter="transition ease-out duration-100"
+                                  enterFrom="transform opacity-0 scale-95"
+                                  enterTo="transform opacity-100 scale-100"
+                                  leave="transition ease-in duration-75"
+                                  leaveFrom="transform opacity-100 scale-100"
+                                  leaveTo="transform opacity-0 scale-95"
+                                >
+                                  <Menu.Items className="absolute right-0 z-10 mt-2 w-44 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                    <div className="py-1">
+                                      <Menu.Item>
+                                        <a
+                                          href="#"
+                                          onClick={() =>
+                                            onUpdate(item.pagaEntityId)
+                                          }
+                                          className="flex text-gray-700 block px-4 py-2 text-sm"
+                                        >
+                                          <PencilSquareIcon className="w-4 h-4 ml-1" />
+                                          <span className="flex-1 ml-3 whitespace-nowrap">
+                                            Edit
+                                          </span>
+                                        </a>
+                                      </Menu.Item>
+                                      <Menu.Item>
+                                        <a
+                                          href="#"
+                                          onClick={() =>
+                                            onDelete(item.pagaEntityId)
+                                          }
+                                          className="flex text-gray-700 block px-4 py-2 text-sm"
+                                        >
+                                          <TrashIcon className="inline-flex w-4 h-4 ml-1" />
+                                          <span className="flex-1 ml-3 whitespace-nowrap">
+                                            Delete
+                                          </span>
+                                        </a>
+                                      </Menu.Item>
                                     </div>
-
-                                    <Transition
-                                      as={Fragment}
-                                      enter="transition ease-out duration-100"
-                                      enterFrom="transform opacity-0 scale-95"
-                                      enterTo="transform opacity-100 scale-100"
-                                      leave="transition ease-in duration-75"
-                                      leaveFrom="transform opacity-100 scale-100"
-                                      leaveTo="transform opacity-0 scale-95"
-                                    >
-                                      <Menu.Items className="absolute right-0 z-10 mt-2 w-44 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                        <div className="py-1">
-                                          <Menu.Item>
-                                            <a
-                                              href="#"
-                                              onClick={() =>
-                                                onUpdate(item.pagaEntityId)
-                                              }
-                                              className="flex text-gray-700 block px-4 py-2 text-sm"
-                                            >
-                                              <PencilSquareIcon className="w-4 h-4 ml-1" />
-                                              <span className="flex-1 ml-3 whitespace-nowrap">
-                                                Edit
-                                              </span>
-                                            </a>
-                                          </Menu.Item>
-                                          <Menu.Item>
-                                            <a
-                                              href="#"
-                                              onClick={() =>
-                                                onDelete(item.pagaEntityId)
-                                              }
-                                              className="flex text-gray-700 block px-4 py-2 text-sm"
-                                            >
-                                              <TrashIcon className="inline-flex w-4 h-4 ml-1" />
-                                              <span className="flex-1 ml-3 whitespace-nowrap">
-                                                Delete
-                                              </span>
-                                            </a>
-                                          </Menu.Item>
-                                        </div>
-                                      </Menu.Items>
-                                    </Transition>
-                                  </Menu>
-                                </td>
-                              </tr>
-                            </>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                    <div className="w-full mt-8 items-center">
-                      <Pagination
-                        items={search(fintechs).length}
-                        pageSize={pageSize}
-                        currentPage={currentPage}
-                        onPageChange={handlePageChange}
-                      />
-                    </div>
-                  </div>
-                </>
-              )}
+                                  </Menu.Items>
+                                </Transition>
+                              </Menu>
+                            </td>
+                          </tr>
+                        </>
+                      );
+                    })}
+                  </tbody>
+                </table>
+                <div className="w-full mt-8 items-center">
+                  <Pagination
+                    items={search(fintechs).length}
+                    pageSize={pageSize}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </>

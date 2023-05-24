@@ -1,12 +1,17 @@
 import * as ActionType from "../../constant/payment/AccountConstant";
 
 const INIT_STATE = {
+  allAccounts: [],
   accounts: [],
   account: [],
 };
 
 const AccountReduce = (state = INIT_STATE, action: any) => {
   switch (action.type) {
+    case ActionType.GET_ALL_ACCOUNT_REQUEST:
+      return { ...state };
+    case ActionType.GET_ALL_ACCOUNT_SUCCESS:
+      return GetAllAccountSuccessfully(state, action);
     case ActionType.GET_ACCOUNT_REQUEST:
       return { ...state };
     case ActionType.GET_ACCOUNT_SUCCESS:
@@ -32,10 +37,18 @@ const AccountReduce = (state = INIT_STATE, action: any) => {
   }
 };
 
-const GetAccountSuccessfully = (state: any, action: any) => {
+const GetAllAccountSuccessfully = (state: any, action: any) => {
   return {
     ...state,
-    accounts: action.payload,
+    allAccounts: action.payload,
+  };
+};
+
+const GetAccountSuccessfully = (state: any, action: any) => {
+  const { payload } = action;
+  return {
+    ...state,
+    accounts: payload,
   };
 };
 

@@ -79,11 +79,7 @@ export default function AddPhotos(props: any) {
     setRefresh(true);
   };
 
-  // const modal = () => {
-  //   props.setRefresh(true);
-  //   setShowModal(false);
-  // };
-
+  console.log(props.displayPhoto);
   return (
     <>
       {/* <button className="p-3 hover:bg-coldBlue hover:text-white w-full" type="button" onClick={() => setShowModal(true)}>
@@ -167,7 +163,7 @@ export default function AddPhotos(props: any) {
                   </div>
                 </div>
                 <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
-                  <button onClick={() => props.setDisplay(false)} className="mx-2 hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-base font-semibold text-white outline-none">
+                  <button onClick={() => props.setUpload(false)} className="mx-2 hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-base font-semibold text-white outline-none">
                     Cancel
                   </button>
                 </div>

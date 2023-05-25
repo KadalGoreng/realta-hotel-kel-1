@@ -70,9 +70,16 @@ export default function DetailPurchasing() {
   const subTotal = (price: any) => {
     return price.reduce((sum: any, el: any) => sum + el.Salary, 0);
   };
-  // function calculate() {
-  //   return props.selectCart.reduce((prev: any, cur: any) => prev + convertPrice(cur.vendorProducts[0].veproPrice), 0);
-  // }
+
+  const maps = purchaseOrderDetails.map((data: any) => data.podePrice);
+  console.log(maps);
+
+  function calculate() {
+    return maps.reduce((prev: any, cur: any) => prev + convertPrice(cur), 0);
+  }
+
+  console.log(calculate());
+  console.log(calculate() - calculate() * 0.1);
 
   return (
     <div>
@@ -89,12 +96,14 @@ export default function DetailPurchasing() {
                       <div className="grid grid-cols-3 gap-4 place-items-start mb-0">
                         <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">PO Number : {PurchaseOrderHeader.poheNumber}</span>
                         <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">Vendor : {PurchaseOrderHeader.poheVendor.vendorName}</span>
-                        <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">Sub Total : {PurchaseOrderHeader.poheSubtotal}</span>
+                        <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">Sub Total : Rp {calculate()}</span>
                       </div>
                       <div className="mb-0 grid grid-cols-3 gap-4 place-items-start">
                         <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">PO Date : {PurchaseOrderHeader.poheOrderDate}</span>
                         <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">Status : {poStatus(PurchaseOrderHeader.poheStatus)}</span>
-                        <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">Total Amount: {PurchaseOrderHeader.poheTotalAmount}</span>
+                        <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">
+                          Total Amount: Rp {calculate() + calculate() * 0.1} <span className="text-lg underline decoration-pink-500">(tax 10%)</span>
+                        </span>
                       </div>
                       <table className="p-0 text-center	min-w-full mb-5">
                         <thead className="bg-blue-400 border-b">
@@ -133,10 +142,10 @@ export default function DetailPurchasing() {
                                   <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
                                     <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{PoDetail.podeStock.stockName}</td>
                                     <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{PoDetail.podeOrderQty}</td>
-                                    <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{PoDetail.podePrice}</td>
+                                    <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">Rp {convertPrice(PoDetail.podePrice)}</td>
                                     <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{PoDetail.podeReceivedQty}</td>
                                     <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{PoDetail.podeRejectedQty}</td>
-                                    <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{PoDetail.podePrice}</td>
+                                    <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">Rp {convertPrice(PoDetail.podePrice)}</td>
                                     <td>
                                       {/* dropDown  */}
                                       <Menu as="div" className="relative inline-block text-left">

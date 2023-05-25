@@ -9,7 +9,7 @@ import Link from "next/link";
 import ReactPaginate from "react-paginate";
 import ModalCreate from "./StockModalCreate";
 import ModalEdit from "./StockModalEdit";
-import AddPhoto from "../UploadPhoto/[id]";
+// import AddPhoto from "../UploadPhoto/[id]";
 import AddPhotos from "./AddPhoto";
 // import UploadPhoto from "../Upload-Photo/AddPhoto";
 
@@ -73,7 +73,7 @@ export default function StocksSaga() {
           <div>
             {display && <ModalCreate setDisplay={setDisplay} />}
             {displayEdit && <ModalEdit setDisplay={setDisplayEdit} id={id} setRefresh={setRefresh} />}
-            {upload && <AddPhotos setDisplay={setDisplayPhoto} setRefresh={setRefresh} id={id} />}
+            {upload && <AddPhotos setDisplay={setDisplayPhoto} setUpload={setUpload} setRefresh={setRefresh} id={id} />}
             <div className="mt-20">
               <form className="flex items-center justify-center gap-2">
                 <h2>Search</h2>

@@ -73,6 +73,11 @@ export default function PurchaseOrderHeaderSaga() {
     }
   };
 
+  const convertPrice = (price: string) => {
+    return parseFloat(price.replace(/[$,RP]/gi, ""));
+  };
+
+  const totalAmount = (price: any) => price.reduce((e: any, i: any) => e + convertPrice(i.podePrice), 0);
   return (
     <div>
       <Layout>
@@ -144,7 +149,8 @@ export default function PurchaseOrderHeaderSaga() {
                                     <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{poHeader.poheOrderDate}</td>
                                     <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{poHeader.poheVendor ? poHeader.poheVendor.vendorName : undefined}</td>
                                     {/* <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">1</td> */}
-                                    <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{poHeader.poheTotalAmount}</td>
+                                    {/* <p>{poHeader.purchaseOrderDetails[0].}</p> */}
+                                    <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">Rp {totalAmount(poHeader.purchaseOrderDetails) + totalAmount(poHeader.purchaseOrderDetails) * 0.1}</td>
                                     <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{poStatus(poHeader.poheStatus)}</td>
                                     <td>
                                       {/* dropDown  */}

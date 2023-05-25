@@ -45,7 +45,7 @@ function* findStockPhoto(action: any): any {
 function* editStockPhoto(action: any): any {
   const { payload } = action;
   try {
-    const result = yield call(StockPhotoApi.Upload, payload);
+    const result = yield call(StockPhotoApi.Update, payload);
     yield put(EditStockPhotoSuccess(result.data));
   } catch (error) {
     yield put(EditStockPhotoFailed(error));

@@ -19,23 +19,35 @@ import ButtonOutline from "./ButtonOutline";
 
 export default function Card(props: any) {
   const { hotelId, hotelName, hotelReviews, hotelAddr, facilities } = props;
+  console.log(facilities);
 
   const aminities = removeDuplicates([...facilities]);
 
   const moreFacility = aminities.length - 3;
+  const primaryImage = facilities[0].facilityPhotos.map(
+    (item: any) => item.faphoPrimary === true && item.faphoPhotoFilename
+  );
 
   return (
     <div key={hotelId} className="border-b-[2px] pb-4">
       <div className="flex gap-5">
         <div className="flex w-[30%]">
           <div
+            className="w-[500px] h-[206px] overflow-hidden"
             id={`slide1${hotelId}`}
             // className="carousel-item relative w-full"
           >
-            <img
-              src="https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-masonry-100.jpg"
-              className="w-full h-full"
-            />
+            {facilities[0].facilityPhotos.length > 0 ? (
+              <img
+                src={`http://localhost:3002/uploads/${primaryImage}`}
+                className="min-w-full min-h-full"
+              />
+            ) : (
+              <img
+                src="https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-masonry-100.jpg"
+                className="w-full h-full"
+              />
+            )}
             {/* <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
               <a
                 href={`#slide4${hotelId}`}

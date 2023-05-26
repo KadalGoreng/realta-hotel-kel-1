@@ -2,6 +2,7 @@ import * as ActionType from "../Constant/BookingHotelConstant";
 
 const INIT_STATE = {
   bookingHotel: [],
+  bookingHistory: [],
   hotelFacility: [],
   coupon: [],
   stocks: [],
@@ -23,6 +24,10 @@ const BookingHotelReducer = (state = INIT_STATE, action: any) => {
       return { ...state };
     case ActionType.GET_COUPON_SUCCESS:
       return getCoupon(state, action);
+    case ActionType.GET_BOOKINGHISTORY_REQUEST:
+      return { ...state };
+    case ActionType.GET_BOOKINGHISTORY_SUCCESS:
+      return getBookingHistory(state, action);
     case ActionType.GET_STOCK_REQUEST:
       return { ...state };
     case ActionType.GET_STOCK_SUCCESS:
@@ -56,6 +61,13 @@ const getCoupon = (state: any, action: any) => {
   return {
     ...state,
     coupon: action.payload,
+  };
+};
+
+const getBookingHistory = (state: any, action: any) => {
+  return {
+    ...state,
+    bookingHistory: action.payload,
   };
 };
 

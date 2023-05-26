@@ -11,7 +11,9 @@ export default function AnotherRoom(props: any) {
     faciMaxNumber,
     setSelected,
     selected,
+    facilityPhotos,
   } = props;
+
   return (
     <div className="flex gap-4 rounded-lg p-4 bg-white shadow-[0px_2px_10px_2px_#00000024]">
       <div className="flex justify-between w-full">
@@ -40,8 +42,8 @@ export default function AnotherRoom(props: any) {
         </div>
         <div className="flex flex-col gap-3">
           <img
-            className="rounded w-60"
-            src="https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-masonry-100.jpg"
+            className="rounded w-72 h-40"
+            src={`http://localhost:3002/uploads/${facilityPhotos[0].faphoPhotoFilename}`}
             alt=""
           />
           {selected === faciId ? (

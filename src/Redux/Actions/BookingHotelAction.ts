@@ -42,6 +42,20 @@ export const GetCouponFailed = (payload: any) => ({
   payload,
 });
 
+export const GetBookingHistoryRequest = () => ({
+  type: ActionType.GET_BOOKINGHISTORY_REQUEST,
+});
+
+export const GetBookingHistorySuccess = (payload: any) => ({
+  type: ActionType.GET_BOOKINGHISTORY_SUCCESS,
+  payload,
+});
+
+export const GetBookingHistoryFailed = (payload: any) => ({
+  type: ActionType.GET_BOOKINGHISTORY_FAILED,
+  payload,
+});
+
 export const GetAddOnItemRequest = () => ({
   type: ActionType.GET_STOCK_REQUEST,
 });

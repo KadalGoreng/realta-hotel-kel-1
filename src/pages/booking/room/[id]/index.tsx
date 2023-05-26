@@ -73,19 +73,19 @@ export default function BookingRoom() {
     <div className="flex flex-col">
       <div className="flex">
         <img
-          src="https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-masonry-100.jpg"
+          src={`http://localhost:3002/uploads/${facilities[0].facilityPhotos[0].faphoPhotoFilename}`}
           className="w-[25%]"
         />
         <img
-          src="https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-masonry-100.jpg"
+          src={`http://localhost:3002/uploads/${facilities[0].facilityPhotos[0].faphoPhotoFilename}`}
           className="w-[25%]"
         />
         <img
-          src="https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-masonry-100.jpg"
+          src={`http://localhost:3002/uploads/${facilities[0].facilityPhotos[0].faphoPhotoFilename}`}
           className="w-[25%]"
         />
         <img
-          src="https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-masonry-100.jpg"
+          src={`http://localhost:3002/uploads/${facilities[0].facilityPhotos[0].faphoPhotoFilename}`}
           className="w-[25%]"
         />
       </div>

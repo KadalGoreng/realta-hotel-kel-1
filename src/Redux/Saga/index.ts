@@ -7,6 +7,7 @@ import {
   handleGetCoupon,
   handleGetFacilityHotel,
   handleGetAddOnItem,
+  handleGetBookingHistory,
 } from "./BookingHotelSaga";
 import { GetPolicy, GetRegions } from "./MasterModuleSaga";
 
@@ -24,6 +25,12 @@ function* watchAll() {
     takeEvery(ActionTypeBooking.GET_STOCK_REQUEST, handleGetAddOnItem),
   ]);
   yield all([takeEvery(ActionTypeBooking.GET_COUPON_REQUEST, handleGetCoupon)]);
+  yield all([
+    takeEvery(
+      ActionTypeBooking.GET_BOOKINGHISTORY_REQUEST,
+      handleGetBookingHistory
+    ),
+  ]);
   yield all([takeEvery(ActionTypeMaster.GET_REGIONS_REQUEST, GetRegions)]);
   yield all([takeEvery(ActionTypeMaster.GET_POLICY_REQUEST, GetPolicy)]);
 }

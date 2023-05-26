@@ -1,9 +1,24 @@
 import React, { useEffect, useState } from "react";
 import api from "@/api/BookingHotel";
 import { useSelector } from "react-redux";
+import { convertPrice } from "@/utils/helpers";
 
 export default function Invoice() {
   const { boex } = useSelector((state: any) => state.bookingHotelState);
+  const { bookingOrder } = useSelector((state: any) => state.bookingHotelState);
+
+  const {
+    hotelName,
+    dateStart,
+    dateEnd,
+    faciName,
+    price,
+    totalPrice,
+    faciId,
+    saving,
+    faciTaxRate,
+    hotelId,
+  } = bookingOrder;
 
   const [dataOrder, setDataOrder] = useState({
     boorId: null,
@@ -34,8 +49,19 @@ export default function Invoice() {
     },
   });
 
-  const { boorOrderNumber, boorOrderDate, boorStatus, boorPayType, boorUser } =
-    dataOrder;
+  const {
+    boorOrderNumber,
+    boorOrderDate,
+    boorStatus,
+    boorPayType,
+    boorUser,
+    boorTotalAmount,
+    boorTotalTax,
+    boorType,
+    boorTotalGuest,
+    boorTotalRoom,
+    boorDiscount,
+  } = dataOrder;
 
   const getDataOrder = async () => {
     const result: any = await api.getBookingOrderByUser(1);
@@ -44,6 +70,12 @@ export default function Invoice() {
   useEffect(() => {
     getDataOrder();
   }, []);
+
+  const subTotalAddOns = boex.reduce(
+    (prev: any, curr: any) => prev + curr.boexSubtotal,
+    0
+  );
+  console.log(dataOrder);
 
   return (
     <div className="min-h-screen">
@@ -106,18 +138,18 @@ export default function Invoice() {
               <tbody className="px-16">
                 {/* row 1 */}
                 <tr>
-                  <td>Indonesia Standard Double</td>
+                  <td>Deluxe Room</td>
                   <td>1</td>
-                  <td>1 Adult</td>
-                  <td>Rp. 300.000</td>
-                  <td>-Rp. 300.000</td>
+                  <td>{boorTotalGuest} Adult</td>
+                  <td>Rp. {price}</td>
+                  <td>-Rp. {convertPrice(boorDiscount)}</td>
                   <td>150</td>
-                  <td>Rp. 300.000</td>
+                  <td>Rp. {totalPrice}</td>
                 </tr>
                 {boex &&
                   boex.map((item: any) => (
                     <tr>
-                      <td>Drink</td>
+                      <td>{item.pritName}</td>
                       <td>{item.boexQty}</td>
                       <td></td>
                       <td>{`Rp.${item.boexPrice}`}</td>
@@ -128,16 +160,16 @@ export default function Invoice() {
                   ))}
               </tbody>
               <tbody>
-                <tr>
+                {/* <tr>
                   <td colSpan={5} className="border-none"></td>
                   <td>Total Amount: </td>
-                  <td>Rp. 300.000</td>
+                  <td>Rp. {totalPrice + subTotalAddOns}</td>
                 </tr>
                 <tr>
                   <td colSpan={5} className="border-none"></td>
                   <td>Tax: </td>
-                  <td>Rp. 300.000</td>
-                </tr>
+                  <td>Rp. {convertPrice(boorTotalTax)}</td>
+                </tr> */}
                 <tr>
                   <td colSpan={4}></td>
                   <td className="max-w-[190px]">
@@ -150,7 +182,9 @@ export default function Invoice() {
                     </button>
                   </td>
                   <td className="font-bold">Payment Amount: </td>
-                  <td>Rp. 300.000</td>
+                  <td>
+                    Rp. {Number(convertPrice(boorTotalAmount) + subTotalAddOns)}
+                  </td>
                 </tr>
               </tbody>
             </>

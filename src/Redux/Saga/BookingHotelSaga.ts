@@ -46,6 +46,17 @@ function* handleGetCoupon(): any {
   }
 }
 
+function* handleGetBookingHistory(): any {
+  try {
+    const result = yield call(BookingHotelApi.getBookingOrder);
+    if (result.status === 200) {
+      yield put(GetCouponSuccess(result.data));
+    }
+  } catch (error) {
+    yield put(GetCouponFailed(error));
+  }
+}
+
 function* handleGetAddOnItem(): any {
   try {
     const result = yield call(BookingHotelApi.getAddOnItem);
@@ -68,9 +79,10 @@ function* handleCreateBoex(action: any): any {
 }
 
 export {
-  handleGetBookingHotel,
+  handleGetBookingHistory,
   handleGetFacilityHotel,
-  handleGetCoupon,
+  handleGetBookingHotel,
   handleGetAddOnItem,
   handleCreateBoex,
+  handleGetCoupon,
 };

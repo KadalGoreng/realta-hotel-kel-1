@@ -83,9 +83,11 @@ export const bookingOrderNumber = (num: string) => {
   return `BO#${todayDate}-${numberOfOrder}`;
 };
 
-export const transactionNumber = (num: string) => {
+export const transactionNumber = () => {
   const todayDate = new Date().toISOString().slice(0, 10).replace(/[-]/gi, "");
-  const numberOfTrx = num.padStart(4, "0");
+  const numberOfTrx = Math.floor(Math.random() * 9999)
+    .toString()
+    .padStart(4, "0");
 
   return `TRB#${todayDate}-${numberOfTrx}`;
 };

@@ -10,6 +10,10 @@ export const GET_COUPON_REQUEST = "get/coupon/request";
 export const GET_COUPON_SUCCESS = "get/coupon/success";
 export const GET_COUPON_FAILED = "get/coupon/failed";
 
+export const GET_BOOKINGHISTORY_REQUEST = "get/bookinghistory/request";
+export const GET_BOOKINGHISTORY_SUCCESS = "get/bookinghistory/success";
+export const GET_BOOKINGHISTORY_FAILED = "get/bookinghistory/failed";
+
 export const GET_STOCK_REQUEST = "get/stock/request";
 export const GET_STOCK_SUCCESS = "get/stock/success";
 export const GET_STOCK_FAILED = "get/stock/failed";

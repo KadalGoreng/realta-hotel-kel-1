@@ -68,7 +68,7 @@ export default function Order() {
   });
 
   const [payloadTrx, setPayloadTrx] = useState({
-    patr_number: transactionNumber("7"),
+    patr_number: transactionNumber(),
     patr_debet: 0,
     patr_credit: totalPrice,
     patr_type: "TRB",
@@ -179,18 +179,21 @@ export default function Order() {
   }, []);
 
   const booking = () => {
-    // api.createOrder(payload).then(() => {
-    //   api.createTransaction(payloadTrx);
-    // });
+    api.createOrder(payload).then(() => {
+      api.createTransaction(payloadTrx);
+    });
     addOnsOrder &&
       addOnsOrder.map((order: any) =>
         dispatch(
-          CreateBoexRequest(Object.fromEntries(Object.entries(order).slice(1)))
+          // CreateBoexRequest(Object.fromEntries(Object.entries(order).slice(1)))
+          CreateBoexRequest(order)
         )
       );
 
     window.alert("Successfully Order");
-    router.push(`/booking/room/${hotelId}/invoice`);
+    router.push({
+      pathname: `/booking/room/${hotelId}/invoice`,
+    });
   };
 
   return (
@@ -214,15 +217,30 @@ export default function Order() {
               </div>
               <div className="flex flex-col" style={{ flex: "0 1 40%" }}>
                 <label>Full Name</label>
-                <input className="input input-bordered input-sm" type="text" />
+                <input
+                  disabled
+                  className="input input-bordered input-sm"
+                  type="text"
+                  value="Achmad Rendra Artama"
+                />
               </div>
               <div className="flex flex-col" style={{ flex: "0 1 40%" }}>
                 <label>Email</label>
-                <input className="input input-bordered input-sm" type="text" />
+                <input
+                  disabled
+                  className="input input-bordered input-sm"
+                  type="text"
+                  value="Rendra@gmail.com"
+                />
               </div>
               <div className="flex flex-col" style={{ flex: "0 1 40%" }}>
                 <label>Mobile Number</label>
-                <input className="input input-bordered input-sm" type="tel" />
+                <input
+                  disabled
+                  className="input input-bordered input-sm"
+                  type="tel"
+                  value="082287821698"
+                />
               </div>
               <div className="flex flex-col" style={{ flex: "0 1 40%" }}>
                 &nbsp;
@@ -307,15 +325,9 @@ export default function Order() {
                   <option disabled selected>
                     Select payment
                   </option>
-                  <option selected={false} value={"CR"}>
-                    Credit Card
-                  </option>
-                  <option selected={true} value={"C"}>
-                    Pay at Hotel
-                  </option>
-                  <option selected={true} value={"D"}>
-                    Debit
-                  </option>
+                  <option value={"CR"}>Credit Card</option>
+                  <option value={"C"}>Pay at Hotel</option>
+                  <option value={"D"}>Debit</option>
                 </select>
               </div>
               <div className="flex flex-col gap-2" style={{ flex: "0 1 40%" }}>

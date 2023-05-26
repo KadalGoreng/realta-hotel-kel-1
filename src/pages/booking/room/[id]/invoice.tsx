@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import api from "@/api/BookingHotel";
+import { useSelector } from "react-redux";
 
 export default function Invoice() {
+  const { boex } = useSelector((state: any) => state.bookingHotelState);
+
   const [dataOrder, setDataOrder] = useState({
     boorId: null,
     boorOrderNumber: "",
@@ -41,8 +44,6 @@ export default function Invoice() {
   useEffect(() => {
     getDataOrder();
   }, []);
-
-  console.log(dataOrder);
 
   return (
     <div className="min-h-screen">
@@ -113,6 +114,18 @@ export default function Invoice() {
                   <td>150</td>
                   <td>Rp. 300.000</td>
                 </tr>
+                {boex &&
+                  boex.map((item: any) => (
+                    <tr>
+                      <td>Drink</td>
+                      <td>{item.boexQty}</td>
+                      <td></td>
+                      <td>{`Rp.${item.boexPrice}`}</td>
+                      <td></td>
+                      <td></td>
+                      <td>{`Rp. ${item.boexSubtotal}`}</td>
+                    </tr>
+                  ))}
               </tbody>
               <tbody>
                 <tr>

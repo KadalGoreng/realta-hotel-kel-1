@@ -1,12 +1,5 @@
-import {
-  bookingDays,
-  convertPrice,
-  formatDate,
-  formatPrice,
-} from "@/utils/helpers";
-import Link from "next/link";
+import { bookingDays, formatDate, formatPrice } from "@/utils/helpers";
 import React from "react";
-import { useSelector } from "react-redux";
 import Button from "./Button";
 
 export default function OrderSummaryNotModified(props: any) {
@@ -21,6 +14,7 @@ export default function OrderSummaryNotModified(props: any) {
     saving,
     hotelId,
     onClick,
+    subTotalAddOn,
   } = props;
 
   return (
@@ -47,6 +41,10 @@ export default function OrderSummaryNotModified(props: any) {
           <div className="text-sm">{`Rp. ${formatPrice(price)}`}</div>
         </div>
         <div className="flex justify-between items-center">
+          <div>Extra Order</div>
+          <div className="text-sm">{`Rp. ${formatPrice(subTotalAddOn)}`}</div>
+        </div>
+        <div className="flex justify-between items-center">
           <div>Discount Voucher</div>
           <div className="text-sm">{`-Rp. ${formatPrice(saving)}`}</div>
         </div>
@@ -59,13 +57,13 @@ export default function OrderSummaryNotModified(props: any) {
             <p className="card-title">Total Price</p>
             <p className="text-sm font-thin">termasuk pajak</p>
           </div>
-          <p className="text-sm">{`Rp. ${formatPrice(totalPrice)}`}</p>
+          <p className="text-sm">{`Rp. ${formatPrice(
+            totalPrice + subTotalAddOn
+          )}`}</p>
         </div>
       </div>
       <div className="card-actions">
-        <Link href={`/booking/room/${hotelId}/invoice/`} className="w-full">
-          <Button label="Create Booking Order" fullWidth onClick={onClick} />
-        </Link>
+        <Button label="Create Booking Order" fullWidth onClick={onClick} />
       </div>
     </div>
   );

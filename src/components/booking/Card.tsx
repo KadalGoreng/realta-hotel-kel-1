@@ -143,7 +143,10 @@ export default function Card(props: any) {
                 (facility: any, index: number) =>
                   index < 3 && (
                     <div className="flex items-center gap-1">
-                      <CarOutlined style={{ fontSize: "20px" }} />
+                      <img
+                        src={`/icons/${facility.faciCagro.cagroIcon}`}
+                        className="w-[20px]"
+                      />
                       <span className="font-thin">
                         {facility.faciCagro.cagroName}
                       </span>
@@ -151,18 +154,6 @@ export default function Card(props: any) {
                   )
               )}
               {moreFacility > 0 && <span>+ {moreFacility} more</span>}
-              {/* <div className="flex items-center gap-1">
-                <CarOutlined style={{ fontSize: "20px" }} />
-                <span className="font-thin">Parking</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <CoffeeOutlined style={{ fontSize: "20px" }} />
-                <span className="font-thin">Coffee/Tea</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <ShoppingCartOutlined style={{ fontSize: "20px" }} />
-                <span className="font-thin">Market</span>
-              </div> */}
             </div>
           </div>
           {facilities.length !== 0 && (

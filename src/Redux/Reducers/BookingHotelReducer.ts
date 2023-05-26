@@ -6,7 +6,7 @@ const INIT_STATE = {
   coupon: [],
   stocks: [],
   bookingOrder: {},
-  boex: {},
+  boex: [],
 };
 
 const BookingHotelReducer = (state = INIT_STATE, action: any) => {
@@ -77,7 +77,7 @@ const createBoex = (state: any, action: any) => {
   const { payload } = action;
   return {
     ...state,
-    boex: { payload },
+    boex: [...state.boex, payload],
   };
 };
 

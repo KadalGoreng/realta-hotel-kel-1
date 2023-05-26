@@ -1,10 +1,5 @@
 import { convertPrice, formatPrice } from "@/utils/helpers";
-import {
-  CarOutlined,
-  CoffeeOutlined,
-  ShoppingCartOutlined,
-  CheckCircleFilled,
-} from "@ant-design/icons";
+import { CheckCircleFilled } from "@ant-design/icons";
 import React from "react";
 import ButtonOutline from "./ButtonOutline";
 
@@ -28,7 +23,7 @@ export default function AnotherRoom(props: any) {
             <span>Max Vacant: {faciMaxNumber}</span>
             <span>Rp. {formatPrice(convertPrice(faciRatePrice))}</span>
           </div>
-          <div className="flex gap-4">
+          {/* <div className="flex gap-4">
             <div className="flex items-center gap-1">
               <CarOutlined style={{ fontSize: "20px" }} />
               <span className="font-thin ">Parking</span>
@@ -41,7 +36,7 @@ export default function AnotherRoom(props: any) {
               <ShoppingCartOutlined style={{ fontSize: "20px" }} />
               <span className="font-thin">Market</span>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="flex flex-col gap-3">
           <img

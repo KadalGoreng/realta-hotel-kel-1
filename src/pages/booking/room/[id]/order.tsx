@@ -13,9 +13,11 @@ import {
   CreateBoexRequest,
   GetAddOnItemRequest,
 } from "@/Redux/Actions/BookingHotelAction";
+import { useRouter } from "next/router";
 
 export default function Order() {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const { bookingOrder } = useSelector((state: any) => state.bookingHotelState);
   const { bookingHotel } = useSelector((state: any) => state.bookingHotelState);
@@ -166,6 +168,11 @@ export default function Order() {
     return addOnsOrder.find((order: any) => order.pritName === item.pritName);
   };
 
+  const subTotalAddOns = addOnsOrder.reduce(
+    (prev: any, curr: any) => prev + curr.boexSubtotal,
+    0
+  );
+
   useEffect(() => {
     getOrderNumber();
     dispatch(GetAddOnItemRequest());
@@ -183,6 +190,7 @@ export default function Order() {
       );
 
     window.alert("Successfully Order");
+    router.push(`/booking/room/${hotelId}/invoice`);
   };
 
   return (
@@ -277,11 +285,7 @@ export default function Order() {
                     <td>
                       <span className="font-bold">
                         Rp.
-                        {addOnsOrder &&
-                          addOnsOrder.reduce(
-                            (prev: any, curr: any) => prev + curr.boexSubtotal,
-                            0
-                          )}
+                        {addOnsOrder && subTotalAddOns}
                       </span>
                     </td>
                   </tr>
@@ -303,11 +307,14 @@ export default function Order() {
                   <option disabled selected>
                     Select payment
                   </option>
-                  <option selected={false} value={"GT"}>
-                    GoTo
+                  <option selected={false} value={"CR"}>
+                    Credit Card
                   </option>
-                  <option selected={true} value={"CR"}>
+                  <option selected={true} value={"C"}>
                     Pay at Hotel
+                  </option>
+                  <option selected={true} value={"D"}>
+                    Debit
                   </option>
                 </select>
               </div>
@@ -325,7 +332,11 @@ export default function Order() {
           </div>
         </div>
         <div className="min-w-[400px]">
-          <OrderSummaryNotModified {...bookingOrder} onClick={booking} />
+          <OrderSummaryNotModified
+            {...bookingOrder}
+            onClick={booking}
+            subTotalAddOn={subTotalAddOns}
+          />
         </div>
       </div>
     </div>

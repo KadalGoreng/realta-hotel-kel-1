@@ -6,7 +6,7 @@ import * as ActionFacilityPhoto from "../constant/facilityPhotoConstant";
 import * as ActionCategoryGroup from "../constant/master/categoryGroupConstant";
 import * as ActionAddress from "../constant/master/addressConstant";
 import { handleGetFacilities, handleAddFacilities, handleFindFacilities, handleEditFacilities, handleDelFacilities } from "./FacilitiesSaga";
-import { handleFacilityPhoto, handleAddFacilityPhoto, editFacilityPhoto, deleteFacilityPhoto } from "./FacilityPhotoSaga";
+import { handleFacilityPhoto, handleAddFacilityPhoto, editFacilityPhoto, deleteFacilityPhoto, handleFacilityPhotoMany } from "./FacilityPhotoSaga";
 
 import { handleAddress, findAddress } from "./master/AddressSaga";
 import { handleCategoryGroup } from "./master/CategoryGroupSaga";
@@ -29,6 +29,7 @@ function* watchAll() {
 
     //facility photo
     takeEvery(ActionFacilityPhoto.GET_FACILITY_PHOTO_REQUEST, handleFacilityPhoto),
+    takeEvery(ActionFacilityPhoto.GET_FACILITY_PHOTO_REQUEST, handleFacilityPhotoMany),
     takeEvery(ActionFacilityPhoto.ADD_FACILITY_PHOTO_REQUEST, handleAddFacilityPhoto),
     takeEvery(ActionFacilityPhoto.EDIT_FACILITY_PHOTO_REQUEST, editFacilityPhoto),
     takeEvery(ActionFacilityPhoto.DEL_FACILITY_PHOTO_REQUEST, deleteFacilityPhoto),

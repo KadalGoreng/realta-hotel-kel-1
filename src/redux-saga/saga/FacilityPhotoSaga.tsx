@@ -9,6 +9,8 @@ import {
   EditFacilityPhotoFailed,
   DelFacilityPhotoSuccess,
   DelFacilityPhotoFailed,
+  GetManyFacilityPhotoSuccess,
+  GetManyFacilityPhotoFailed,
 } from "../action/facilityPhotoAction";
 
 function* handleFacilityPhoto(action: any): any {
@@ -18,6 +20,16 @@ function* handleFacilityPhoto(action: any): any {
     yield put(GetFacilityPhotoSuccess(result));
   } catch (error) {
     yield put(GetFacilityPhotoFailed(error));
+  }
+}
+
+function* handleFacilityPhotoMany(action: any): any {
+  const { payload } = action;
+  try {
+    const result = yield call(FacilityPhoto.findMany, payload);
+    yield put(GetManyFacilityPhotoSuccess(result));
+  } catch (error) {
+    yield put(GetManyFacilityPhotoFailed(error));
   }
 }
 
@@ -51,4 +63,4 @@ function* deleteFacilityPhoto(action: any): any {
   }
 }
 
-export { handleFacilityPhoto, handleAddFacilityPhoto, editFacilityPhoto, deleteFacilityPhoto };
+export { handleFacilityPhoto, handleAddFacilityPhoto, editFacilityPhoto, deleteFacilityPhoto, handleFacilityPhotoMany };

@@ -61,7 +61,7 @@ export default function FormikHotelsUpdate(props: any) {
               <div className="relative py-8 px-5 md:px-10 bg-white shadow-md rounded border border-gray-400">
                 <h1 className="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">Edit Hotels</h1>
 
-                <div className="mb-4">
+                {/* <div className="mb-4">
                   <label form="name" className="text-gray-800 text-sm font-bold leading-tight tracking-normal">
                     Hotel ID
                   </label>
@@ -76,7 +76,7 @@ export default function FormikHotelsUpdate(props: any) {
                     className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
                     disabled
                   />
-                </div>
+                </div> */}
 
                 <div className="mb-4">
                   <label form="name" className="text-gray-800 text-sm font-bold leading-tight tracking-normal">
@@ -159,7 +159,7 @@ export default function FormikHotelsUpdate(props: any) {
                     Cancel
                   </button>
                 </div>
-                <button
+                {/* <button
                   className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600"
                   // onclick="modalHandler()"
                   aria-label="close modal"
@@ -181,7 +181,7 @@ export default function FormikHotelsUpdate(props: any) {
                     <line x1="18" y1="6" x2="6" y2="18" />
                     <line x1="6" y1="6" x2="18" y2="18" />
                   </svg>
-                </button>
+                </button> */}
               </div>
             </div>
           </div>

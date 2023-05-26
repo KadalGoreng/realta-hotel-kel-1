@@ -62,6 +62,17 @@ export default function HotelsRedux() {
     setSearch(e.target.value);
   };
 
+  const formatDate = (date: any, weekday: any, year: any) => {
+    const newDate = new Date(date);
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: weekday,
+      year: year,
+      month: "short",
+      day: "numeric",
+    };
+    return newDate.toLocaleString("id", options);
+  };
+
   const Modal = ({ isVisible, onClose }: { isVisible: any; onClose: () => void }) => {
     if (!isVisible) return null;
 
@@ -194,7 +205,7 @@ export default function HotelsRedux() {
                                     </div>
                                   </td>
                                   <td className="px-6 py-4">{item.hotelPhonenumber}</td>
-                                  <td className="px-6 py-4">{item.hotelModifiedDate}</td>
+                                  <td className="px-6 py-4">{formatDate(item.hotelModifiedDate, undefined, "numeric")}</td>
                                   <td className="d-flex">
                                     <div className="text-sm font-medium leading-5 text-center whitespace-no-wrap border-b border-gray-200 ">
                                       <div>

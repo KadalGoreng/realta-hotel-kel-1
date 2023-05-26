@@ -6,7 +6,7 @@ import { GetCategoryGroupRequest } from "../../redux-saga/action/master/category
 
 export default function FormikFacilitiesUpdate(props: any) {
   const dispatch = useDispatch();
-  const { facility } = useSelector((state: any) => state.facilityState);
+  const { facility } = useSelector((state: any) => state.facilitiesState);
   const { categoryGroups } = useSelector((state: any) => state.categoryGroupState);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export default function FormikFacilitiesUpdate(props: any) {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      faciId: props.id,
+      id: props.id,
       faciName: facility.faciName,
       faciDescription: facility.faciDescription,
       faciRoomNumber: facility.faciRoomNumber,
@@ -37,7 +37,7 @@ export default function FormikFacilitiesUpdate(props: any) {
 
     onSubmit: async (values) => {
       const payload = {
-        faciId: props.id,
+        id: props.id,
         faciName: values.faciName,
         faciDescription: values.faciDescription,
         faciMaxNumber: values.faciMaxNumber,
@@ -66,7 +66,7 @@ export default function FormikFacilitiesUpdate(props: any) {
         <div className="py-12 bg-gray-700 transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0" id="modal">
           <div className="container mx-auto w-11/12 md:w-2/3 max-w-lg">
             <div className="relative py-8 px-5 md:px-10 bg-white shadow-md rounded border border-gray-400">
-              <h1 className="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">Add facility</h1>
+              <h1 className="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">Edit Facility</h1>
 
               <div className="flex gap-3">
                 <div className="mb-2">
@@ -246,7 +246,7 @@ export default function FormikFacilitiesUpdate(props: any) {
                   Cancel
                 </button>
               </div>
-              <button
+              {/* <button
                 className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600"
                 //   onclick="modalHandler()"
                 aria-label="close modal"
@@ -257,7 +257,7 @@ export default function FormikFacilitiesUpdate(props: any) {
                   <line x1="18" y1="6" x2="6" y2="18" />
                   <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

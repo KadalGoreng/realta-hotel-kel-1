@@ -10,6 +10,15 @@ const list = async (id: number) => {
   }
 };
 
+const findMany = async (id: number) => {
+  try {
+    const result = await axios.get(`${config.domain}/facilityPhoto/many/${id}`);
+    return result.data;
+  } catch (error) {
+    return await error;
+  }
+};
+
 const Upload = async (payload: any) => {
   try {
     const result = await axios.post(`${config.domain}/facilityPhoto/`, payload);
@@ -39,6 +48,7 @@ const Delete = async (id: any) => {
 
 export default {
   list,
+  findMany,
   Delete,
   Upload,
   Update,

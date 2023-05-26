@@ -10,14 +10,22 @@ const FacilityPhotoReduce = (state = INIT_STATE, action: any) => {
       return { ...state };
     case ActionType.GET_FACILITY_PHOTO_SUCCESS:
       return GetFacilityPhotoSuccessfully(state, action);
+
+    case ActionType.GET_FACILITY_PHOTO_REQUEST:
+      return { ...state };
+    case ActionType.GET_FACILITY_PHOTO_SUCCESS:
+      return GetManyFacilityPhotoSuccessfully(state, action);
+
     case ActionType.ADD_FACILITY_PHOTO_REQUEST:
       return { ...state };
     case ActionType.ADD_FACILITY_PHOTO_SUCCESS:
       return AddFacilityPhotoSuccessfully(state, action);
+
     case ActionType.EDIT_FACILITY_PHOTO_REQUEST:
       return { ...state };
     case ActionType.EDIT_FACILITY_PHOTO_SUCCESS:
       return EditFacilityPhotoSuccessfully(state, action);
+
     case ActionType.DEL_FACILITY_PHOTO_REQUEST:
       return { ...state };
     case ActionType.DEL_FACILITY_PHOTO_SUCCESS:
@@ -28,6 +36,14 @@ const FacilityPhotoReduce = (state = INIT_STATE, action: any) => {
 };
 
 const GetFacilityPhotoSuccessfully = (state: any, action: any) => {
+  const { payload } = action;
+  return {
+    ...state,
+    facilityPhoto: payload,
+  };
+};
+
+const GetManyFacilityPhotoSuccessfully = (state: any, action: any) => {
   const { payload } = action;
   return {
     ...state,

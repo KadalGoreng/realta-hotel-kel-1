@@ -7,7 +7,7 @@ import { GetFacilitiesRequest } from "@/redux-saga/action/facilitiesAction";
 import FormikFacilitiesCreate from "../reduxfacilities/FacilitiesFormixCreate";
 import FormikFacilitiesUpdate from "../reduxfacilities/FacilitiesFormixUpdate";
 import ReactPaginate from "react-paginate";
-import { log } from "console";
+import AddPhoto from "./UploadPhoto";
 
 export default function HotelsId() {
   const router = useRouter();
@@ -19,11 +19,13 @@ export default function HotelsId() {
 
   const { facilities } = useSelector((state: any) => state.facilitiesState);
   const [display, setDisplay] = useState<any>(false);
+  const [upload, setUpload] = useState<any>(false);
   const [refresh, setRefresh] = useState<any>(false);
   const [displayUpdate, setDisplayUpdate] = useState(false);
   const [faciId, setFaciId] = useState();
   const [showModal, setShowModal] = useState(false);
   const [itemOffset, setItemOffset] = useState(0);
+  const [photoId, setPhotoId] = useState<any>();
 
   const endOffset = itemOffset + 10;
   const currentItems = facilities.slice(itemOffset, endOffset);
@@ -53,11 +55,30 @@ export default function HotelsId() {
     setFaciId(id);
   };
 
+  // const onUpload = (id: any) => {
+  //   router.push({
+  //     pathname: "/facilityPhoto/[id]",
+  //     query: { id: id },
+  //   });
+  // };
+  const convertPrice = (price: string) => {
+    return parseFloat(price.replace(/[$,RP.]/gi, ""));
+  };
+
+  const formatDate = (date: any, weekday: any, year: any) => {
+    const newDate = new Date(date);
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: weekday,
+      year: year,
+      month: "short",
+      day: "numeric",
+    };
+    return newDate.toLocaleString("id", options);
+  };
+
   const onUpload = (id: any) => {
-    router.push({
-      pathname: "/facilityPhoto/[id]",
-      query: { id: id },
-    });
+    setUpload(true);
+    setPhotoId(id);
   };
 
   const Modal = ({ isVisible, onClose }: { isVisible: any; onClose: () => void }) => {
@@ -89,6 +110,8 @@ export default function HotelsId() {
           <FormikFacilitiesUpdate setRefresh={setRefresh} setDisplay={setDisplayUpdate} id={faciId} />
         ) : display ? (
           <FormikFacilitiesCreate setRefresh={setRefresh} setDisplay={setDisplay} refresh={refresh} id={id} />
+        ) : upload ? (
+          <AddPhoto setDisplay={setUpload} id={faciId} />
         ) : (
           <div className="flex ">
             <aside id="default-sidebar" className="border left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
@@ -153,7 +176,7 @@ export default function HotelsId() {
                         Room Number
                       </th>
                       <th scope="col" className="px-6 py-3 bg-gray-50 dark:bg-gray-800">
-                        Max Vocant
+                        Max Vacant
                       </th>
                       <th scope="col" className="px-6 py-3 bg-gray-50 dark:bg-gray-800">
                         Start End Date
@@ -192,10 +215,10 @@ export default function HotelsId() {
                               <td className="px-6 py-4">
                                 <div style={{ width: "130px" }}>
                                   <div>
-                                    <div>{item.faciStartdate.substring(0, 10)}</div>
+                                    <div>{formatDate(item.faciStartdate, undefined, "numeric")} </div>
                                   </div>
                                   <div>
-                                    <div>{item.faciEnddate.substring(0, 10)}</div>
+                                    <div>{formatDate(item.faciEnddate, undefined, "numeric")}</div>
                                   </div>
                                 </div>
                               </td>
@@ -204,14 +227,14 @@ export default function HotelsId() {
                               </td>
                               <td className="px-6 py-4">
                                 <div>
-                                  <p>{item.faciRatePrice && item.faciDiscount ? Math.round(Number(item.faciDiscount.replace(/[^0-9]+/g, "")) / (Number(item.faciRatePrice.replace(/[^0-9]+/g, "")) / 100)) : null}%</p>
+                                  <p>{item.faciRatePrice && item.faciDiscount ? Math.round((convertPrice(item.faciDiscount) / convertPrice(item.faciRatePrice)) * 100) : 0}%</p>
                                 </div>
                               </td>
                               <td className="px-6 py-4">{item.faciRatePrice}</td>
                               <td className="px-6 py-4">
                                 {" "}
                                 <div>
-                                  <p>{item.faciRatePrice && item.faciTaxRate ? Math.round(Number(item.faciTaxRate.replace(/[^0-9]+/g, "")) / (Number(item.faciRatePrice.replace(/[^0-9]+/g, "")) / 100)) : null}%</p>
+                                  <p>{item.faciRatePrice && item.faciTaxRate ? Math.round((convertPrice(item.faciTaxRate) / convertPrice(item.faciRatePrice)) * 100) : 0}%</p>
                                 </div>
                               </td>
                               <td className="d-flex">

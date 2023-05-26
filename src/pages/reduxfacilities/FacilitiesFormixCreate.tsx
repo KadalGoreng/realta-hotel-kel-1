@@ -12,6 +12,10 @@ export default function FormikFacilitiesCreate(props: any) {
     dispatch(GetCategoryGroupRequest());
   }, [dispatch]);
 
+  const convertPrice = (price: string) => {
+    return parseFloat(price.replace(/[$,RP.]/gi, ""));
+  };
+
   const formik = useFormik({
     initialValues: {
       faciName: "",
@@ -39,14 +43,16 @@ export default function FormikFacilitiesCreate(props: any) {
         faciMeasureUnit: values.faciMeasureUnit,
         faciLowPrice: values.faciLowPrice,
         faciHighPrice: values.faciHighPrice,
-        faciRatePrice: (parseInt(values.faciHighPrice) + parseInt(values.faciLowPrice)) / 2,
-        faciDiscount: ((parseInt(values.faciHighPrice) + parseInt(values.faciLowPrice)) / 2 / 100) * parseInt(values.faciDiscount),
-        faciTaxRate: ((parseInt(values.faciHighPrice) + parseInt(values.faciLowPrice)) / 2 / 100) * parseInt(values.faciTaxRate),
+        faciRatePrice: ((convertPrice(values.faciHighPrice) + convertPrice(values.faciLowPrice)) / 2).toString(),
+        faciDiscount: convertPrice(values.faciDiscount).toString(),
+        faciTaxRate: convertPrice(values.faciTaxRate).toString(),
         faciStartdate: values.faciStartdate,
         faciEnddate: values.faciEnddate,
         faciCagro: Number(values.faciCagro),
         faciHotel: Number(props.id),
       };
+
+      console.log(payload);
 
       dispatch(AddFacilitiesRequest(payload));
       props.setDisplay(false);
@@ -61,7 +67,7 @@ export default function FormikFacilitiesCreate(props: any) {
         <div className="py-12 bg-gray-700 transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0" id="modal">
           <div className="container mx-auto w-11/12 md:w-2/3 max-w-lg">
             <div className="relative py-8 px-5 md:px-10 bg-white shadow-md rounded border border-gray-400">
-              <h1 className="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">Add Facilities</h1>
+              <h1 className="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">Add Facility</h1>
 
               <div className="flex gap-3">
                 <div className="mb-2">
@@ -250,7 +256,7 @@ export default function FormikFacilitiesCreate(props: any) {
                   Cancel
                 </button>
               </div>
-              <button
+              {/* <button
                 className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600"
                 //   onclick="modalHandler()"
                 aria-label="close modal"
@@ -272,7 +278,7 @@ export default function FormikFacilitiesCreate(props: any) {
                   <line x1="18" y1="6" x2="6" y2="18" />
                   <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

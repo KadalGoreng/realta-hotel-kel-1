@@ -44,11 +44,16 @@ export default function Order() {
 
   const [addOnsOrder, setAddOnsOrder] = useState<any>([]);
 
+  const subTotalAddOns = addOnsOrder.reduce(
+    (prev: any, curr: any) => prev + curr.boexSubtotal,
+    0
+  );
+
   const [payload, setPayload] = useState({
     boorOrderDate: new Date(),
     boorArrivalDate: dateStart,
     boorTotalRoom: 1,
-    boorTotalGuest: 1,
+    boorTotalGuest: 2,
     boorDiscount: saving,
     boorTotalTax: faciTaxRate,
     boorTotalAmount: totalPrice,
@@ -80,6 +85,19 @@ export default function Order() {
     user_id: 1,
   });
 
+  const [payloadBorde, setPayloadBorde] = useState({
+    borderBoorId: null,
+    bordeCheckin: dateStart,
+    bordeCheckout: dateEnd,
+    bordeAdults: 2,
+    bordeKids: 0,
+    bordePrice: totalPrice,
+    bordeExtra: null,
+    bordeDiscount: saving,
+    bordeTax: faciTaxRate,
+    bordeSubtotal: totalPrice + subTotalAddOns,
+  });
+
   const onChangeState = (key: string, value: any) => {
     setPayload((prev) => ({ ...prev, [key]: value }));
   };
@@ -87,6 +105,10 @@ export default function Order() {
   const getOrderNumber = async () => {
     const result: any = await api.getBookingOrder();
     const numBo = result.data[0].boorId + 1;
+    setPayloadBorde({
+      ...payloadBorde,
+      borderBoorId: result.data[0].boorId,
+    });
     setPayloadTrx({
       ...payloadTrx,
       order_number: bookingOrderNumber(`${numBo}`),
@@ -168,25 +190,28 @@ export default function Order() {
     return addOnsOrder.find((order: any) => order.pritName === item.pritName);
   };
 
-  const subTotalAddOns = addOnsOrder.reduce(
-    (prev: any, curr: any) => prev + curr.boexSubtotal,
-    0
-  );
-
   useEffect(() => {
     getOrderNumber();
     dispatch(GetAddOnItemRequest());
   }, []);
 
+  useEffect(() => {
+    setPayloadBorde({
+      ...payloadBorde,
+      bordeExtra: subTotalAddOns,
+    });
+  }, [subTotalAddOns]);
+
   const booking = () => {
     api.createOrder(payload).then(() => {
       api.createTransaction(payloadTrx);
     });
+    api.createOrderDetail(payloadBorde);
     addOnsOrder &&
       addOnsOrder.map((order: any) =>
         dispatch(
-          // CreateBoexRequest(Object.fromEntries(Object.entries(order).slice(1)))
           CreateBoexRequest(order)
+          // CreateBoexRequest(Object.fromEntries(Object.entries(order).slice(1)))
         )
       );
 
@@ -270,7 +295,7 @@ export default function Order() {
                       index < 5 && (
                         <tr key={index}>
                           <td>{item.pritName}</td>
-                          <td className="">
+                          <td>
                             Rp.
                             {formatPrice(convertPrice(item.pritPrice))}
                           </td>

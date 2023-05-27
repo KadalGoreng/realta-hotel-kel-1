@@ -11,6 +11,8 @@ import {
   GetFacilitySuccess,
   GetAddOnItemFailed,
   GetAddOnItemSuccess,
+  GetBookingHistorySuccess,
+  GetBookingHistoryFailed,
 } from "../Actions/BookingHotelAction";
 
 function* handleGetBookingHotel(): any {
@@ -50,10 +52,10 @@ function* handleGetBookingHistory(): any {
   try {
     const result = yield call(BookingHotelApi.getBookingOrder);
     if (result.status === 200) {
-      yield put(GetCouponSuccess(result.data));
+      yield put(GetBookingHistorySuccess(result.data));
     }
   } catch (error) {
-    yield put(GetCouponFailed(error));
+    yield put(GetBookingHistoryFailed(error));
   }
 }
 

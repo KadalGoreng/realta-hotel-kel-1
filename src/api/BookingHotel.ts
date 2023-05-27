@@ -56,6 +56,18 @@ const createOrder = async (data: any) => {
   }
 };
 
+const createOrderDetail = async (data: any) => {
+  try {
+    const result = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/order-detail/`,
+      data
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
 const createBoex = async (data: any) => {
   try {
     const result = await axios.post(
@@ -112,4 +124,5 @@ export default {
   createTransaction,
   getAddOnItem,
   createBoex,
+  createOrderDetail,
 };

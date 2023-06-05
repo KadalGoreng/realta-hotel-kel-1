@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Slider from "@mui/material/Slider";
 import { Box } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { GetCagroRequest } from "@/Redux/Actions/BookingHotelAction";
 
 export default function Filter(props: any) {
   const { priceFilter, category, setPriceValue, setSelectedPage, setCategory } =
     props;
+
+  const { cagroName } = useSelector((state: any) => state.bookingHotelState);
+
+  const dispatch = useDispatch();
 
   const handleFilterChange = (e: any) => {
     const value = e.target.value;
@@ -20,12 +26,23 @@ export default function Filter(props: any) {
     setPriceValue(newValue as number[]);
   };
 
+  const resetFilter = () => {
+    setCategory([]);
+    setPriceValue([100000, 10000000]);
+  };
+
+  useEffect(() => {
+    dispatch(GetCagroRequest());
+  }, []);
+
   return (
-    <aside className="w-[25%] p-4 border-r-[2px] max-md:hidden">
+    <aside className="w-[25%] p-4 border-r-[2px] hidden md:inline">
       <div className="sticky top-0">
         <div className="flex justify-between">
           <span className="text-2xl font-bold">Filters</span>
-          <button>Clear All</button>
+          <button className="text-red-500 font-bold" onClick={resetFilter}>
+            Clear All
+          </button>
         </div>
         <div className="facilities flex flex-col py-4 gap-3 border-b-[2px]">
           <p className="font-bold">Price Range</p>
@@ -48,42 +65,19 @@ export default function Filter(props: any) {
         <div className="facilities flex flex-col py-4 gap-3">
           <p className="font-bold">Hotel Facility</p>
           <div className="flex flex-col pl-4 gap-3">
-            <label>
-              <input
-                className="mr-4"
-                type="checkbox"
-                value="Restaurant"
-                onChange={handleFilterChange}
-              />
-              Restaurant
-            </label>
-            <label>
-              <input
-                className="mr-4"
-                type="checkbox"
-                value="Gym"
-                onChange={handleFilterChange}
-              />
-              Gym
-            </label>
-            <label>
-              <input
-                className="mr-4"
-                type="checkbox"
-                value="Ballroom"
-                onChange={handleFilterChange}
-              />
-              Ball Room
-            </label>
-            <label>
-              <input
-                className="mr-4"
-                type="checkbox"
-                value="Swimming Pool"
-                onChange={handleFilterChange}
-              />
-              Swimming Pool
-            </label>
+            {cagroName &&
+              cagroName.map((item: any) => (
+                <label>
+                  <input
+                    className="mr-4"
+                    type="checkbox"
+                    value={item.cagroName}
+                    checked={category.includes(item.cagroName)}
+                    onChange={handleFilterChange}
+                  />
+                  {item.cagroName}
+                </label>
+              ))}
           </div>
         </div>
         <div className="flex justify-center"></div>

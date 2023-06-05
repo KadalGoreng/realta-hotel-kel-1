@@ -8,6 +8,7 @@ const INIT_STATE = {
   stocks: [],
   bookingOrder: {},
   boex: [],
+  cagroName: [],
 };
 
 const BookingHotelReducer = (state = INIT_STATE, action: any) => {
@@ -20,6 +21,11 @@ const BookingHotelReducer = (state = INIT_STATE, action: any) => {
       return { ...state };
     case ActionType.GET_FACILITY_SUCCESS:
       return getFacility(state, action);
+    case ActionType.GET_COUPON_REQUEST:
+    case ActionType.GET_CAGRO_REQUEST:
+      return { ...state };
+    case ActionType.GET_CAGRO_SUCCESS:
+      return getCagro(state, action);
     case ActionType.GET_COUPON_REQUEST:
       return { ...state };
     case ActionType.GET_COUPON_SUCCESS:
@@ -54,6 +60,13 @@ const getFacility = (state: any, action: any) => {
   return {
     ...state,
     hotelFacility: action.payload,
+  };
+};
+
+const getCagro = (state: any, action: any) => {
+  return {
+    ...state,
+    cagroName: action.payload,
   };
 };
 

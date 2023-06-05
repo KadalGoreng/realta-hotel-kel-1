@@ -8,6 +8,7 @@ import {
   handleGetFacilityHotel,
   handleGetAddOnItem,
   handleGetBookingHistory,
+  handleGetCategoryHotel,
 } from "./BookingHotelSaga";
 import { GetPolicy, GetRegions } from "./MasterModuleSaga";
 
@@ -17,6 +18,9 @@ function* watchAll() {
   ]);
   yield all([
     takeEvery(ActionTypeBooking.GET_FACILITY_REQUEST, handleGetFacilityHotel),
+  ]);
+  yield all([
+    takeEvery(ActionTypeBooking.GET_CAGRO_REQUEST, handleGetCategoryHotel),
   ]);
   yield all([
     takeEvery(ActionTypeBooking.CREATE_BOEX_REQUEST, handleCreateBoex),

@@ -6,6 +6,10 @@ export const GET_FACILITY_REQUEST = "get/facility/request";
 export const GET_FACILITY_SUCCESS = "get/facility/success";
 export const GET_FACILITY_FAILED = "get/facility/failed";
 
+export const GET_CAGRO_REQUEST = "get/cagro/request";
+export const GET_CAGRO_SUCCESS = "get/cagro/success";
+export const GET_CAGRO_FAILED = "get/cagro/failed";
+
 export const GET_COUPON_REQUEST = "get/coupon/request";
 export const GET_COUPON_SUCCESS = "get/coupon/success";
 export const GET_COUPON_FAILED = "get/coupon/failed";

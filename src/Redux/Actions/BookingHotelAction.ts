@@ -28,6 +28,20 @@ export const GetFacilityFailed = (payload: any) => ({
   payload,
 });
 
+export const GetCagroRequest = () => ({
+  type: ActionType.GET_CAGRO_REQUEST,
+});
+
+export const GetCagroSuccess = (payload: any) => ({
+  type: ActionType.GET_CAGRO_SUCCESS,
+  payload,
+});
+
+export const GetCagroFailed = (payload: any) => ({
+  type: ActionType.GET_CAGRO_FAILED,
+  payload,
+});
+
 export const GetCouponRequest = () => ({
   type: ActionType.GET_COUPON_REQUEST,
 });

@@ -22,6 +22,17 @@ const getFacility = async () => {
   }
 };
 
+const getCategoryFacility = async () => {
+  try {
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/categoryGroup`
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
 const getCoupon = async () => {
   try {
     const result = await axios.get(
@@ -117,6 +128,7 @@ const createTransaction = async (data: any) => {
 export default {
   getHotel,
   getFacility,
+  getCategoryFacility,
   getCoupon,
   createOrder,
   getBookingOrderByUser,

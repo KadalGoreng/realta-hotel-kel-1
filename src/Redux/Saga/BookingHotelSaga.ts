@@ -13,6 +13,8 @@ import {
   GetAddOnItemSuccess,
   GetBookingHistorySuccess,
   GetBookingHistoryFailed,
+  GetCagroSuccess,
+  GetCagroFailed,
 } from "../Actions/BookingHotelAction";
 
 function* handleGetBookingHotel(): any {
@@ -34,6 +36,17 @@ function* handleGetFacilityHotel(): any {
     }
   } catch (error) {
     yield put(GetFacilityFailed(error));
+  }
+}
+
+function* handleGetCategoryHotel(): any {
+  try {
+    const result = yield call(BookingHotelApi.getCategoryFacility);
+    if (result.status === 200) {
+      yield put(GetCagroSuccess(result.data));
+    }
+  } catch (error) {
+    yield put(GetCagroFailed(error));
   }
 }
 
@@ -83,6 +96,7 @@ function* handleCreateBoex(action: any): any {
 export {
   handleGetBookingHistory,
   handleGetFacilityHotel,
+  handleGetCategoryHotel,
   handleGetBookingHotel,
   handleGetAddOnItem,
   handleCreateBoex,

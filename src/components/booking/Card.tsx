@@ -19,7 +19,6 @@ import ButtonOutline from "./ButtonOutline";
 
 export default function Card(props: any) {
   const { hotelId, hotelName, hotelReviews, hotelAddr, facilities } = props;
-  console.log(facilities);
 
   const aminities = removeDuplicates([...facilities]);
 

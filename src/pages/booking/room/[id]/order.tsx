@@ -1,6 +1,7 @@
 import OrderSummaryNotModified from "@/components/booking/OrderSummaryNotModified";
 import React, { useEffect, useState } from "react";
 import api from "@/api/BookingHotel";
+import apiUser from "@/api/Users";
 import { useDispatch, useSelector } from "react-redux";
 import {
   bookingOrderNumber,
@@ -17,10 +18,11 @@ import { useRouter } from "next/router";
 
 export default function Order() {
   const dispatch = useDispatch();
+  const [showMore, setShowMore] = useState(false);
+
   const router = useRouter();
 
   const { bookingOrder } = useSelector((state: any) => state.bookingHotelState);
-  const { bookingHotel } = useSelector((state: any) => state.bookingHotelState);
   const { stocks } = useSelector((state: any) => state.bookingHotelState);
 
   const {
@@ -36,12 +38,6 @@ export default function Order() {
     hotelId,
   } = bookingOrder;
 
-  const addOns = bookingHotel
-    .find((item: any) => item.hotelId === Number(hotelId))
-    .facilities.find(
-      (item: any) => item.faciId === Number(faciId)
-    ).stockDetails;
-
   const [addOnsOrder, setAddOnsOrder] = useState<any>([]);
 
   const subTotalAddOns = addOnsOrder.reduce(
@@ -49,6 +45,7 @@ export default function Order() {
     0
   );
 
+  const [user, setUser] = useState<any>({});
   const [payload, setPayload] = useState({
     boorOrderDate: new Date(),
     boorArrivalDate: dateStart,
@@ -60,7 +57,7 @@ export default function Order() {
     boorDownPayment: 0,
     boorPayType: "",
     boorIsPaid: "P",
-    boorType: "",
+    boorType: "I",
     boorCardnumber: "",
     boorMemberType: "SILVER",
     boorStatus: "BOOKING",
@@ -75,7 +72,7 @@ export default function Order() {
   const [payloadTrx, setPayloadTrx] = useState({
     patr_number: transactionNumber(),
     patr_debet: 0,
-    patr_credit: totalPrice,
+    patr_credit: totalPrice + subTotalAddOns,
     patr_type: "TRB",
     patr_note: "Booking",
     order_number: "",
@@ -190,10 +187,17 @@ export default function Order() {
     return addOnsOrder.find((order: any) => order.pritName === item.pritName);
   };
 
+  const getUser = async () => {
+    const user = await apiUser.findOne(1);
+    setUser(user);
+  };
+
   useEffect(() => {
+    getUser();
     getOrderNumber();
     dispatch(GetAddOnItemRequest());
   }, []);
+  console.log(user);
 
   useEffect(() => {
     setPayloadBorde({
@@ -203,26 +207,39 @@ export default function Order() {
   }, [subTotalAddOns]);
 
   const booking = () => {
-    api.createOrder(payload).then(() => {
-      api.createTransaction(payloadTrx);
-    });
-    api.createOrderDetail(payloadBorde);
-    addOnsOrder &&
-      addOnsOrder.map((order: any) =>
-        dispatch(
-          CreateBoexRequest(order)
-          // CreateBoexRequest(Object.fromEntries(Object.entries(order).slice(1)))
-        )
-      );
+    if (payload.boorPayType === "") {
+      alert("Mohon pilih pembayaran!");
+      return;
+    } else {
+      if (payload.boorPayType === "D") {
+        if (user.userAccounts[0].usacSaldo > totalPrice + subTotalAddOns) {
+          api.createOrder(payload).then(() => {
+            api.createOrderDetail(payloadBorde);
+            api.createTransaction(payloadTrx);
+          });
+          addOnsOrder &&
+            addOnsOrder.map((order: any) =>
+              dispatch(
+                CreateBoexRequest(order)
+                // CreateBoexRequest(Object.fromEntries(Object.entries(order).slice(1)))
+              )
+            );
+        } else {
+          window.alert("Saldo Kurang");
+          return;
+        }
+      }
+    }
 
     window.alert("Successfully Order");
     router.push({
       pathname: `/booking/room/${hotelId}/invoice`,
     });
   };
+  console.log(user.userAccounts);
 
   return (
-    <div className="flex flex-col min-h-[100vh]">
+    <div className="flex flex-col min-h-[100vh] mb-10">
       <div className="my-[56px] mx-auto">
         {/* <span className="text-2xl font-bold">Modify your booking</span> */}
       </div>
@@ -246,7 +263,7 @@ export default function Order() {
                   disabled
                   className="input input-bordered input-sm"
                   type="text"
-                  value="Achmad Rendra Artama"
+                  value={user.userFullName}
                 />
               </div>
               <div className="flex flex-col" style={{ flex: "0 1 40%" }}>
@@ -255,7 +272,7 @@ export default function Order() {
                   disabled
                   className="input input-bordered input-sm"
                   type="text"
-                  value="Rendra@gmail.com"
+                  value={user.userEmail}
                 />
               </div>
               <div className="flex flex-col" style={{ flex: "0 1 40%" }}>
@@ -264,7 +281,7 @@ export default function Order() {
                   disabled
                   className="input input-bordered input-sm"
                   type="tel"
-                  value="082287821698"
+                  value={user.userPhoneNumber}
                 />
               </div>
               <div className="flex flex-col" style={{ flex: "0 1 40%" }}>
@@ -290,9 +307,39 @@ export default function Order() {
                   </tr>
                 </thead>
                 <tbody>
-                  {stocks.map(
-                    (item: any, index: number) =>
-                      index < 5 && (
+                  {!showMore
+                    ? stocks.map(
+                        (item: any, index: number) =>
+                          index < 5 && (
+                            <tr key={index}>
+                              <td>{item.pritName}</td>
+                              <td>
+                                Rp.
+                                {formatPrice(convertPrice(item.pritPrice))}
+                              </td>
+                              <td className="flex gap-3">
+                                <span
+                                  className="btn btn-xs"
+                                  onClick={() => removerItem(item)}
+                                >
+                                  -
+                                </span>
+                                <span>
+                                  {addOnsOrder && findAddOn(item)
+                                    ? findAddOn(item).boexQty
+                                    : "0"}
+                                </span>
+                                <span
+                                  className="btn btn-xs"
+                                  onClick={() => addToCart(item)}
+                                >
+                                  +
+                                </span>
+                              </td>
+                            </tr>
+                          )
+                      )
+                    : stocks.map((item: any, index: number) => (
                         <tr key={index}>
                           <td>{item.pritName}</td>
                           <td>
@@ -319,8 +366,19 @@ export default function Order() {
                             </span>
                           </td>
                         </tr>
-                      )
-                  )}
+                      ))}
+                  <tr>
+                    <td>
+                      {stocks.length > 5 && (
+                        <span
+                          className="font-bold text-[#b37d31] cursor-pointer mt-2"
+                          onClick={() => setShowMore(!showMore)}
+                        >
+                          {!showMore ? "Show more" : "Show less"}
+                        </span>
+                      )}
+                    </td>
+                  </tr>
                   <tr>
                     <td className="font-bold">
                       <span>Total Price</span>
@@ -328,7 +386,7 @@ export default function Order() {
                     <td>
                       <span className="font-bold">
                         Rp.
-                        {addOnsOrder && subTotalAddOns}
+                        {addOnsOrder && formatPrice(subTotalAddOns)}
                       </span>
                     </td>
                   </tr>

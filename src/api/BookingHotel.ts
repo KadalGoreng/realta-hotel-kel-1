@@ -127,14 +127,14 @@ const createTransaction = async (data: any) => {
 
 export default {
   getHotel,
-  getFacility,
-  getCategoryFacility,
   getCoupon,
-  createOrder,
-  getBookingOrderByUser,
-  getBookingOrder,
-  createTransaction,
-  getAddOnItem,
   createBoex,
+  createOrder,
+  getFacility,
+  getAddOnItem,
+  getBookingOrder,
   createOrderDetail,
+  createTransaction,
+  getCategoryFacility,
+  getBookingOrderByUser,
 };

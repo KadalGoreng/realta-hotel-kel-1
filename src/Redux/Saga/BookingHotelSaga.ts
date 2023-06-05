@@ -94,11 +94,11 @@ function* handleCreateBoex(action: any): any {
 }
 
 export {
-  handleGetBookingHistory,
-  handleGetFacilityHotel,
-  handleGetCategoryHotel,
-  handleGetBookingHotel,
-  handleGetAddOnItem,
-  handleCreateBoex,
   handleGetCoupon,
+  handleCreateBoex,
+  handleGetAddOnItem,
+  handleGetBookingHotel,
+  handleGetCategoryHotel,
+  handleGetFacilityHotel,
+  handleGetBookingHistory,
 };

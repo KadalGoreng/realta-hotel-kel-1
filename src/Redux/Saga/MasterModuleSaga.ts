@@ -3,39 +3,62 @@ import { call, put } from "redux-saga/effects";
 import {
   CreateAddressFailed,
   CreateAddressSuccess,
+  CreateCagroFailed,
+  CreateCagroSuccess,
   CreateCountryFailed,
   CreateCountrySuccess,
+  CreatePolicyFailed,
+  CreatePolicySuccess,
   CreateProvinceFailed,
   CreateProvinceSuccess,
   CreateRegionsFailed,
   CreateRegionsSuccess,
+  CreateServiceFailed,
+  CreateServiceSuccess,
   DeleteAddressFailed,
   DeleteAddressSuccess,
+  DeleteCagroFailed,
+  DeleteCagroSuccess,
   DeleteCountryFailed,
   DeleteCountrySuccess,
+  DeletePolicyFailed,
+  DeletePolicySuccess,
   DeleteProvinceFailed,
   DeleteProvinceSuccess,
   DeleteRegionsFailed,
   DeleteRegionsSuccess,
+  DeleteServiceFailed,
+  DeleteServiceSuccess,
   GetAddressFailed,
   GetAddressSuccess,
   GetCountryFailed,
   GetCountrySuccess,
+  GetPolicyByCategFailed,
+  GetPolicyByCategSuccess,
   GetPolicyFailed,
   GetPolicySuccess,
   GetProvinceFailed,
   GetProvinceSuccess,
   GetRegionsFailed,
   GetRegionsSuccess,
+  GetServiceFailed,
+  GetServiceSuccess,
   UpdateAddressFailed,
   UpdateAddressSuccess,
+  UpdateCagroFailed,
+  UpdateCagroSuccess,
   UpdateCountryFailed,
   UpdateCountrySuccess,
+  UpdatePolicyFailed,
+  UpdatePolicySuccess,
   UpdateProvinceFailed,
   UpdateProvinceSuccess,
   UpdateRegionsFailed,
   UpdateRegionsSuccess,
+  UpdateServiceFailed,
+  UpdateServiceSuccess,
 } from "../Actions/masterAction";
+import { GetCagroFailed, GetCagroSuccess } from "../Actions/BookingHotelAction";
 
 interface ResponseGenerator {
   config?: any;
@@ -249,25 +272,187 @@ function* DeleteAddress(action: any) {
   }
 }
 
-function* GetPolicy(action: any): any {
+function* GetService(): any {
+  try {
+    const result = yield call(MasterApi.getService);
+    if (result.status === 200) {
+      yield put(GetServiceSuccess(result.data));
+    }
+  } catch (error) {
+    yield put(GetServiceFailed(error));
+  }
+}
+
+function* CreateService(action: any) {
   const { payload } = action;
   try {
-    const result = yield call(MasterApi.policyByCategories, payload);
-    yield put(GetPolicySuccess(result.data));
+    const result: ResponseGenerator = yield call(
+      MasterApi.createService,
+      payload
+    );
+    yield put(CreateServiceSuccess(result.data));
+  } catch (error) {
+    yield put(CreateServiceFailed(error));
+  }
+}
+
+function* UpdateService(action: any) {
+  const { payload } = action;
+  try {
+    const result: ResponseGenerator = yield call(
+      MasterApi.updateService,
+      payload
+    );
+    yield put(UpdateServiceSuccess(result.data));
+  } catch (error) {
+    yield put(UpdateServiceFailed(error));
+  }
+}
+
+function* DeleteService(action: any) {
+  const { payload } = action;
+  try {
+    const result: ResponseGenerator = yield call(
+      MasterApi.deleteService,
+      payload
+    );
+    yield put(DeleteServiceSuccess(result.data));
+  } catch (error) {
+    yield put(DeleteServiceFailed(error));
+  }
+}
+
+function* GetCagro(): any {
+  try {
+    const result = yield call(MasterApi.getCagro);
+    if (result.status === 200) {
+      yield put(GetCagroSuccess(result.data));
+    }
+  } catch (error) {
+    yield put(GetCagroFailed(error));
+  }
+}
+
+function* CreateCagro(action: any) {
+  const { payload } = action;
+  try {
+    const result: ResponseGenerator = yield call(
+      MasterApi.createCagro,
+      payload
+    );
+    yield put(CreateCagroSuccess(result.data));
+  } catch (error) {
+    yield put(CreateCagroFailed(error));
+  }
+}
+
+function* UpdateCagro(action: any) {
+  const { payload, id } = action;
+  try {
+    const result: ResponseGenerator = yield call(
+      MasterApi.updateCagro,
+      payload,
+      id
+    );
+    yield put(UpdateCagroSuccess(result.data));
+  } catch (error) {
+    yield put(UpdateCagroFailed(error));
+  }
+}
+
+function* DeleteCagro(action: any) {
+  const { payload } = action;
+  try {
+    const result: ResponseGenerator = yield call(
+      MasterApi.deleteCagro,
+      payload
+    );
+    yield put(DeleteCagroSuccess(result.data));
+  } catch (error) {
+    yield put(DeleteCagroFailed(error));
+  }
+}
+
+function* GetPolicy(): any {
+  try {
+    const result = yield call(MasterApi.getPolicy);
+    if (result.status === 200) {
+      yield put(GetPolicySuccess(result.data));
+    }
   } catch (error) {
     yield put(GetPolicyFailed(error));
   }
 }
 
+function* CreatePolicy(action: any) {
+  const { payload } = action;
+  try {
+    const result: ResponseGenerator = yield call(
+      MasterApi.createPolicy,
+      payload
+    );
+    yield put(CreatePolicySuccess(result.data));
+  } catch (error) {
+    yield put(CreatePolicyFailed(error));
+  }
+}
+
+function* UpdatePolicy(action: any) {
+  const { payload } = action;
+  try {
+    const result: ResponseGenerator = yield call(
+      MasterApi.updatePolicy,
+      payload
+    );
+    yield put(UpdatePolicySuccess(result.data));
+  } catch (error) {
+    yield put(UpdatePolicyFailed(error));
+  }
+}
+
+function* DeletePolicy(action: any) {
+  const { payload } = action;
+  try {
+    const result: ResponseGenerator = yield call(
+      MasterApi.deletePolicy,
+      payload
+    );
+    yield put(DeletePolicySuccess(result.data));
+  } catch (error) {
+    yield put(DeletePolicyFailed(error));
+  }
+}
+
+function* GetPolicyByCateg(action: any): any {
+  const { payload } = action;
+  try {
+    const result = yield call(MasterApi.policyByCategories, payload);
+    yield put(GetPolicyByCategSuccess(result.data));
+  } catch (error) {
+    yield put(GetPolicyByCategFailed(error));
+  }
+}
+
 export {
+  GetCagro,
   GetPolicy,
   GetRegions,
   GetAddress,
+  GetService,
+  UpdateCagro,
+  DeleteCagro,
   GetProvince,
-  CreateRegion,
+  CreateCagro,
   GetCountries,
+  CreatePolicy,
   UpdateRegion,
+  UpdatePolicy,
   DeleteRegion,
+  DeletePolicy,
+  CreateRegion,
+  CreateService,
+  UpdateService,
+  DeleteService,
   CreateAddress,
   UpdateAddress,
   DeleteAddress,
@@ -277,4 +462,5 @@ export {
   CreateProvince,
   UpdateProvince,
   DeleteProvince,
+  GetPolicyByCateg,
 };

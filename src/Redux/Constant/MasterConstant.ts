@@ -2,9 +2,9 @@ export const GET_REGION_REQUEST = "get/region/request";
 export const GET_REGION_SUCCESS = "get/region/success";
 export const GET_REGION_FAILED = "get/region/failed";
 
-export const GET_POLICY_REQUEST = "get/policy/request";
-export const GET_POLICY_SUCCESS = "get/policy/success";
-export const GET_POLICY_FAILED = "get/policy/failed";
+export const GET_POLICYBYCATEG_REQUEST = "get/policyByCateg/request";
+export const GET_POLICYBYCATEG_SUCCESS = "get/policyByCateg/success";
+export const GET_POLICYBYCATEG_FAILED = "get/policyByCateg/failed";
 
 export const CREATE_REGION_REQUEST = "create/region/request";
 export const CREATE_REGION_SUCCESS = "create/region/success";
@@ -65,3 +65,51 @@ export const UPDATE_ADDRESS_FAILED = "update/address/failed";
 export const DELETE_ADDRESS_REQUEST = "delete/address/request";
 export const DELETE_ADDRESS_SUCCESS = "delete/address/success";
 export const DELETE_ADDRESS_FAILED = "delete/address/failed";
+
+export const GET_POLICY_REQUEST = "get/policy/request";
+export const GET_POLICY_SUCCESS = "get/policy/success";
+export const GET_POLICY_FAILED = "get/policy/failed";
+
+export const CREATE_POLICY_REQUEST = "create/policy/request";
+export const CREATE_POLICY_SUCCESS = "create/policy/success";
+export const CREATE_POLICY_FAILED = "create/policy/failed";
+
+export const UPDATE_POLICY_REQUEST = "update/policy/request";
+export const UPDATE_POLICY_SUCCESS = "update/policy/success";
+export const UPDATE_POLICY_FAILED = "update/policy/failed";
+
+export const DELETE_POLICY_REQUEST = "delete/policy/request";
+export const DELETE_POLICY_SUCCESS = "delete/policy/success";
+export const DELETE_POLICY_FAILED = "delete/policy/failed";
+
+export const GET_SERVICE_REQUEST = "get/service/request";
+export const GET_SERVICE_SUCCESS = "get/service/success";
+export const GET_SERVICE_FAILED = "get/service/failed";
+
+export const CREATE_SERVICE_REQUEST = "create/service/request";
+export const CREATE_SERVICE_SUCCESS = "create/service/success";
+export const CREATE_SERVICE_FAILED = "create/service/failed";
+
+export const UPDATE_SERVICE_REQUEST = "update/service/request";
+export const UPDATE_SERVICE_SUCCESS = "update/service/success";
+export const UPDATE_SERVICE_FAILED = "update/service/failed";
+
+export const DELETE_SERVICE_REQUEST = "delete/service/request";
+export const DELETE_SERVICE_SUCCESS = "delete/service/success";
+export const DELETE_SERVICE_FAILED = "delete/service/failed";
+
+export const GET_CAGRO_REQUEST = "get/cagro/request";
+export const GET_CAGRO_SUCCESS = "get/cagro/success";
+export const GET_CAGRO_FAILED = "get/cagro/failed";
+
+export const CREATE_CAGRO_REQUEST = "create/cagro/request";
+export const CREATE_CAGRO_SUCCESS = "create/cagro/success";
+export const CREATE_CAGRO_FAILED = "create/cagro/failed";
+
+export const UPDATE_CAGRO_REQUEST = "update/cagro/request";
+export const UPDATE_CAGRO_SUCCESS = "update/cagro/success";
+export const UPDATE_CAGRO_FAILED = "update/cagro/failed";
+
+export const DELETE_CAGRO_REQUEST = "delete/cagro/request";
+export const DELETE_CAGRO_SUCCESS = "delete/cagro/success";
+export const DELETE_CAGRO_FAILED = "delete/cagro/failed";

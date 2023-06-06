@@ -96,6 +96,7 @@ export default function Update(props: Product) {
                   <label className="label font-bold">Region Name</label>
                   <input
                     type="text"
+                    value={payload.regionName}
                     onChange={(e) =>
                       handleChangeState("regionName", e.target.value)
                     }

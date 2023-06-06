@@ -6,6 +6,9 @@ const INIT_STATE = {
   provinces: [],
   address: [],
   policy: [],
+  service: [],
+  cagro: [],
+  policyByCategory: [],
 };
 
 const MasterReducer = (state = INIT_STATE, action: any) => {
@@ -62,6 +65,42 @@ const MasterReducer = (state = INIT_STATE, action: any) => {
       return { ...state };
     case ActionType.GET_POLICY_SUCCESS:
       return getPolicySuccess(state, action);
+    case ActionType.CREATE_POLICY_REQUEST:
+      return { ...state };
+    case ActionType.CREATE_POLICY_SUCCESS:
+      return createPolicySuccess(state, action);
+    case ActionType.DELETE_POLICY_REQUEST:
+      return { ...state };
+    case ActionType.DELETE_POLICY_SUCCESS:
+      return { ...state };
+    case ActionType.GET_SERVICE_REQUEST:
+      return { ...state };
+    case ActionType.GET_SERVICE_SUCCESS:
+      return getServiceSuccess(state, action);
+    case ActionType.CREATE_SERVICE_REQUEST:
+      return { ...state };
+    case ActionType.CREATE_SERVICE_SUCCESS:
+      return createServiceSuccess(state, action);
+    case ActionType.DELETE_SERVICE_REQUEST:
+      return { ...state };
+    case ActionType.DELETE_SERVICE_SUCCESS:
+      return { ...state };
+    case ActionType.GET_CAGRO_REQUEST:
+      return { ...state };
+    case ActionType.GET_CAGRO_SUCCESS:
+      return getCagroSuccess(state, action);
+    case ActionType.CREATE_CAGRO_REQUEST:
+      return { ...state };
+    case ActionType.CREATE_CAGRO_SUCCESS:
+      return createCagroSuccess(state, action);
+    case ActionType.DELETE_CAGRO_REQUEST:
+      return { ...state };
+    case ActionType.DELETE_CAGRO_SUCCESS:
+      return { ...state };
+    case ActionType.GET_POLICYBYCATEG_REQUEST:
+      return { ...state };
+    case ActionType.GET_POLICYBYCATEG_SUCCESS:
+      return getPolicyByCategSuccess(state, action);
     default:
       return { ...state };
   }
@@ -127,10 +166,55 @@ const createAddressSuccess = (state: any, action: any) => {
   };
 };
 
+const getServiceSuccess = (state: any, action: any) => {
+  return {
+    ...state,
+    service: action.payload,
+  };
+};
+
+const createServiceSuccess = (state: any, action: any) => {
+  const { payload } = action;
+  return {
+    ...state,
+    service: [...state.service, payload],
+  };
+};
+
+const getCagroSuccess = (state: any, action: any) => {
+  return {
+    ...state,
+    cagro: action.payload,
+  };
+};
+
+const createCagroSuccess = (state: any, action: any) => {
+  const { payload } = action;
+  return {
+    ...state,
+    cagro: [...state.cagro, payload],
+  };
+};
+
 const getPolicySuccess = (state: any, action: any) => {
   return {
     ...state,
     policy: action.payload,
+  };
+};
+
+const createPolicySuccess = (state: any, action: any) => {
+  const { payload } = action;
+  return {
+    ...state,
+    policy: [...state.policy, payload],
+  };
+};
+
+const getPolicyByCategSuccess = (state: any, action: any) => {
+  return {
+    ...state,
+    policyByCategory: action.payload,
   };
 };
 

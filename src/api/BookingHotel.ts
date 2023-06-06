@@ -25,7 +25,7 @@ const getHotelById = async (id: number) => {
 const getReviewByHotel = async (id: number) => {
   try {
     const result = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL_API}/hotelReviews/${id}`
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/hotelReviews?hotelId=${id}`
     );
     return result;
   } catch (error) {

@@ -188,6 +188,146 @@ const updateAddress = async (payload: any) => {
   }
 };
 
+const getPolicy = async () => {
+  try {
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/policy`
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+const createPolicy = async (payload: string) => {
+  try {
+    const result = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/policy`,
+      payload
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+const deletePolicy = async (id: number) => {
+  try {
+    const result = await axios.delete(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/policy/${id}`
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+const updatePolicy = async (payload: any) => {
+  const { id, ...data } = payload;
+  try {
+    const result = await axios.put(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/policy/${id}`,
+      data
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+const getService = async () => {
+  try {
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/service-task`
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+const createService = async (payload: string) => {
+  try {
+    const result = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/service-task`,
+      payload
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+const deleteService = async (id: number) => {
+  try {
+    const result = await axios.delete(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/service-task/${id}`
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+const updateService = async (payload: any) => {
+  const { id, ...data } = payload;
+  try {
+    const result = await axios.put(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/service-task/${id}`,
+      data
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+const getCagro = async () => {
+  try {
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/categoryGroup`
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+const createCagro = async (payload: string) => {
+  try {
+    const result = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/categoryGroup`,
+      payload
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+const deleteCagro = async (id: number) => {
+  try {
+    const result = await axios.delete(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/categoryGroup/${id}`
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+const updateCagro = async (payload: any, id: any) => {
+  try {
+    const result = await axios.put(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/categoryGroup/${id}`,
+      payload
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
 const policyByCategories = async (id: number) => {
   try {
     const result = await axios.get(
@@ -200,10 +340,22 @@ const policyByCategories = async (id: number) => {
 };
 
 export default {
+  getPolicy,
   getRegions,
   getCountry,
   getAddress,
   getProvinces,
+  createPolicy,
+  updatePolicy,
+  deletePolicy,
+  getService,
+  createCagro,
+  updateCagro,
+  deleteCagro,
+  getCagro,
+  createService,
+  updateService,
+  deleteService,
   createRegions,
   updateRegions,
   deleteRegions,

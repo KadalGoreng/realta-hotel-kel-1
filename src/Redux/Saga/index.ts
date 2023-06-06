@@ -14,22 +14,34 @@ import {
 } from "./BookingHotelSaga";
 import {
   CreateAddress,
+  CreateCagro,
   CreateCountry,
+  CreatePolicy,
   CreateProvince,
   CreateRegion,
+  CreateService,
   DeleteAddress,
+  DeleteCagro,
   DeleteCountry,
+  DeletePolicy,
   DeleteProvince,
   DeleteRegion,
+  DeleteService,
   GetAddress,
+  GetCagro,
   GetCountries,
   GetPolicy,
+  GetPolicyByCateg,
   GetProvince,
   GetRegions,
+  GetService,
   UpdateAddress,
+  UpdateCagro,
   UpdateCountry,
+  UpdatePolicy,
   UpdateProvince,
   UpdateRegion,
+  UpdateService,
 } from "./MasterModuleSaga";
 
 function* watchAll() {
@@ -96,6 +108,26 @@ function* watchAll() {
     takeEvery(ActionTypeMaster.DELETE_ADDRESS_REQUEST, DeleteAddress),
   ]);
   yield all([takeEvery(ActionTypeMaster.GET_POLICY_REQUEST, GetPolicy)]);
+  yield all([takeEvery(ActionTypeMaster.CREATE_POLICY_REQUEST, CreatePolicy)]);
+  yield all([takeEvery(ActionTypeMaster.UPDATE_POLICY_REQUEST, UpdatePolicy)]);
+  yield all([takeEvery(ActionTypeMaster.DELETE_POLICY_REQUEST, DeletePolicy)]);
+  yield all([takeEvery(ActionTypeMaster.GET_CAGRO_REQUEST, GetCagro)]);
+  yield all([takeEvery(ActionTypeMaster.CREATE_CAGRO_REQUEST, CreateCagro)]);
+  yield all([takeEvery(ActionTypeMaster.UPDATE_CAGRO_REQUEST, UpdateCagro)]);
+  yield all([takeEvery(ActionTypeMaster.DELETE_CAGRO_REQUEST, DeleteCagro)]);
+  yield all([takeEvery(ActionTypeMaster.GET_SERVICE_REQUEST, GetService)]);
+  yield all([
+    takeEvery(ActionTypeMaster.CREATE_SERVICE_REQUEST, CreateService),
+  ]);
+  yield all([
+    takeEvery(ActionTypeMaster.UPDATE_SERVICE_REQUEST, UpdateService),
+  ]);
+  yield all([
+    takeEvery(ActionTypeMaster.DELETE_SERVICE_REQUEST, DeleteService),
+  ]);
+  yield all([
+    takeEvery(ActionTypeMaster.GET_POLICYBYCATEG_REQUEST, GetPolicyByCateg),
+  ]);
 }
 
 export default watchAll;

@@ -239,9 +239,127 @@ export const DeleteAddressFailed = (payload: any) => ({
   payload,
 });
 
-export const GetPolicyRequest = (payload: any) => ({
-  type: ActionType.GET_POLICY_REQUEST,
+export const GetServiceRequest = () => ({
+  type: ActionType.GET_SERVICE_REQUEST,
+});
+
+export const GetServiceSuccess = (payload: any) => ({
+  type: ActionType.GET_SERVICE_SUCCESS,
   payload,
+});
+
+export const GetServiceFailed = (payload: any) => ({
+  type: ActionType.GET_SERVICE_FAILED,
+  payload,
+});
+
+export const CreateServiceRequest = (payload: any) => ({
+  type: ActionType.CREATE_SERVICE_REQUEST,
+  payload,
+});
+
+export const CreateServiceSuccess = (payload: any) => ({
+  type: ActionType.CREATE_SERVICE_SUCCESS,
+  payload,
+});
+
+export const CreateServiceFailed = (payload: any) => ({
+  type: ActionType.CREATE_SERVICE_FAILED,
+  payload,
+});
+
+export const UpdateServiceRequest = (payload: any) => ({
+  type: ActionType.UPDATE_SERVICE_REQUEST,
+  payload,
+});
+
+export const UpdateServiceSuccess = (payload: any) => ({
+  type: ActionType.UPDATE_SERVICE_SUCCESS,
+  payload,
+});
+
+export const UpdateServiceFailed = (payload: any) => ({
+  type: ActionType.UPDATE_SERVICE_FAILED,
+  payload,
+});
+
+export const DeleteServiceRequest = (payload: any) => ({
+  type: ActionType.DELETE_SERVICE_REQUEST,
+  payload,
+});
+
+export const DeleteServiceSuccess = (payload: any) => ({
+  type: ActionType.DELETE_SERVICE_SUCCESS,
+  payload,
+});
+
+export const DeleteServiceFailed = (payload: any) => ({
+  type: ActionType.DELETE_SERVICE_FAILED,
+  payload,
+});
+
+export const GetCagroRequest = () => ({
+  type: ActionType.GET_CAGRO_REQUEST,
+});
+
+export const GetCagroSuccess = (payload: any) => ({
+  type: ActionType.GET_CAGRO_SUCCESS,
+  payload,
+});
+
+export const GetCagroFailed = (payload: any) => ({
+  type: ActionType.GET_CAGRO_FAILED,
+  payload,
+});
+
+export const CreateCagroRequest = (payload: any) => ({
+  type: ActionType.CREATE_CAGRO_REQUEST,
+  payload,
+});
+
+export const CreateCagroSuccess = (payload: any) => ({
+  type: ActionType.CREATE_CAGRO_SUCCESS,
+  payload,
+});
+
+export const CreateCagroFailed = (payload: any) => ({
+  type: ActionType.CREATE_CAGRO_FAILED,
+  payload,
+});
+
+export const UpdateCagroRequest = (payload: any, id: any) => ({
+  type: ActionType.UPDATE_CAGRO_REQUEST,
+  payload,
+  id,
+});
+
+export const UpdateCagroSuccess = (payload: any) => ({
+  type: ActionType.UPDATE_CAGRO_SUCCESS,
+  payload,
+});
+
+export const UpdateCagroFailed = (payload: any) => ({
+  type: ActionType.UPDATE_CAGRO_FAILED,
+  payload,
+});
+
+export const DeleteCagroRequest = (payload: any) => ({
+  type: ActionType.DELETE_CAGRO_REQUEST,
+  payload,
+});
+
+export const DeleteCagroSuccess = (payload: any) => ({
+  type: ActionType.DELETE_CAGRO_SUCCESS,
+  payload,
+});
+
+export const DeleteCagroFailed = (payload: any) => ({
+  type: ActionType.DELETE_CAGRO_FAILED,
+  payload,
+});
+
+export const GetPolicyRequest = () => ({
+  type: ActionType.GET_POLICY_REQUEST,
 });
 
 export const GetPolicySuccess = (payload: any) => ({
@@ -251,5 +369,65 @@ export const GetPolicySuccess = (payload: any) => ({
 
 export const GetPolicyFailed = (payload: any) => ({
   type: ActionType.GET_POLICY_FAILED,
+  payload,
+});
+
+export const CreatePolicyRequest = (payload: any) => ({
+  type: ActionType.CREATE_POLICY_REQUEST,
+  payload,
+});
+
+export const CreatePolicySuccess = (payload: any) => ({
+  type: ActionType.CREATE_POLICY_SUCCESS,
+  payload,
+});
+
+export const CreatePolicyFailed = (payload: any) => ({
+  type: ActionType.CREATE_POLICY_FAILED,
+  payload,
+});
+
+export const UpdatePolicyRequest = (payload: any) => ({
+  type: ActionType.UPDATE_POLICY_REQUEST,
+  payload,
+});
+
+export const UpdatePolicySuccess = (payload: any) => ({
+  type: ActionType.UPDATE_POLICY_SUCCESS,
+  payload,
+});
+
+export const UpdatePolicyFailed = (payload: any) => ({
+  type: ActionType.UPDATE_POLICY_FAILED,
+  payload,
+});
+
+export const DeletePolicyRequest = (payload: any) => ({
+  type: ActionType.DELETE_POLICY_REQUEST,
+  payload,
+});
+
+export const DeletePolicySuccess = (payload: any) => ({
+  type: ActionType.DELETE_POLICY_SUCCESS,
+  payload,
+});
+
+export const DeletePolicyFailed = (payload: any) => ({
+  type: ActionType.DELETE_POLICY_FAILED,
+  payload,
+});
+
+export const GetPolicyByCategRequest = (payload: any) => ({
+  type: ActionType.GET_POLICYBYCATEG_REQUEST,
+  payload,
+});
+
+export const GetPolicyByCategSuccess = (payload: any) => ({
+  type: ActionType.GET_POLICYBYCATEG_SUCCESS,
+  payload,
+});
+
+export const GetPolicyByCategFailed = (payload: any) => ({
+  type: ActionType.GET_POLICYBYCATEG_FAILED,
   payload,
 });

@@ -3,7 +3,7 @@ import {
   GetHotelByIdRequest,
   GetReviewByIdRequest,
 } from "@/Redux/Actions/BookingHotelAction";
-import { GetPolicyRequest } from "@/Redux/Actions/masterAction";
+import { GetPolicyByCategRequest } from "@/Redux/Actions/masterAction";
 import AnotherRoom from "@/components/booking/AnotherRoom";
 import OrderSummary from "@/components/booking/OrderSummary";
 import {
@@ -25,7 +25,7 @@ export default function BookingRoom() {
   const { hotel } = useSelector((state: any) => state.bookingHotelState);
   const { review } = useSelector((state: any) => state.bookingHotelState);
   const { coupon } = useSelector((state: any) => state.bookingHotelState);
-  const { policy } = useSelector((state: any) => state.masterState);
+  const { policyByCategory } = useSelector((state: any) => state.masterState);
 
   const aminities = removeDuplicates([...hotel]);
 
@@ -56,7 +56,7 @@ export default function BookingRoom() {
       dispatch(GetHotelByIdRequest(id));
       dispatch(GetReviewByIdRequest(id));
       dispatch(GetCouponRequest());
-      dispatch(GetPolicyRequest(1));
+      dispatch(GetPolicyByCategRequest(1));
     }
   }, [id]);
 
@@ -223,8 +223,8 @@ export default function BookingRoom() {
               <div>
                 <p className="mb-2 font-bold text-2xl">Hotel Policies</p>
                 <ul className="list-disc pl-5">
-                  {policy &&
-                    policy.map((item: any) => (
+                  {policyByCategory &&
+                    policyByCategory.map((item: any) => (
                       <li className="text-gray-600">{item.poliDescription}</li>
                     ))}
                 </ul>

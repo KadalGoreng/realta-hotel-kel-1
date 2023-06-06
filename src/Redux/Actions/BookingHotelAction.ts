@@ -14,6 +14,36 @@ export const GetBookingHotelFailed = (payload: any) => ({
   payload,
 });
 
+export const GetHotelByIdRequest = (payload: any) => ({
+  type: ActionType.GET_HOTEL_REQUEST,
+  payload,
+});
+
+export const GetHotelByIdSuccess = (payload: any) => ({
+  type: ActionType.GET_HOTEL_SUCCESS,
+  payload,
+});
+
+export const GetHotelByIdFailed = (payload: any) => ({
+  type: ActionType.GET_HOTEL_FAILED,
+  payload,
+});
+
+export const GetReviewByIdRequest = (payload: any) => ({
+  type: ActionType.GET_REVIEW_REQUEST,
+  payload,
+});
+
+export const GetReviewByIdSuccess = (payload: any) => ({
+  type: ActionType.GET_REVIEW_SUCCESS,
+  payload,
+});
+
+export const GetReviewByIdFailed = (payload: any) => ({
+  type: ActionType.GET_REVIEW_FAILED,
+  payload,
+});
+
 export const GetFacilityRequest = () => ({
   type: ActionType.GET_FACILITY_REQUEST,
 });

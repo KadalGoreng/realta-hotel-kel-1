@@ -2,6 +2,14 @@ export const GET_BOOKING_REQUEST = "get/booking/request";
 export const GET_BOOKING_SUCCESS = "get/booking/success";
 export const GET_BOOKING_FAILED = "get/booking/failed";
 
+export const GET_HOTEL_REQUEST = "get/hotel/request";
+export const GET_HOTEL_SUCCESS = "get/hotel/success";
+export const GET_HOTEL_FAILED = "get/hotel/failed";
+
+export const GET_REVIEW_REQUEST = "get/review/request";
+export const GET_REVIEW_SUCCESS = "get/review/success";
+export const GET_REVIEW_FAILED = "get/review/failed";
+
 export const GET_FACILITY_REQUEST = "get/facility/request";
 export const GET_FACILITY_SUCCESS = "get/facility/success";
 export const GET_FACILITY_FAILED = "get/facility/failed";

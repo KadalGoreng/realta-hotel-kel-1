@@ -7,12 +7,12 @@ import {
 } from "@/utils/helpers";
 import { DatePicker, Space } from "antd";
 import dayjs from "dayjs";
-import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { CreateBoSuccess } from "@/Redux/Actions/BookingHotelAction";
 import { RangePickerProps } from "antd/es/date-picker";
 import Button from "./Button";
+import { useRouter } from "next/router";
 
 export default function OrderSummary(props: any) {
   const {
@@ -26,6 +26,7 @@ export default function OrderSummary(props: any) {
   } = props;
 
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const [totalBooking, setTotalBooking] = useState(1);
   const [couponDiscount, setCouponDiscount] = useState({
@@ -82,6 +83,11 @@ export default function OrderSummary(props: any) {
 
   const disabledDate: RangePickerProps["disabledDate"] = (current: any) => {
     return current && current <= dayjs(reduceOneDay);
+  };
+
+  const createBooking = () => {
+    dispatch(CreateBoSuccess(bookingOrder));
+    router.push(`${id}/order`);
   };
 
   useEffect(() => {
@@ -179,15 +185,7 @@ export default function OrderSummary(props: any) {
         </div>
       </div>
       <div className="card-actions">
-        <Link
-          href={`${id}/order`}
-          className="w-full"
-          onClick={() => {
-            dispatch(CreateBoSuccess(bookingOrder));
-          }}
-        >
-          <Button label="Continue to Book" fullWidth />
-        </Link>
+        <Button label="Continue to Book" fullWidth onClick={createBooking} />
       </div>
     </div>
   );

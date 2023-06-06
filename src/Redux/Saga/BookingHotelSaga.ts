@@ -15,6 +15,10 @@ import {
   GetBookingHistoryFailed,
   GetCagroSuccess,
   GetCagroFailed,
+  GetHotelByIdSuccess,
+  GetHotelByIdFailed,
+  GetReviewByIdSuccess,
+  GetReviewByIdFailed,
 } from "../Actions/BookingHotelAction";
 
 function* handleGetBookingHotel(): any {
@@ -25,6 +29,30 @@ function* handleGetBookingHotel(): any {
     }
   } catch (error) {
     yield put(GetBookingHotelFailed(error));
+  }
+}
+
+function* handleGetHotelById(action: any): any {
+  const { payload } = action;
+  try {
+    const result = yield call(BookingHotelApi.getHotelById, payload);
+    if (result.status === 200) {
+      yield put(GetHotelByIdSuccess(result.data));
+    }
+  } catch (error) {
+    yield put(GetHotelByIdFailed(error));
+  }
+}
+
+function* handleGetReviewById(action: any): any {
+  const { payload } = action;
+  try {
+    const result = yield call(BookingHotelApi.getReviewByHotel, payload);
+    if (result.status === 200) {
+      yield put(GetReviewByIdSuccess(result.data));
+    }
+  } catch (error) {
+    yield put(GetReviewByIdFailed(error));
   }
 }
 
@@ -96,8 +124,10 @@ function* handleCreateBoex(action: any): any {
 export {
   handleGetCoupon,
   handleCreateBoex,
+  handleGetHotelById,
   handleGetAddOnItem,
   handleGetBookingHotel,
+  handleGetReviewById,
   handleGetCategoryHotel,
   handleGetFacilityHotel,
   handleGetBookingHistory,

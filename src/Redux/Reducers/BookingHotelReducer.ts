@@ -9,6 +9,8 @@ const INIT_STATE = {
   bookingOrder: {},
   boex: [],
   cagroName: [],
+  hotel: [],
+  reviews: [],
 };
 
 const BookingHotelReducer = (state = INIT_STATE, action: any) => {
@@ -17,11 +19,18 @@ const BookingHotelReducer = (state = INIT_STATE, action: any) => {
       return { ...state };
     case ActionType.GET_BOOKING_SUCCESS:
       return getHotel(state, action);
+    case ActionType.GET_HOTEL_REQUEST:
+      return { ...state };
+    case ActionType.GET_HOTEL_SUCCESS:
+      return getHotelById(state, action);
+    case ActionType.GET_REVIEW_REQUEST:
+      return { ...state };
+    case ActionType.GET_REVIEW_SUCCESS:
+      return getReviewById(state, action);
     case ActionType.GET_FACILITY_REQUEST:
       return { ...state };
     case ActionType.GET_FACILITY_SUCCESS:
       return getFacility(state, action);
-    case ActionType.GET_COUPON_REQUEST:
     case ActionType.GET_CAGRO_REQUEST:
       return { ...state };
     case ActionType.GET_CAGRO_SUCCESS:
@@ -53,6 +62,20 @@ const getHotel = (state: any, action: any) => {
   return {
     ...state,
     bookingHotel: action.payload,
+  };
+};
+
+const getHotelById = (state: any, action: any) => {
+  return {
+    ...state,
+    hotel: action.payload,
+  };
+};
+
+const getReviewById = (state: any, action: any) => {
+  return {
+    ...state,
+    review: action.payload,
   };
 };
 

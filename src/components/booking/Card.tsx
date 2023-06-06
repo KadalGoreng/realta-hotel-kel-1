@@ -1,31 +1,59 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { StarFilled } from "@ant-design/icons";
 import {
-  CarOutlined,
-  CoffeeOutlined,
-  ShoppingCartOutlined,
-  StarFilled,
-} from "@ant-design/icons";
-import {
+  addOneDay,
   calculateRating,
   convertPrice,
   formatHotelRating,
   formatPrice,
   removeDuplicates,
 } from "@/utils/helpers";
+import dayjs from "dayjs";
 import Button from "./Button";
 import ButtonOutline from "./ButtonOutline";
+import { CreateBoSuccess } from "@/Redux/Actions/BookingHotelAction";
+import { useRouter } from "next/router";
 
 export default function Card(props: any) {
   const { hotelId, hotelName, hotelReviews, hotelAddr, facilities } = props;
+  const dispatch = useDispatch();
+  const router = useRouter();
 
   const aminities = removeDuplicates([...facilities]);
+
+  const [bookingOrder, setBookingOrder] = useState({
+    dateStart: dayjs(Date.now()),
+    dateEnd: dayjs(addOneDay),
+    hotelName: hotelName,
+    hotelId: hotelId,
+  });
 
   const moreFacility = aminities.length - 3;
   const primaryImage = facilities[0].facilityPhotos.map(
     (item: any) => item.faphoPrimary === true && item.faphoPhotoFilename
   );
+
+  const onChangeState = (key: string, value: any) => {
+    setBookingOrder((prev) => ({ ...prev, [key]: value }));
+  };
+
+  useEffect(() => {
+    onChangeState("faciName", facilities[0].faciName);
+    onChangeState("faciId", facilities[0].faciId);
+    onChangeState("saving", 0);
+    onChangeState("price", convertPrice(facilities[0].faciRatePrice));
+    onChangeState("faciTaxRate", convertPrice(facilities[0].faciTaxRate));
+    onChangeState("faciRatePrice", convertPrice(facilities[0].faciRatePrice));
+    onChangeState("totalPrice", convertPrice(facilities[0].faciRatePrice));
+    onChangeState("coupon", null);
+  }, []);
+
+  const createBooking = () => {
+    dispatch(CreateBoSuccess(bookingOrder));
+    router.push(`booking/room/${hotelId}/order`);
+  };
 
   return (
     <div key={hotelId} className="border-b-[2px] pb-4">
@@ -34,7 +62,6 @@ export default function Card(props: any) {
           <div
             className="w-[500px] h-[206px] overflow-hidden"
             id={`slide1${hotelId}`}
-            // className="carousel-item relative w-full"
           >
             {facilities[0].facilityPhotos.length > 0 ? (
               <img
@@ -47,90 +74,7 @@ export default function Card(props: any) {
                 className="w-full h-full"
               />
             )}
-            {/* <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-              <a
-                href={`#slide4${hotelId}`}
-                className="btn btn-circle opacity-50"
-              >
-                ❮
-              </a>
-              <a
-                href={`#slide2${hotelId}`}
-                className="btn btn-circle opacity-50"
-              >
-                ❯
-              </a>
-            </div> */}
           </div>
-          {/* <div
-            id={`slide2${hotelId}`}
-            className="carousel-item relative w-full"
-          >
-            <img
-              src="https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-masonry-100.jpg"
-              className="w-full"
-            />
-            <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-              <a
-                href={`#slide1${hotelId}`}
-                className="btn btn-circle opacity-50"
-              >
-                ❮
-              </a>
-              <a
-                href={`#slide3${hotelId}`}
-                className="btn btn-circle opacity-50"
-              >
-                ❯
-              </a>
-            </div>
-          </div>
-          <div
-            id={`slide3${hotelId}`}
-            className="carousel-item relative w-full"
-          >
-            <img
-              src="https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-masonry-100.jpg"
-              className="w-full"
-            />
-            <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-              <a
-                href={`#slide2${hotelId}`}
-                className="btn btn-circle opacity-50"
-              >
-                ❮
-              </a>
-              <a
-                href={`#slide4${hotelId}`}
-                className="btn btn-circle opacity-50"
-              >
-                ❯
-              </a>
-            </div>
-          </div>
-          <div
-            id={`slide4${hotelId}`}
-            className="carousel-item relative w-full"
-          >
-            <img
-              src="https://www.fastcat.com.ph/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-masonry-100.jpg"
-              className="w-full"
-            />
-            <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-              <a
-                href={`#slide3${hotelId}`}
-                className="btn btn-circle opacity-50"
-              >
-                ❮
-              </a>
-              <a
-                href={`#slide1${hotelId}`}
-                className="btn btn-circle opacity-50"
-              >
-                ❯
-              </a>
-            </div>
-          </div> */}
         </div>
         <div className="flex flex-col gap-4 justify-between">
           <div>
@@ -183,7 +127,7 @@ export default function Card(props: any) {
                 <Link href={`/booking/room/${hotelId}`}>
                   <ButtonOutline label="View Details" />
                 </Link>
-                <Button label="Book Now" btnSmall />
+                <Button label="Book Now" btnSmall onClick={createBooking} />
               </div>
             </div>
           )}

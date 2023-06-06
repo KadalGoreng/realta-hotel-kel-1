@@ -9,6 +9,8 @@ import {
   handleGetAddOnItem,
   handleGetBookingHistory,
   handleGetCategoryHotel,
+  handleGetHotelById,
+  handleGetReviewById,
 } from "./BookingHotelSaga";
 import {
   CreateAddress,
@@ -33,6 +35,12 @@ import {
 function* watchAll() {
   yield all([
     takeEvery(ActionTypeBooking.GET_BOOKING_REQUEST, handleGetBookingHotel),
+  ]);
+  yield all([
+    takeEvery(ActionTypeBooking.GET_HOTEL_REQUEST, handleGetHotelById),
+  ]);
+  yield all([
+    takeEvery(ActionTypeBooking.GET_REVIEW_REQUEST, handleGetReviewById),
   ]);
   yield all([
     takeEvery(ActionTypeBooking.GET_FACILITY_REQUEST, handleGetFacilityHotel),

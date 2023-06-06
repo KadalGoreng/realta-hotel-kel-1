@@ -11,6 +11,28 @@ const getHotel = async () => {
   }
 };
 
+const getHotelById = async (id: number) => {
+  try {
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/facilities/hotel/${id}`
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+const getReviewByHotel = async (id: number) => {
+  try {
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/hotelReviews/${id}`
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
 const getFacility = async () => {
   try {
     const result = await axios.get(
@@ -131,6 +153,8 @@ export default {
   createBoex,
   createOrder,
   getFacility,
+  getHotelById,
+  getReviewByHotel,
   getAddOnItem,
   getBookingOrder,
   createOrderDetail,

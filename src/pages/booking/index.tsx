@@ -39,7 +39,7 @@ export default function Booking() {
       item.facilities.some((ele: any) => ele.faciCagro.cagroName === categ)
     )
   );
-  console.log(test);
+  console.log(bookingHotel);
 
   const endOffset = itemOffset + 10;
   // const currentItems = bookingHotel.slice(itemOffset, endOffset);
@@ -54,7 +54,6 @@ export default function Booking() {
     const newOffset = (selectedPage * 10) % hotelFilter.length;
     setItemOffset(newOffset);
   });
-  console.log(category);
 
   return (
     <div className="flex min-h-screen">

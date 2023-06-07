@@ -8,6 +8,7 @@ const INIT_STATE = {
   policy: [],
   service: [],
   cagro: [],
+  priceItem: [],
   policyByCategory: [],
 };
 
@@ -96,6 +97,18 @@ const MasterReducer = (state = INIT_STATE, action: any) => {
     case ActionType.DELETE_CAGRO_REQUEST:
       return { ...state };
     case ActionType.DELETE_CAGRO_SUCCESS:
+      return { ...state };
+    case ActionType.GET_PRICE_REQUEST:
+      return { ...state };
+    case ActionType.GET_PRICE_SUCCESS:
+      return getPriceSuccess(state, action);
+    case ActionType.CREATE_PRICE_REQUEST:
+      return { ...state };
+    case ActionType.CREATE_PRICE_SUCCESS:
+      return createPriceSuccess(state, action);
+    case ActionType.DELETE_PRICE_REQUEST:
+      return { ...state };
+    case ActionType.DELETE_PRICE_SUCCESS:
       return { ...state };
     case ActionType.GET_POLICYBYCATEG_REQUEST:
       return { ...state };
@@ -193,6 +206,21 @@ const createCagroSuccess = (state: any, action: any) => {
   return {
     ...state,
     cagro: [...state.cagro, payload],
+  };
+};
+
+const getPriceSuccess = (state: any, action: any) => {
+  return {
+    ...state,
+    priceItem: action.payload,
+  };
+};
+
+const createPriceSuccess = (state: any, action: any) => {
+  const { payload } = action;
+  return {
+    ...state,
+    priceItem: [...state.priceItem, payload],
   };
 };
 

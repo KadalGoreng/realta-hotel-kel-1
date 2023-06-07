@@ -5,7 +5,7 @@ import {
 import AddCagro from "@/components/master/category/AddCagro";
 import DeleteCagro from "@/components/master/category/DeleteCagro";
 import UpdateCagro from "@/components/master/category/UpdateCagro";
-import BasicModal from "@/components/master/policy/ModalDescription";
+import ModalDescription from "@/components/master/ModalDescription";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -61,7 +61,7 @@ export default function index() {
                   <td>
                     <div className="flex gap-2">
                       {item.cagroName}
-                      <BasicModal description={item.cagroDescription} />
+                      <ModalDescription description={item.cagroDescription} />
                     </div>
                   </td>
                   <td>

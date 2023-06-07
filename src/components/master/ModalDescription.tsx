@@ -1,6 +1,5 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 
@@ -21,7 +20,7 @@ type Props = {
   description: string;
 };
 
-export default function BasicModal(props: Props) {
+export default function ModalDescription(props: Props) {
   const { description } = props;
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);

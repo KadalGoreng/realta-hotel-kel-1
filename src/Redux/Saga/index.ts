@@ -17,6 +17,7 @@ import {
   CreateCagro,
   CreateCountry,
   CreatePolicy,
+  CreatePrice,
   CreateProvince,
   CreateRegion,
   CreateService,
@@ -24,6 +25,7 @@ import {
   DeleteCagro,
   DeleteCountry,
   DeletePolicy,
+  DeletePrice,
   DeleteProvince,
   DeleteRegion,
   DeleteService,
@@ -32,6 +34,7 @@ import {
   GetCountries,
   GetPolicy,
   GetPolicyByCateg,
+  GetPrice,
   GetProvince,
   GetRegions,
   GetService,
@@ -39,6 +42,7 @@ import {
   UpdateCagro,
   UpdateCountry,
   UpdatePolicy,
+  UpdatePrice,
   UpdateProvince,
   UpdateRegion,
   UpdateService,
@@ -115,6 +119,10 @@ function* watchAll() {
   yield all([takeEvery(ActionTypeMaster.CREATE_CAGRO_REQUEST, CreateCagro)]);
   yield all([takeEvery(ActionTypeMaster.UPDATE_CAGRO_REQUEST, UpdateCagro)]);
   yield all([takeEvery(ActionTypeMaster.DELETE_CAGRO_REQUEST, DeleteCagro)]);
+  yield all([takeEvery(ActionTypeMaster.GET_PRICE_REQUEST, GetPrice)]);
+  yield all([takeEvery(ActionTypeMaster.CREATE_PRICE_REQUEST, CreatePrice)]);
+  yield all([takeEvery(ActionTypeMaster.UPDATE_PRICE_REQUEST, UpdatePrice)]);
+  yield all([takeEvery(ActionTypeMaster.DELETE_PRICE_REQUEST, DeletePrice)]);
   yield all([takeEvery(ActionTypeMaster.GET_SERVICE_REQUEST, GetService)]);
   yield all([
     takeEvery(ActionTypeMaster.CREATE_SERVICE_REQUEST, CreateService),

@@ -9,6 +9,8 @@ import {
   CreateCountrySuccess,
   CreatePolicyFailed,
   CreatePolicySuccess,
+  CreatePriceFailed,
+  CreatePriceSuccess,
   CreateProvinceFailed,
   CreateProvinceSuccess,
   CreateRegionsFailed,
@@ -23,6 +25,8 @@ import {
   DeleteCountrySuccess,
   DeletePolicyFailed,
   DeletePolicySuccess,
+  DeletePriceFailed,
+  DeletePriceSuccess,
   DeleteProvinceFailed,
   DeleteProvinceSuccess,
   DeleteRegionsFailed,
@@ -37,6 +41,8 @@ import {
   GetPolicyByCategSuccess,
   GetPolicyFailed,
   GetPolicySuccess,
+  GetPriceFailed,
+  GetPriceSuccess,
   GetProvinceFailed,
   GetProvinceSuccess,
   GetRegionsFailed,
@@ -51,6 +57,8 @@ import {
   UpdateCountrySuccess,
   UpdatePolicyFailed,
   UpdatePolicySuccess,
+  UpdatePriceFailed,
+  UpdatePriceSuccess,
   UpdateProvinceFailed,
   UpdateProvinceSuccess,
   UpdateRegionsFailed,
@@ -373,6 +381,56 @@ function* DeleteCagro(action: any) {
   }
 }
 
+function* GetPrice(): any {
+  try {
+    const result = yield call(MasterApi.getPriceItem);
+    if (result.status === 200) {
+      yield put(GetPriceSuccess(result.data));
+    }
+  } catch (error) {
+    yield put(GetPriceFailed(error));
+  }
+}
+
+function* CreatePrice(action: any) {
+  const { payload } = action;
+  try {
+    const result: ResponseGenerator = yield call(
+      MasterApi.createPriceItem,
+      payload
+    );
+    yield put(CreatePriceSuccess(result.data));
+  } catch (error) {
+    yield put(CreatePriceFailed(error));
+  }
+}
+
+function* UpdatePrice(action: any) {
+  const { payload } = action;
+  try {
+    const result: ResponseGenerator = yield call(
+      MasterApi.updatePriceItem,
+      payload
+    );
+    yield put(UpdatePriceSuccess(result.data));
+  } catch (error) {
+    yield put(UpdatePriceFailed(error));
+  }
+}
+
+function* DeletePrice(action: any) {
+  const { payload } = action;
+  try {
+    const result: ResponseGenerator = yield call(
+      MasterApi.deletePriceItem,
+      payload
+    );
+    yield put(DeletePriceSuccess(result.data));
+  } catch (error) {
+    yield put(DeletePriceFailed(error));
+  }
+}
+
 function* GetPolicy(): any {
   try {
     const result = yield call(MasterApi.getPolicy);
@@ -441,7 +499,11 @@ export {
   GetService,
   UpdateCagro,
   DeleteCagro,
+  GetPrice,
+  UpdatePrice,
+  DeletePrice,
   GetProvince,
+  CreatePrice,
   CreateCagro,
   GetCountries,
   CreatePolicy,

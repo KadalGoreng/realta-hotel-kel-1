@@ -61,7 +61,7 @@ export default function UpdatePolicy(props: Product) {
 
       <div className="modal">
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Edit Country</h3>
+          <h3 className="font-bold text-lg">Edit Policy</h3>
           <form onSubmit={handleSubmit}>
             <div className="form-control">
               <div className="flex flex-col gap-4">
@@ -90,25 +90,6 @@ export default function UpdatePolicy(props: Product) {
                   />
                 </div>
               </div>
-              {/* <label className="label font-bold">Country Name</label>
-              <div className="flex flex-col gap-4">
-                <input
-                  disabled
-                  type="text"
-                  defaultValue={code}
-                  className="input w-full input-bordered font-normal"
-                  placeholder="Country"
-                />
-                <input
-                  type="text"
-                  defaultValue={name}
-                  onChange={(e) =>
-                    handleChangeState("countryName", e.target.value)
-                  }
-                  className="input w-full input-bordered font-normal"
-                  placeholder="Region"
-                />
-              </div> */}
             </div>
             <div className="modal-action">
               <button

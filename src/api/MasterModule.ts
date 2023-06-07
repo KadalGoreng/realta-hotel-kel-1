@@ -328,6 +328,53 @@ const updateCagro = async (payload: any, id: any) => {
   }
 };
 
+const getPriceItem = async () => {
+  try {
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/price-items`
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+const createPriceItem = async (payload: string) => {
+  try {
+    const result = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/price-items`,
+      payload
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+const deletePriceItem = async (id: number) => {
+  try {
+    const result = await axios.delete(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/price-items/${id}`
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+const updatePriceItem = async (payload: any) => {
+  const { id, ...data } = payload;
+  try {
+    const result = await axios.put(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/price-items/${id}`,
+      data
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
 const policyByCategories = async (id: number) => {
   try {
     const result = await axios.get(
@@ -340,19 +387,20 @@ const policyByCategories = async (id: number) => {
 };
 
 export default {
+  getCagro,
   getPolicy,
   getRegions,
   getCountry,
   getAddress,
-  getProvinces,
-  createPolicy,
-  updatePolicy,
-  deletePolicy,
   getService,
   createCagro,
   updateCagro,
   deleteCagro,
-  getCagro,
+  getProvinces,
+  createPolicy,
+  updatePolicy,
+  deletePolicy,
+  getPriceItem,
   createService,
   updateService,
   deleteService,
@@ -362,6 +410,9 @@ export default {
   createAddress,
   updateAddress,
   deleteAddress,
+  createPriceItem,
+  updatePriceItem,
+  deletePriceItem,
   createProvinces,
   updateProvinces,
   deleteProvinces,

@@ -20,3 +20,11 @@ export const sidebarMaster = [
     url: "priceitems",
   },
 ];
+
+export const typePriceItems = [
+  "Softdrink",
+  "Facility",
+  "Service",
+  "Food",
+  "Snack",
+];

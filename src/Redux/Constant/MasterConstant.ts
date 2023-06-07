@@ -113,3 +113,19 @@ export const UPDATE_CAGRO_FAILED = "update/cagro/failed";
 export const DELETE_CAGRO_REQUEST = "delete/cagro/request";
 export const DELETE_CAGRO_SUCCESS = "delete/cagro/success";
 export const DELETE_CAGRO_FAILED = "delete/cagro/failed";
+
+export const GET_PRICE_REQUEST = "get/price/request";
+export const GET_PRICE_SUCCESS = "get/price/success";
+export const GET_PRICE_FAILED = "get/price/failed";
+
+export const CREATE_PRICE_REQUEST = "create/price/request";
+export const CREATE_PRICE_SUCCESS = "create/price/success";
+export const CREATE_PRICE_FAILED = "create/price/failed";
+
+export const UPDATE_PRICE_REQUEST = "update/price/request";
+export const UPDATE_PRICE_SUCCESS = "update/price/success";
+export const UPDATE_PRICE_FAILED = "update/price/failed";
+
+export const DELETE_PRICE_REQUEST = "delete/price/request";
+export const DELETE_PRICE_SUCCESS = "delete/price/success";
+export const DELETE_PRICE_FAILED = "delete/price/failed";

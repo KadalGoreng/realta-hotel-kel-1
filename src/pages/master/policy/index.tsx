@@ -1,7 +1,7 @@
 import { GetPolicyRequest } from "@/Redux/Actions/masterAction";
 import AddPolicy from "@/components/master/policy/AddPolicy";
 import DeletePolicy from "@/components/master/policy/DeletePolicy";
-import BasicModal from "@/components/master/policy/ModalDescription";
+import ModalDescription from "@/components/master/ModalDescription";
 import UpdatePolicy from "@/components/master/policy/UpdatePolicy";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -46,7 +46,7 @@ export default function index() {
                   <td>
                     <div className="flex gap-2">
                       {polis.poliName}
-                      <BasicModal description={polis.poliDescription} />
+                      <ModalDescription description={polis.poliDescription} />
                     </div>
                   </td>
                   <td>

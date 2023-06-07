@@ -358,6 +358,65 @@ export const DeleteCagroFailed = (payload: any) => ({
   payload,
 });
 
+export const GetPriceRequest = () => ({
+  type: ActionType.GET_PRICE_REQUEST,
+});
+
+export const GetPriceSuccess = (payload: any) => ({
+  type: ActionType.GET_PRICE_SUCCESS,
+  payload,
+});
+
+export const GetPriceFailed = (payload: any) => ({
+  type: ActionType.GET_PRICE_FAILED,
+  payload,
+});
+
+export const CreatePriceRequest = (payload: any) => ({
+  type: ActionType.CREATE_PRICE_REQUEST,
+  payload,
+});
+
+export const CreatePriceSuccess = (payload: any) => ({
+  type: ActionType.CREATE_PRICE_SUCCESS,
+  payload,
+});
+
+export const CreatePriceFailed = (payload: any) => ({
+  type: ActionType.CREATE_PRICE_FAILED,
+  payload,
+});
+
+export const UpdatePriceRequest = (payload: any) => ({
+  type: ActionType.UPDATE_PRICE_REQUEST,
+  payload,
+});
+
+export const UpdatePriceSuccess = (payload: any) => ({
+  type: ActionType.UPDATE_PRICE_SUCCESS,
+  payload,
+});
+
+export const UpdatePriceFailed = (payload: any) => ({
+  type: ActionType.UPDATE_PRICE_FAILED,
+  payload,
+});
+
+export const DeletePriceRequest = (payload: any) => ({
+  type: ActionType.DELETE_PRICE_REQUEST,
+  payload,
+});
+
+export const DeletePriceSuccess = (payload: any) => ({
+  type: ActionType.DELETE_PRICE_SUCCESS,
+  payload,
+});
+
+export const DeletePriceFailed = (payload: any) => ({
+  type: ActionType.DELETE_PRICE_FAILED,
+  payload,
+});
+
 export const GetPolicyRequest = () => ({
   type: ActionType.GET_POLICY_REQUEST,
 });

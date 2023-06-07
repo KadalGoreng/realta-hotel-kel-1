@@ -1,11 +1,9 @@
-import {
-  CreatePolicyRequest,
-  CreateServiceRequest,
-} from "@/Redux/Actions/masterAction";
+import { CreateServiceRequest } from "@/Redux/Actions/masterAction";
 import { SyntheticEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 
-export default function AddTask() {
+export default function AddTask(props: any) {
+  const { setRefresh } = props;
   const dispatch = useDispatch();
 
   const [payload, setPayload] = useState({
@@ -39,6 +37,7 @@ export default function AddTask() {
       return;
     }
 
+    setRefresh(true);
     setPayload({
       setaName: "",
       setSeq: "",

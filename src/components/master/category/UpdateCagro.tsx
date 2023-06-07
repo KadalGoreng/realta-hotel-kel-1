@@ -7,7 +7,6 @@ type Product = {
   cagroName: string;
   cagroDescription: string;
   cagroType: string;
-  poliId: string;
   setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -16,14 +15,7 @@ export default function UpdateCagro(props: Product) {
 
   const { policy } = useSelector((state: any) => state.masterState);
 
-  const {
-    cagroId,
-    cagroName,
-    cagroDescription,
-    poliId,
-    cagroType,
-    setRefresh,
-  } = props;
+  const { cagroId, cagroName, cagroDescription, cagroType, setRefresh } = props;
 
   const [payload, setPayload] = useState({
     id: cagroId,
@@ -53,10 +45,12 @@ export default function UpdateCagro(props: Product) {
     if (payload.file !== "") {
       data.append("file", payload.file);
     }
+    if (payload.poliId !== "") {
+      data.append("poliId", payload.poliId);
+    }
     data.append("cagroName", payload.cagroName);
     data.append("cagroDescription", payload.cagroDescription);
     data.append("cagroType", payload.cagroType);
-    // data.append("poliId", payload.poliId);
 
     if (payload.cagroName !== "") {
       dispatch(UpdateCagroRequest(data, payload.id));
@@ -65,6 +59,7 @@ export default function UpdateCagro(props: Product) {
       return;
     }
     setRefresh(true);
+    handleChangeState("poliId", "");
     setModal(!modal);
   };
 
@@ -117,6 +112,23 @@ export default function UpdateCagro(props: Product) {
                     </option>
                     <option value="Facility">Facility</option>
                     <option value="Service">Service</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="label font-bold">Policy Rules</label>
+                  <select
+                    className="select select-bordered w-full"
+                    onChange={(e) =>
+                      handleChangeState("poliId", e.target.value)
+                    }
+                  >
+                    <option disabled selected>
+                      Type
+                    </option>
+                    {policy.data &&
+                      policy.data.map((polis: any) => (
+                        <option value={polis.poliId}>{polis.poliName}</option>
+                      ))}
                   </select>
                 </div>
                 {/* <div>

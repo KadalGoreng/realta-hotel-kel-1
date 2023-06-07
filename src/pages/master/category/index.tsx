@@ -16,9 +16,14 @@ export default function index() {
 
   const [refresh, setRefresh] = useState<boolean>(false);
 
+  const payload = {
+    page: "",
+    limit: 100,
+  };
+
   useEffect(() => {
     dispatch(GetCagroRequest());
-    dispatch(GetPolicyRequest());
+    dispatch(GetPolicyRequest(payload));
     setRefresh(false);
   }, [refresh]);
 

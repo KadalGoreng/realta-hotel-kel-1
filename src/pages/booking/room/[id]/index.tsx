@@ -118,7 +118,7 @@ export default function BookingRoom() {
                       ? aminities.map((facility: any) => (
                           <div className="flex items-center gap-1">
                             <img
-                              src={`/icons/${facility.faciCagro.cagroIcon}`}
+                              src={`http://localhost:3002/uploads/${facility.faciCagro.cagroIcon}`}
                               className="w-[20px]"
                             />
                             <span className="font-thin">
@@ -131,7 +131,7 @@ export default function BookingRoom() {
                             index < 3 && (
                               <div className="flex items-center gap-1">
                                 <img
-                                  src={`/icons/${facility.faciCagro.cagroIcon}`}
+                                  src={`http://localhost:3002/uploads/${facility.faciCagro.cagroIcon}`}
                                   className="w-[20px]"
                                 />
                                 <span className="font-thin">

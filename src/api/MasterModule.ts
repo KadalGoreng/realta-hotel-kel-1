@@ -188,7 +188,18 @@ const updateAddress = async (payload: any) => {
   }
 };
 
-const getPolicy = async () => {
+const getPolicy = async (payload: any) => {
+  try {
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/policy?page=${payload.page}&limit=${payload.limit}`
+    );
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+const getPolicyAll = async () => {
   try {
     const result = await axios.get(
       `${process.env.NEXT_PUBLIC_BASE_URL_API}/policy`
@@ -235,10 +246,10 @@ const updatePolicy = async (payload: any) => {
   }
 };
 
-const getService = async () => {
+const getService = async (payload: string | number) => {
   try {
     const result = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL_API}/service-task`
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/service-task?page=${payload}`
     );
     return result;
   } catch (error) {
@@ -328,10 +339,10 @@ const updateCagro = async (payload: any, id: any) => {
   }
 };
 
-const getPriceItem = async () => {
+const getPriceItem = async (name: string, page: number | string) => {
   try {
     const result = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL_API}/price-items`
+      `${process.env.NEXT_PUBLIC_BASE_URL_API}/price-items?name=${name}&page=${page}`
     );
     return result;
   } catch (error) {

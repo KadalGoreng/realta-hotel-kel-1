@@ -239,8 +239,9 @@ export const DeleteAddressFailed = (payload: any) => ({
   payload,
 });
 
-export const GetServiceRequest = () => ({
+export const GetServiceRequest = (payload: any) => ({
   type: ActionType.GET_SERVICE_REQUEST,
+  payload,
 });
 
 export const GetServiceSuccess = (payload: any) => ({
@@ -358,8 +359,10 @@ export const DeleteCagroFailed = (payload: any) => ({
   payload,
 });
 
-export const GetPriceRequest = () => ({
+export const GetPriceRequest = (name: any, page: any) => ({
   type: ActionType.GET_PRICE_REQUEST,
+  name,
+  page,
 });
 
 export const GetPriceSuccess = (payload: any) => ({
@@ -417,8 +420,9 @@ export const DeletePriceFailed = (payload: any) => ({
   payload,
 });
 
-export const GetPolicyRequest = () => ({
+export const GetPolicyRequest = (payload: any) => ({
   type: ActionType.GET_POLICY_REQUEST,
+  payload,
 });
 
 export const GetPolicySuccess = (payload: any) => ({

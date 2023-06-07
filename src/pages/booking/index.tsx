@@ -83,6 +83,7 @@ export default function Booking() {
                 pageRangeDisplayed={1}
                 pageCount={pageCount}
                 previousLabel="< prev"
+                forcePage={selectedPage}
                 containerClassName="flex gap-1"
                 renderOnZeroPageCount={null}
                 nextClassName="btn btn-sm rounded btn-outline"

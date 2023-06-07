@@ -280,9 +280,10 @@ function* DeleteAddress(action: any) {
   }
 }
 
-function* GetService(): any {
+function* GetService(action: any): any {
+  const { payload } = action;
   try {
-    const result = yield call(MasterApi.getService);
+    const result = yield call(MasterApi.getService, payload);
     if (result.status === 200) {
       yield put(GetServiceSuccess(result.data));
     }
@@ -381,9 +382,10 @@ function* DeleteCagro(action: any) {
   }
 }
 
-function* GetPrice(): any {
+function* GetPrice(actions: any): any {
+  const { name, page } = actions;
   try {
-    const result = yield call(MasterApi.getPriceItem);
+    const result = yield call(MasterApi.getPriceItem, name, page);
     if (result.status === 200) {
       yield put(GetPriceSuccess(result.data));
     }
@@ -431,9 +433,10 @@ function* DeletePrice(action: any) {
   }
 }
 
-function* GetPolicy(): any {
+function* GetPolicy(action: any): any {
+  const { payload } = action;
   try {
-    const result = yield call(MasterApi.getPolicy);
+    const result = yield call(MasterApi.getPolicy, payload);
     if (result.status === 200) {
       yield put(GetPolicySuccess(result.data));
     }

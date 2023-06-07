@@ -2,7 +2,8 @@ import { CreatePolicyRequest } from "@/Redux/Actions/masterAction";
 import { SyntheticEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 
-export default function AddPolicy() {
+export default function AddPolicy(props: any) {
+  const { setRefresh } = props;
   const dispatch = useDispatch();
 
   const [payload, setPayload] = useState({
@@ -40,6 +41,7 @@ export default function AddPolicy() {
       poliName: "",
       poliDescription: "",
     });
+    setRefresh(true);
     setModal(!modal);
   };
 

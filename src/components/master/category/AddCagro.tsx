@@ -44,7 +44,7 @@ export default function AddCagro(props: any) {
     data.append("cagroType", payload.cagroType);
     data.append("poliId", payload.poliId);
 
-    if (payload.cagroName !== "") {
+    if (payload.cagroName !== "" && payload.file !== "") {
       dispatch(CreateCagroRequest(data));
     } else {
       alert("Isi Semua Form");
@@ -95,7 +95,7 @@ export default function AddCagro(props: any) {
                       handleChangeState("cagroName", e.target.value)
                     }
                     className="input w-full input-bordered font-normal"
-                    placeholder="Service"
+                    placeholder="Cagro"
                   />
                 </div>
                 <div>
@@ -124,9 +124,10 @@ export default function AddCagro(props: any) {
                     <option disabled selected>
                       Type
                     </option>
-                    {policy.map((polis: any) => (
-                      <option value={polis.poliId}>{polis.poliName}</option>
-                    ))}
+                    {policy.data &&
+                      policy.data.map((polis: any) => (
+                        <option value={polis.poliId}>{polis.poliName}</option>
+                      ))}
                   </select>
                 </div>
                 <div>

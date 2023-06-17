@@ -1,12 +1,17 @@
 import * as ActionType from "../constant/hotelsConstant";
 
 const init_state = {
+  // allHotels: [],
   hotels: [],
   hotel: [],
 };
 
 const HotelsReduce = (state = init_state, action: any) => {
   switch (action.type) {
+    // case ActionType.GETALL_HOTELS_REQUEST:
+    //   return { ...state };
+    // case ActionType.GETALL_HOTELS_SUCCESS:
+    //   return GetAllHotels(state, action);
     case ActionType.GET_HOTELS_REQUEST:
       return { ...state };
     case ActionType.GET_HOTELS_SUCCESS:
@@ -30,6 +35,13 @@ const HotelsReduce = (state = init_state, action: any) => {
     default:
       return { ...state };
   }
+};
+
+const GetAllHotels = (state: any, action: any) => {
+  return {
+    ...state,
+    allHotels: action.payload,
+  };
 };
 
 const GetHotels = (state: any, action: any) => {

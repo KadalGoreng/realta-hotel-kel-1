@@ -16,17 +16,17 @@ export const GetFacilityPhotoFailed = (payload: any) => ({
 });
 
 export const GetManyFacilityPhotoRequest = (payload: any) => ({
-  type: ActionFacilityPhoto.GET_FACILITY_PHOTO_REQUEST,
+  type: ActionFacilityPhoto.GET_MANY_FACILITY_PHOTO_REQUEST,
   payload,
 });
 
 export const GetManyFacilityPhotoSuccess = (payload: any) => ({
-  type: ActionFacilityPhoto.GET_FACILITY_PHOTO_SUCCESS,
+  type: ActionFacilityPhoto.GET_MANY_FACILITY_PHOTO_SUCCESS,
   payload,
 });
 
 export const GetManyFacilityPhotoFailed = (payload: any) => ({
-  type: ActionFacilityPhoto.GET_FACILITY_PHOTO_FAILED,
+  type: ActionFacilityPhoto.GET_MANY_FACILITY_PHOTO_FAILED,
   payload,
 });
 

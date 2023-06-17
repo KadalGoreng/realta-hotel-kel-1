@@ -12,9 +12,9 @@ export default function DisplayImage({ imageSrc, fallbackImage }: any) {
       <Image
         src={imgSrc}
         alt=""
-        width={100}
-        height={100}
-        className="max-w-4"
+        width={250}
+        height={200}
+        className="max-w-4 flex"
         onLoadingComplete={(result) => {
           if (result.naturalWidth === 0) {
             setImgSrc(fallbackImage);

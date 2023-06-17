@@ -1,11 +1,11 @@
 import { useRouter } from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect, useState, Fragment } from "react";
-import { FindHotelsRequest } from "@/redux-saga/action/hotelsAction";
+import { FindHotelsRequest, GetHotelsRequest } from "@/redux-saga/action/hotelsAction";
 import Layout from "@/component/layout";
 import { GetFacilitiesRequest } from "@/redux-saga/action/facilitiesAction";
-import FormikFacilitiesCreate from "../reduxfacilities/FacilitiesFormixCreate";
-import FormikFacilitiesUpdate from "../reduxfacilities/FacilitiesFormixUpdate";
+import FacilitiesCreate from "../facilities/FacilitiesCreate";
+import FacilitiesUpdate from "../facilities/FacilitiesUpdate";
 import ReactPaginate from "react-paginate";
 import AddPhoto from "./UploadPhoto";
 
@@ -15,7 +15,7 @@ export default function HotelsId() {
 
   const dispatch = useDispatch();
   const { hotels } = useSelector((state: any) => state.hotelsState);
-  const hotel = hotels.find((data: any) => data.hotelId == id);
+  const hotel = hotels.items && hotels.items.find((data: any) => data.hotelId == id);
 
   const { facilities } = useSelector((state: any) => state.facilitiesState);
   const [display, setDisplay] = useState<any>(false);
@@ -24,29 +24,23 @@ export default function HotelsId() {
   const [displayUpdate, setDisplayUpdate] = useState(false);
   const [faciId, setFaciId] = useState();
   const [showModal, setShowModal] = useState(false);
-  const [itemOffset, setItemOffset] = useState(0);
   const [photoId, setPhotoId] = useState<any>();
+  const [selectedPage, setSelectedPage] = useState(1);
+  const [payload, setPayload] = useState({ page: 1, name: "" });
 
-  const endOffset = itemOffset + 10;
-  const currentItems = facilities.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(facilities.length / 10);
-
-  const handlePageClick = (event: any) => {
-    const newOffset = (event.selected * 10) % facilities.length;
-    setItemOffset(newOffset);
+  const handlePageClick = (data: { selected: number }) => {
+    setSelectedPage(data.selected + 1);
   };
 
   useEffect(() => {
     if (router.isReady) {
-      dispatch(GetFacilitiesRequest(router.query.id));
-      dispatch(FindHotelsRequest(router.query.id));
+      dispatch(GetHotelsRequest(payload));
+      dispatch(GetFacilitiesRequest({ page: selectedPage, id: id }));
+      dispatch(FindHotelsRequest(id));
     }
-  }, [dispatch, router.query.id, refresh, router.isReady]);
+  }, [payload, dispatch, selectedPage, id, router.isReady]);
 
   const onClickUpdate = (faciId: any) => {
-    console.log(faciId);
-    console.log(facilities);
-
     setDisplayUpdate(true);
   };
 
@@ -55,12 +49,6 @@ export default function HotelsId() {
     setFaciId(id);
   };
 
-  // const onUpload = (id: any) => {
-  //   router.push({
-  //     pathname: "/facilityPhoto/[id]",
-  //     query: { id: id },
-  //   });
-  // };
   const convertPrice = (price: string) => {
     return parseFloat(price.replace(/[$,RP.]/gi, ""));
   };
@@ -107,11 +95,11 @@ export default function HotelsId() {
     <div>
       <Layout>
         {displayUpdate ? (
-          <FormikFacilitiesUpdate setRefresh={setRefresh} setDisplay={setDisplayUpdate} id={faciId} />
+          <FacilitiesUpdate setRefresh={setRefresh} setDisplay={setDisplayUpdate} id={faciId} />
         ) : display ? (
-          <FormikFacilitiesCreate setRefresh={setRefresh} setDisplay={setDisplay} refresh={refresh} id={id} />
+          <FacilitiesCreate setRefresh={setRefresh} setDisplay={setDisplay} refresh={refresh} id={id} />
         ) : upload ? (
-          <AddPhoto setDisplay={setUpload} id={faciId} />
+          <AddPhoto setDisplay={setUpload} id={faciId} setRefresh={setRefresh} />
         ) : (
           <div className="flex ">
             <aside id="default-sidebar" className="border left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
@@ -199,9 +187,8 @@ export default function HotelsId() {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentItems &&
-                      Array.isArray(currentItems) &&
-                      currentItems.map((item: any, index: any) => {
+                    {facilities.items &&
+                      facilities.items.map((item: any, index: any) => {
                         return (
                           <Fragment key={item.facilitiesId}>
                             <tr key={index} className="border-b border-gray-200 dark:border-gray-700">
@@ -259,7 +246,7 @@ export default function HotelsId() {
                 nextLabel="next >"
                 onPageChange={handlePageClick}
                 pageRangeDisplayed={1}
-                pageCount={pageCount}
+                pageCount={facilities.meta && facilities.meta.totalPages}
                 previousLabel="<prev"
                 containerClassName="flex gap-1"
                 renderOnZeroPageCount={null}

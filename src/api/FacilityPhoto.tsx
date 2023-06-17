@@ -19,6 +19,18 @@ const findMany = async (id: number) => {
   }
 };
 
+// Use DTO
+
+// const Upload = async (payload: any) => {
+//   const {...uploadFacilityPhotoDto} = payload
+//   try {
+//     const result = await axios.post(`${config.domain}/facilityPhoto/`, uploadFacilityPhotoDto);
+//     return result;
+//   } catch (error) {
+//     return await error;
+//   }
+// };
+
 const Upload = async (payload: any) => {
   try {
     const result = await axios.post(`${config.domain}/facilityPhoto/`, payload);
@@ -27,6 +39,18 @@ const Upload = async (payload: any) => {
     return await error;
   }
 };
+
+// Use DTO
+
+// const Update = async (payload: any) => {
+//   const { id, ...updateFacilityPhotoDto } = payload;
+//   try {
+//     const result = await axios.put(`${config.domain}/facilityPhoto/${id}`, updateFacilityPhotoDto);
+//     return result;
+//   } catch (error) {
+//     return await error;
+//   }
+// };
 
 const Update = async (payload: any) => {
   try {
@@ -46,10 +70,12 @@ const Delete = async (id: any) => {
   }
 };
 
-export default {
+const facilityPhotoApi = {
   list,
   findMany,
   Delete,
   Upload,
   Update,
 };
+
+export default facilityPhotoApi;

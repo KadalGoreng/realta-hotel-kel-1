@@ -4,10 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { EditFacilitiesRequest, FindFacilitiesRequest } from "@/redux-saga/action/facilitiesAction";
 import { GetCategoryGroupRequest } from "../../redux-saga/action/master/categoryGroupAction";
 
-export default function FormikFacilitiesUpdate(props: any) {
+export default function FacilitiesUpdate(props: any) {
   const dispatch = useDispatch();
   const { facility } = useSelector((state: any) => state.facilitiesState);
+  const { facilities } = useSelector((state: any) => state.facilitiesState);
   const { categoryGroups } = useSelector((state: any) => state.categoryGroupState);
+
+  console.log(facility);
+  // console.log(facilities);
 
   useEffect(() => {
     dispatch(FindFacilitiesRequest(props.id));
@@ -15,7 +19,9 @@ export default function FormikFacilitiesUpdate(props: any) {
     console.log(props.id);
   }, [dispatch, props.id]);
 
-  console.log(facility.faciName);
+  const convertPrice = (price: string) => {
+    return parseFloat(price.replace(/[$,RP.]/gi, ""));
+  };
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -26,10 +32,10 @@ export default function FormikFacilitiesUpdate(props: any) {
       faciRoomNumber: facility.faciRoomNumber,
       faciMaxNumber: facility.faciMaxNumber,
       faciMeasureUnit: facility.faciMeasureUnit,
-      faciLowPrice: facility.faciLowPrice && Number(facility.faciLowPrice.replace(/[^0-9]+/g, "") / 100),
-      faciHighPrice: facility.faciHighPrice && Number(facility.faciHighPrice.replace(/[^0-9]+/g, "") / 100),
-      faciDiscount: facility.faciDiscount && Math.round(Number(facility.faciDiscount.replace(/[^0-9]+/g, "")) / (Number(facility.faciRatePrice.replace(/[^0-9]+/g, "")) / 100)),
-      faciTaxRate: facility.faciTaxRate && Math.round(Number(facility.faciTaxRate.replace(/[^0-9]+/g, "")) / (Number(facility.faciRatePrice.replace(/[^0-9]+/g, "")) / 100)),
+      faciLowPrice: facility.faciLowPrice,
+      faciHighPrice: facility.faciHighPrice,
+      faciDiscount: facility.faciDiscount,
+      faciTaxRate: facility.faciTaxRate,
       faciStartdate: facility.faciStartdate && facility.faciStartdate.substring(0, 10),
       faciEnddate: facility.faciEnddate && facility.faciEnddate.substring(0, 10),
       faciCagro: facility.faciCagro && facility.faciCagro.cagroId,
@@ -43,13 +49,14 @@ export default function FormikFacilitiesUpdate(props: any) {
         faciMaxNumber: values.faciMaxNumber,
         faciMeasureUnit: values.faciMeasureUnit,
         faciRoomNumber: values.faciRoomNumber,
-        faciStartdate: values.faciStartdate,
-        faciEnddate: values.faciEnddate,
+        faciStartdate: new Date(values.faciStartdate),
+        faciEnddate: new Date(values.faciEnddate),
         faciLowPrice: values.faciLowPrice,
         faciHighPrice: values.faciHighPrice,
-        faciRatePrice: (parseInt(values.faciHighPrice) + parseInt(values.faciLowPrice)) / 2,
-        faciDiscount: (Math.floor((parseInt(values.faciHighPrice) + parseInt(values.faciLowPrice)) / 2) / 100) * parseInt(values.faciDiscount),
-        faciTaxRate: Math.floor((parseInt(values.faciHighPrice) + parseInt(values.faciLowPrice)) / 2 / 100) * parseInt(values.faciTaxRate),
+        faciModifiedDate: new Date(),
+        faciRatePrice: ((convertPrice(values.faciHighPrice) + convertPrice(values.faciLowPrice)) / 2).toString(),
+        faciDiscount: convertPrice(values.faciDiscount).toString(),
+        faciTaxRate: convertPrice(values.faciTaxRate).toString(),
         faciCagro: values.faciCagro,
       };
 

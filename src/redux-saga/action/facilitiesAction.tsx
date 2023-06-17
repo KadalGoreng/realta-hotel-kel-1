@@ -1,5 +1,20 @@
 import * as ActionFacilities from "../constant/facilitiesConstant";
 
+// export const GetAllFacilitiesRequest = (payload: any) => ({
+//   type: ActionFacilities.GET_ALLFACILITIES_REQUEST,
+//   payload,
+// });
+
+// export const GetAllFacilitiesSuccess = (payload: any) => ({
+//   type: ActionFacilities.GET_ALLFACILITIES_SUCCESS,
+//   payload,
+// });
+
+// export const GetAllFacilitiesFailed = (payload: any) => ({
+//   type: ActionFacilities.GET_ALLFACILITIES_FAILED,
+//   payload,
+// });
+
 export const GetFacilitiesRequest = (payload: any) => ({
   type: ActionFacilities.GET_FACILITIES_REQUEST,
   payload,

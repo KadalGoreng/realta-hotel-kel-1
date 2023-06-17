@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AddFacilitiesRequest } from "@/redux-saga/action/facilitiesAction";
 import { GetCategoryGroupRequest } from "@/redux-saga/action/master/categoryGroupAction";
 
-export default function FormikFacilitiesCreate(props: any) {
+export default function FacilitiesCreate(props: any) {
   const dispatch = useDispatch();
   const { categoryGroups } = useSelector((state: any) => state.categoryGroupState);
 

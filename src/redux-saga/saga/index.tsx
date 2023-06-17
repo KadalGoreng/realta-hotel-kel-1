@@ -14,6 +14,7 @@ import { handleCategoryGroup } from "./master/CategoryGroupSaga";
 function* watchAll() {
   yield all([
     //hotels
+    // takeEvery(ActionTypeHotels.GETALL_HOTELS_REQUEST, handleGetAllHotels),
     takeEvery(ActionTypeHotels.GET_HOTELS_REQUEST, handleGetHotels),
     takeEvery(ActionTypeHotels.ADD_HOTELS_REQUEST, handleAddHotels),
     takeEvery(ActionTypeHotels.FIND_HOTELS_REQUEST, handleFindHotels),
@@ -21,6 +22,7 @@ function* watchAll() {
     takeEvery(ActionTypeHotels.DEL_HOTELS_REQUEST, handleDelHotels),
 
     //facilities
+    // takeEvery(ActionTypeFacilities.GET_ALLFACILITIES_REQUEST, handleAllFacilities),
     takeEvery(ActionTypeFacilities.GET_FACILITIES_REQUEST, handleGetFacilities),
     takeEvery(ActionTypeFacilities.ADD_FACILITIES_REQUEST, handleAddFacilities),
     takeEvery(ActionTypeFacilities.FIND_FACILITIES_REQUEST, handleFindFacilities),
@@ -29,7 +31,7 @@ function* watchAll() {
 
     //facility photo
     takeEvery(ActionFacilityPhoto.GET_FACILITY_PHOTO_REQUEST, handleFacilityPhoto),
-    takeEvery(ActionFacilityPhoto.GET_FACILITY_PHOTO_REQUEST, handleFacilityPhotoMany),
+    takeEvery(ActionFacilityPhoto.GET_MANY_FACILITY_PHOTO_REQUEST, handleFacilityPhotoMany),
     takeEvery(ActionFacilityPhoto.ADD_FACILITY_PHOTO_REQUEST, handleAddFacilityPhoto),
     takeEvery(ActionFacilityPhoto.EDIT_FACILITY_PHOTO_REQUEST, editFacilityPhoto),
     takeEvery(ActionFacilityPhoto.DEL_FACILITY_PHOTO_REQUEST, deleteFacilityPhoto),

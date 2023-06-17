@@ -2,10 +2,11 @@ import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import images from "../../assets/images/home-icon.svg";
+import Image from "next/image";
 
 const navigation = [
   { name: "Home", href: "/", current: true },
-  { name: "Hotels", href: "/reduxhotels", current: false },
+  { name: "Hotels", href: "/hotels", current: false },
   // { name: "Facilities", href: "/reduxfacilities", current: false },
 ];
 
@@ -43,7 +44,7 @@ export default function Header() {
                   <div>
                     <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="sr-only">Open user menu</span>
-                      <img className="h-8 w-8 rounded-full" src={images} alt="" />
+                      <Image className="h-8 w-8 rounded-full" src={images} alt="" />
                     </Menu.Button>
                   </div>
                   {/* <div className="text-white">Role Administartor</div> */}

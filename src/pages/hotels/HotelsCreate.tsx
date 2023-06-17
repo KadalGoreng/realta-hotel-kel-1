@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AddHotelsRequest } from "@/redux-saga/action/hotelsAction";
 import { GetAddressRequest, FindAddressRequest } from "../../redux-saga/action/master/addressAction";
 
-export default function FormikHotelsCreate(props: any) {
+export default function HotelsCreate(props: any) {
   const dispatch = useDispatch();
   const [city, setCity] = useState<number>();
   const { addresses, address } = useSelector((state: any) => state.addressState);

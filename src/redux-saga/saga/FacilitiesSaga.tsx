@@ -13,10 +13,20 @@ import {
   DelFacilitiesFailed,
 } from "../action/facilitiesAction";
 
+// function* handleAllFacilities(action: any): any {
+//   const { payload } = action;
+//   try {
+//     const result = yield call(Facilities.GetAllData, payload);
+//     yield put(GetAllFacilitiesSuccess(result));
+//   } catch (error) {
+//     yield put(GetAllFacilitiesFailed(error));
+//   }
+// }
+
 function* handleGetFacilities(action: any): any {
   const { payload } = action;
   try {
-    const result = yield call(Facilities.GetData, payload);
+    const result = yield call(Facilities.GetAllData, payload);
     yield put(GetFacilitiesSuccess(result));
   } catch (error) {
     yield put(GetFacilitiesFailed(error));

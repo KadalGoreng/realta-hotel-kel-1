@@ -3,8 +3,8 @@ import React, { useEffect, useState, Fragment } from "react";
 import Layout from "@/component/layout";
 import { useDispatch, useSelector } from "react-redux";
 import { DelHotelsRequest, GetHotelsRequest } from "@/redux-saga/action/hotelsAction";
-import FormikHotelsCreate from "./HotelsFormixCreate";
-import FormikHotelsUpdate from "./HotelsFormixUpdate";
+import HotelsCreate from "./HotelsCreate";
+import HotelsUpdate from "./HotelsUpdate";
 import HotelsId from "./[id]";
 import Link from "next/link";
 import { log } from "console";
@@ -23,39 +23,44 @@ export default function HotelsRedux() {
   const [showModal, setShowModal] = useState<any>(false);
   const [search, setSearch] = useState<string>("");
   const [itemOffset, setItemOffset] = useState(0);
+  const [payload, setPayload] = useState({ page: 1, name: "" });
   // const [page, setpage] = useState<number>(1);
-  const hotelSearch = hotels.map((item: any) => item.hotelName.toLowerCase().indexOf(search.toLowerCase()) > -1 && item).filter(Boolean);
-  const endOffset = itemOffset + 10;
-  const currentItems = hotelSearch.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(hotelSearch.length / 10);
-  const [filters, setFilters] = useState({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  });
 
-  const handlePageClick = (event: any) => {
-    const newOffset = (event.selected * 10) % hotelSearch.length;
-    setItemOffset(newOffset);
-  };
+  // const [filters, setFilters] = useState({
+  //   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  // });
+
+  // const handlePageClick = (event: any) => {
+  //   const newOffset = (event.selected * 10) % hotelSearch.length;
+  //   setItemOffset(newOffset);
+  // };
 
   useEffect(() => {
-    dispatch(GetHotelsRequest());
+    dispatch(GetHotelsRequest(payload));
     setRefresh(false);
-  }, [dispatch, refresh]);
+  }, [payload, dispatch, refresh]);
 
   const setModal = (id: any) => {
     setShowModal(true);
     setId(id);
   };
 
-  const onClickAdd = (id: any) => {
-    setDisplayAddFacilities(true);
-    setId(id);
-  };
+  // const onClickAdd = (id: any) => {
+  //   setDisplayAddFacilities(true);
+  //   setId(id);
+  // };
 
   const onClickUpdate = (id: any) => {
     setDisplayUpdate(true);
     setId(id);
     setRefresh(true);
+  };
+  const onChangeState = (key: string, value: any) => {
+    setPayload((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handlePageClick = (e: any) => {
+    onChangeState("page", e.selected + 1);
   };
 
   const handleSearch = (e: any) => {
@@ -83,7 +88,7 @@ export default function HotelsRedux() {
             <button className="bg-white p-2" onClick={() => onClickUpdate(id)}>
               Edit
             </button>
-            <Link href={`reduxhotels/${id}`} className="bg-white p-2 flex justify-center items-center">
+            <Link href={`hotels/${id}`} className="bg-white p-2 flex justify-center items-center">
               <button className="bg-white p-2">Add Facilities</button>
             </Link>
           </div>
@@ -97,11 +102,11 @@ export default function HotelsRedux() {
       <Layout>
         <>
           {displayUpdate ? (
-            <FormikHotelsUpdate setRefresh={setRefresh} setDisplay={setDisplayUpdate} id={id} />
+            <HotelsUpdate setRefresh={setRefresh} setDisplay={setDisplayUpdate} id={id} />
           ) : displayAddFacilities ? (
-            <HotelsId setRefresh={setRefresh} setDisplay={setDisplayAddFacilities} id={id} />
+            <HotelsId />
           ) : display ? (
-            <FormikHotelsCreate setRefresh={setRefresh} setDisplay={setDisplay} />
+            <HotelsCreate setRefresh={setRefresh} setDisplay={setDisplay} />
           ) : (
             <>
               <div className="flex ">
@@ -119,11 +124,6 @@ export default function HotelsRedux() {
                           <span className="flex-1 ml-3 whitespace-nowrap">Facilities</span>
                         </a>
                       </li>
-                      {/* <li>
-                        <a href="#" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                          <span className="flex-1 ml-3 whitespace-nowrap">Reviews</span>
-                        </a>
-                      </li> */}
                     </ul>
                   </div>
                 </aside>
@@ -145,8 +145,7 @@ export default function HotelsRedux() {
                         id="default-search"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm  focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Search Hotel"
-                        onChange={handleSearch}
-                        value={search}
+                        onChange={(e) => onChangeState("name", e.target.value)}
                         required
                       />
                     </div>
@@ -183,9 +182,9 @@ export default function HotelsRedux() {
                         </tr>
                       </thead>
                       <tbody>
-                        {currentItems &&
-                          Array.isArray(currentItems) &&
-                          currentItems.map((item: any) => {
+                        {hotels.items &&
+                          Array.isArray(hotels.items) &&
+                          hotels.items.map((item: any) => {
                             return (
                               <Fragment key={item.hotelId}>
                                 <tr className="border-b border-gray-200 dark:border-gray-700">
@@ -222,21 +221,23 @@ export default function HotelsRedux() {
                           })}
                       </tbody>
                     </table>
-
-                    <ReactPaginate
-                      breakLabel="..."
-                      nextLabel="next >"
-                      onPageChange={handlePageClick}
-                      pageRangeDisplayed={1}
-                      pageCount={pageCount}
-                      previousLabel="< prev"
-                      containerClassName="flex gap-1"
-                      renderOnZeroPageCount={null}
-                      nextClassName="btn btn-sm rounded btn-outline"
-                      previousClassName="btn btn-sm rounded btn-outline"
-                      activeLinkClassName="bg-[#1C1C1C] text-white"
-                      pageLinkClassName="btn btn-sm rounded btn-outline"
-                    />
+                    {hotels.meta && (
+                      <ReactPaginate
+                        breakLabel="..."
+                        nextLabel="next >"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={1}
+                        pageCount={hotels.meta.totalPages}
+                        previousLabel="< prev"
+                        forcePage={payload.page - 1}
+                        containerClassName="flex gap-1"
+                        renderOnZeroPageCount={null}
+                        nextClassName="btn btn-sm rounded btn-outline"
+                        previousClassName="btn btn-sm rounded btn-outline"
+                        activeLinkClassName="bg-[#1C1C1C] text-white"
+                        pageLinkClassName="btn btn-sm rounded btn-outline"
+                      />
+                    )}
                   </div>
                 </div>
               </div>

@@ -11,9 +11,9 @@ const FacilityPhotoReduce = (state = INIT_STATE, action: any) => {
     case ActionType.GET_FACILITY_PHOTO_SUCCESS:
       return GetFacilityPhotoSuccessfully(state, action);
 
-    case ActionType.GET_FACILITY_PHOTO_REQUEST:
+    case ActionType.GET_MANY_FACILITY_PHOTO_REQUEST:
       return { ...state };
-    case ActionType.GET_FACILITY_PHOTO_SUCCESS:
+    case ActionType.GET_MANY_FACILITY_PHOTO_SUCCESS:
       return GetManyFacilityPhotoSuccessfully(state, action);
 
     case ActionType.ADD_FACILITY_PHOTO_REQUEST:

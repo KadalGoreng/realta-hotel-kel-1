@@ -4,32 +4,40 @@ import { useDispatch, useSelector } from "react-redux";
 import { EditHotelsRequest, FindHotelsRequest } from "@/redux-saga/action/hotelsAction";
 import { GetAddressRequest, FindAddressRequest } from "../../redux-saga/action/master/addressAction";
 
-export default function FormikHotelsUpdate(props: any) {
+export default function HotelsUpdate(props: any) {
   const dispatch = useDispatch();
   const { hotels } = useSelector((state: any) => state.hotelsState);
   const { hotel } = useSelector((state: any) => state.hotelsState);
-  const [city, setCity] = useState<number>(hotel.hotelAddr && hotel.hotelAddr.addrId);
+  const [city, setCity] = useState<number | undefined>(undefined);
   const { addresses, address } = useSelector((state: any) => state.addressState);
 
-  console.log(hotel);
-  console.log(city);
+  // console.log(hotel);
+  // console.log(hotels);
+
+  // console.log(city);
 
   useEffect(() => {
     dispatch(FindHotelsRequest(props.id));
     dispatch(GetAddressRequest());
-    dispatch(FindAddressRequest(city));
-  }, [dispatch, props.id, city]);
+  }, [dispatch, props.id]);
+
+  useEffect(() => {
+    if (hotel && hotel.hotelAddr && hotel.hotelAddr.addrId !== city) {
+      setCity(hotel.hotelAddr.addrId);
+      dispatch(FindAddressRequest(hotel.hotelAddr.addrId));
+    }
+  }, [dispatch, hotel, city]);
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       id: props.id,
-      hotelName: hotels.hotelName,
-      hotelDescription: hotels.hotelDescription,
-      hotelRatingStar: hotels.hotelRatingStar,
-      hotelPhonenumber: hotels.hotelPhonenumber,
-      hotelModifiedDate: hotels.hotelModifiedDate,
-      hotelAdddr: hotels.hotelAdddr && hotels.hotelAddr.addrId,
+      hotelName: hotel.hotelName,
+      hotelDescription: hotel.hotelDescription,
+      hotelRatingStar: hotel.hotelRatingStar,
+      hotelPhonenumber: hotel.hotelPhonenumber,
+      hotelModifiedDate: hotel.hotelModifiedDate,
+      hotelAddr: city,
     },
 
     onSubmit: async (values) => {
@@ -67,11 +75,11 @@ export default function FormikHotelsUpdate(props: any) {
                   </label>
                   <input
                     placeholder={props.id}
-                    defaultValue={hotels.id}
+                    // defaultValue={hotels.id}
                     type="text"
                     name="hotelId"
                     id="hotelId"
-                    // value={formik.values.id}
+                    value={formik.values.id}
                     onChange={formik.handleChange}
                     className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
                     disabled
@@ -88,7 +96,7 @@ export default function FormikHotelsUpdate(props: any) {
                     id="hotelName"
                     onChange={formik.handleChange}
                     value={formik.values.hotelName}
-                    defaultValue={hotel.hotelName}
+                    // defaultValue={hotel.hotelName}
                     className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
                   />
                 </div>
@@ -103,14 +111,14 @@ export default function FormikHotelsUpdate(props: any) {
                     id="hotelPhonenumber"
                     value={formik.values.hotelPhonenumber}
                     onChange={formik.handleChange}
-                    defaultValue={hotel.hotelPhonenumber}
+                    // defaultValue={hotel.hotelPhonenumber}
                     className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
                   />
                 </div>
 
                 <div className="mb-4">
                   <label className="block text-black text-sm font-bold mb-2">City</label>
-                  <select name="hotelAddr" id="hotelAddr" onChange={handleChange} value={city} onBlur={formik.handleBlur} className="border rounded w-full py-2 px-3 text-blue-950 border-slate-900">
+                  <select name="hotelAddr" id="hotelAddr" defaultValue={hotel.hotelAddr} onChange={handleChange} value={city} onBlur={formik.handleBlur} className="border rounded w-full py-2 px-3 text-blue-950 border-slate-900">
                     <option value="" selected disabled hidden className="text-black ">
                       Search City
                     </option>
@@ -140,11 +148,11 @@ export default function FormikHotelsUpdate(props: any) {
                   </label>
                   <input
                     type="text"
-                    name="description"
-                    id="description"
-                    value={formik.values.hotelAdddr}
+                    name="hotelDescription"
+                    id="hotelDescription"
+                    value={formik.values.hotelDescription}
                     onChange={formik.handleChange}
-                    className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
+                    className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex  items-center pl-3 text-sm border-gray-300 rounded border"
                   />
                 </div>
 

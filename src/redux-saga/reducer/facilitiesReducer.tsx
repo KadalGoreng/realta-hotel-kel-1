@@ -1,12 +1,17 @@
 import * as ActionType from "../constant/facilitiesConstant";
 
 const init_state = {
+  // allFacilities: [],
   facilities: [],
   facility: [],
 };
 
 const FacilitiesReduce = (state = init_state, action: any) => {
   switch (action.type) {
+    //   case ActionType.GET_ALLFACILITIES_REQUEST:
+    //     return { ...state };
+    //   case ActionType.GET_ALLFACILITIES_SUCCESS:
+    //     return GetAllFacilities(state, action);
     case ActionType.GET_FACILITIES_REQUEST:
       return { ...state };
     case ActionType.GET_FACILITIES_SUCCESS:
@@ -31,6 +36,14 @@ const FacilitiesReduce = (state = init_state, action: any) => {
       return { ...state };
   }
 };
+
+// const GetAllFacilities = (state: any, action: any) => {
+//   const { payload } = action;
+//   return {
+//     ...state,
+//     allFacilities: payload,
+//   };
+// };
 
 const GetFacilities = (state: any, action: any) => {
   return {

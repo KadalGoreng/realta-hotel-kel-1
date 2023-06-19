@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Layout from "@/component/layout";
 import { useDispatch, useSelector } from "react-redux";
-import { DelStockRequest, GetStockRequest } from "@/redux-saga/action/stocksAction";
-
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
 import ReactPaginate from "react-paginate";
 import ModalCreate from "./StockModalCreate";
 import ModalEdit from "./StockModalEdit";
-// import AddPhoto from "../UploadPhoto/[id]";
 import AddPhotos from "./AddPhoto";
-// import UploadPhoto from "../Upload-Photo/AddPhoto";
+import { DelStockRequest, GetStockRequest } from "@/redux-saga/action/purchasing/stocksAction";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -28,11 +25,15 @@ export default function StocksSaga() {
   const { stocks } = useSelector((state: any) => state.stocksState);
   const [id, setId] = useState<any>();
   const [search, setSearch] = useState("");
+  const [payload, setPayload] = useState({
+    stockName: "",
+    page: 1,
+  });
 
   useEffect(() => {
-    dispatch(GetStockRequest());
-    setRefresh(false);
-  }, [refresh]);
+    dispatch(GetStockRequest(payload));
+    // setRefresh(false);
+  }, [refresh, payload]);
 
   const onDelete = async (id: any) => {
     dispatch(DelStockRequest(id));
@@ -49,30 +50,29 @@ export default function StocksSaga() {
   const onUpload = (id: any) => {
     setUpload(true);
     setId(id);
-    // setId(id);
   };
 
-  const [itemOffset, setItemOffset] = useState(0);
-
-  const StockSearch = stocks.map((item: any) => item.stockName.toLowerCase().indexOf(search.toLowerCase()) > -1 && item);
-  const searchFilter = StockSearch.filter((item: any) => item);
-
-  const endOffset = itemOffset + 5;
-  const currentItems = stocks.slice(itemOffset, endOffset);
-  const itemsSearch = searchFilter.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(stocks.length / 5);
-
-  const handlePageClick = (event: any) => {
-    const newOffset = (event.selected * 5) % stocks.length;
-    setItemOffset(newOffset);
+  const onChangeState = (key: string, value: any) => {
+    setPayload((prev) => ({ ...prev, [key]: value }));
   };
+
+  const handlePageClick = (e: any) => {
+    onChangeState("page", e.selected + 1);
+  };
+
+  useEffect(() => {
+    onChangeState("page", 1);
+  }, [payload.stockName]);
+
+  console.log(stocks);
+
   return (
     <div>
       <Layout>
         <div className="p-4 sm:ml-64">
           <div>
-            {display && <ModalCreate setDisplay={setDisplay} />}
-            {displayEdit && <ModalEdit setDisplay={setDisplayEdit} id={id} setRefresh={setRefresh} />}
+            {display && <ModalCreate refresh={refresh} setRefresh={setRefresh} setDisplay={setDisplay} />}
+            {displayEdit && <ModalEdit setDisplay={setDisplayEdit} refresh={refresh} id={id} setRefresh={setRefresh} />}
             {upload && <AddPhotos setDisplay={setDisplayPhoto} setUpload={setUpload} setRefresh={setRefresh} id={id} />}
             <div className="mt-20">
               <form className="flex items-center justify-center gap-2">
@@ -85,7 +85,7 @@ export default function StocksSaga() {
                     </svg>
                   </div>
                   <input
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => onChangeState("stockName", e.target.value)}
                     type="text"
                     id="simple-search"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -128,8 +128,8 @@ export default function StocksSaga() {
                           </tr>
                         </thead>
                         <tbody>
-                          {stocks &&
-                            itemsSearch.map((stock: any) => {
+                          {stocks.data &&
+                            stocks.data.map((stock: any) => {
                               return (
                                 <>
                                   <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
@@ -223,15 +223,16 @@ export default function StocksSaga() {
                         breakLabel="..."
                         nextLabel="next >"
                         onPageChange={handlePageClick}
-                        pageRangeDisplayed={2}
-                        pageCount={pageCount}
-                        previousLabel="< previous"
+                        pageRangeDisplayed={1}
+                        pageCount={stocks.totalPages}
+                        previousLabel="< prev"
+                        forcePage={payload.page - 1}
                         containerClassName="flex gap-1 justify-center"
                         renderOnZeroPageCount={null}
-                        activeLinkClassName="bg-red-500"
                         nextLinkClassName="btn btn-sm bg-blue-500 border-none"
-                        pageLinkClassName="btn btn-sm bg-blue-500 border-none"
                         previousLinkClassName="btn btn-sm bg-blue-500 border-none"
+                        activeLinkClassName="bg-red-500"
+                        pageLinkClassName="btn btn-sm bg-blue-500 border-none"
                       />
                     </div>
                   </div>

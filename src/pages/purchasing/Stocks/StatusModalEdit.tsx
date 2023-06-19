@@ -1,4 +1,4 @@
-import { EditStockDetailRequest, FindStockDetailRequest, GetStockDetailRequest } from "@/redux-saga/action/stockDetailAction";
+import { EditStockDetailRequest, FindStockDetailRequest, GetStockDetailRequest } from "@/redux-saga/action/purchasing/stockDetailAction";
 import { useFormik } from "formik";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 export default function StatusModalEdit(props: any) {
   const dispatch = useDispatch();
   const { stockDetail } = useSelector((state: any) => state.stockDetailState);
-  const { stockDetails } = useSelector((state: any) => state.stockDetailState);
+  // const { stockDetails } = useSelector((state: any) => state.stockDetailState);
+  const { facilities } = useSelector((state: any) => state.FacilitiesState);
   console.log(stockDetail);
   useEffect(() => {
     dispatch(FindStockDetailRequest(props.id));
@@ -74,7 +75,7 @@ export default function StatusModalEdit(props: any) {
                         </select>
                       </div>
 
-                      <div className="w-full md:w-1/8 px-3 mb-6 md:mb-0">
+                      <div className="w-full md:w-1/8 px-3 mb-6 md:mb-0 mt-3">
                         <label className="mb-3 block text-base font-medium text-[#07074D]">Used In</label>
                         <select
                           onChange={formik.handleChange}
@@ -82,31 +83,16 @@ export default function StatusModalEdit(props: any) {
                           name="stodFaci"
                           className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                         >
-                          {stockDetails &&
-                            stockDetails.map((stock: any, index: number) => {
+                          {facilities &&
+                            facilities.map((stock: any, index: number) => {
                               return (
-                                <option key={index} value={stock.stodFaci.faciId} selected={props.stockUsed === stock.stodFaci.faciRoomNumber}>
-                                  Room-{stock.stodFaci.faciRoomNumber}
+                                <option key={index} value={stock.faciId} selected={props.stockUsed === stock.faciRoomNumber}>
+                                  Room-{stock.faciRoomNumber}
                                 </option>
                               );
                             })}
                         </select>
                       </div>
-
-                      {/* <div className="flex flex-wrap -mx-3 mb-6">
-                        <div className="w-full md:w-1/8 px-3 mb-6 md:mb-0">
-                          <label className="mb-3 block text-base font-medium text-[#07074D]">Used In</label>
-                          <input
-                            id="faciRoomNumber"
-                            name="faciRoomNumber"
-                            defaultValue={stockDetail.stodFaci.faciRoomNumber}
-                            onChange={formik.handleChange}
-                            type="text"
-                            placeholder="Used In"
-                            className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-                          />
-                        </div>
-                      </div> */}
                     </div>
 
                     <div>

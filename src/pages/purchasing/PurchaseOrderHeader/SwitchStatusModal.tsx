@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { EditPurchaseOrderHeaderRequest, FindPurchaseOrderHeaderRequest } from "@/redux-saga/action/purchaseOrderHeaderAction";
-// import { EditCustomerRequest, FindCustomerRequest } from "@/redux-saga/action/customerAction";
+import { EditPurchaseOrderHeaderRequest, FindPurchaseOrderHeaderRequest } from "@/redux-saga/action/purchasing/purchaseOrderHeaderAction";
 
 export default function CustomerEdit(props: any) {
   const dispatch = useDispatch();
@@ -67,7 +66,7 @@ export default function CustomerEdit(props: any) {
                           Rejected
                         </option>
                         <option value="4" selected={props.status === 4}>
-                          Used
+                          Received
                         </option>
                         <option value="5" selected={props.status === 5}>
                           Completed

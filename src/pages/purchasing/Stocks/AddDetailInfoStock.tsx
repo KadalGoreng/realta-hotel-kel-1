@@ -1,20 +1,19 @@
+import { GetFacilitiesRequest } from "@/redux-saga/action/hotel/facilitiesAction";
+import { AddStockDetailRequest, GetStockDetailRequest } from "@/redux-saga/action/purchasing/stockDetailAction";
 import { useFormik } from "formik";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AddVendorProductRequest } from "@/redux-saga/action/vendorProductAction";
-import { AddStockRequest, GetStockRequest } from "@/redux-saga/action/stocksAction";
-import { AddStockDetailRequest, GetStockDetailRequest } from "@/redux-saga/action/stockDetailAction";
 
 export default function AddDetailInfoStock(props: any) {
   const dispatch = useDispatch();
-  const { stockDetails } = useSelector((state: any) => state.stockDetailState);
+  const { facilities } = useSelector((state: any) => state.FacilitiesState);
   const formik = useFormik({
     initialValues: {
       stodStockId: props.id,
       stodStatus: undefined,
-      stodNotes: undefined,
+
       stodFaci: undefined,
-      stodPohe: undefined,
+      stodPohe: 2,
     },
     onSubmit: async (values: any) => {
       //   console.log(values);
@@ -26,7 +25,7 @@ export default function AddDetailInfoStock(props: any) {
   });
 
   useEffect(() => {
-    dispatch(GetStockDetailRequest());
+    dispatch(GetFacilitiesRequest());
   }, []);
 
   return (
@@ -63,16 +62,6 @@ export default function AddDetailInfoStock(props: any) {
                           <option value="4">Used</option>
                         </select>
                       </div>
-                      <div className="w-full md:w-1/8 px-3 mb-6 md:mb-0 mt-6">
-                        <label className="mb-3 block text-base font-medium text-[#07074D]">Notes</label>
-                        <input
-                          id="stodNotes"
-                          name="stodNotes"
-                          onChange={formik.handleChange}
-                          type="text"
-                          className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-                        />
-                      </div>
 
                       <div className="w-full md:w-1/8 px-3 mb-6 md:mb-0 mt-6">
                         <label className="mb-3 block text-base font-medium text-[#07074D]">Used In</label>
@@ -83,28 +72,15 @@ export default function AddDetailInfoStock(props: any) {
                           className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                         >
                           <option selected>Choose Room</option>
-                          {stockDetails &&
-                            stockDetails.map((stock: any, index: number) => {
+                          {facilities &&
+                            facilities.map((stock: any, index: number) => {
                               return (
-                                <option key={index} value={stock.stodFaci.faciId}>
-                                  Room-{stock.stodFaci.faciRoomNumber}
+                                <option key={index} value={stock.faciId}>
+                                  Room-{stock.faciRoomNumber}
                                 </option>
                               );
                             })}
                         </select>
-                      </div>
-
-                      <div className="w-full md:w-1/8 px-3 mb-6 md:mb-0 mt-6">
-                        <label className="mb-3 block text-base font-medium text-[#07074D]">Pohe</label>
-                        <input
-                          id="stodPohe"
-                          name="stodPohe"
-                          onChange={formik.handleChange}
-                          type="number"
-                          min="2"
-                          placeholder="2"
-                          className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-                        />
                       </div>
 
                       <div className="mt-6">

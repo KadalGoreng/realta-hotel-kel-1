@@ -1,16 +1,13 @@
 import React, { useState, useEffect, Fragment } from "react";
 import Layout from "@/component/layout";
 import { useDispatch, useSelector } from "react-redux";
-// import { DelStockDetailRequest, FindStockDetailRequest, GetStockDetailByStockIdRequest, GetStockDetailRequest } from "@/redux-saga/action/stockDetailAction";
 import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
-import api from "@/api/StockDetailApi";
-import { DelPurchaseOrderHeaderRequest, GetPurchaseOrderHeaderRequest } from "@/redux-saga/action/purchaseOrderHeaderAction";
 import EditPoDetail from "./EditPoDetailModal";
 import AddPoDetail from "./AddPoDetailModal";
-import { DelPurchaseOrderDetailRequest } from "@/redux-saga/action/purchaseOrderDetailAction";
+import { DelPurchaseOrderDetailRequest } from "@/redux-saga/action/purchasing/purchaseOrderDetailAction";
 import { Menu, Transition } from "@headlessui/react";
-// import { GetStockRequest } from "@/redux-saga/action/stocksAction";
+import { FindPurchaseOrderHeaderRequest, GetPurchaseOrderHeaderRequest } from "@/redux-saga/action/purchasing/purchaseOrderHeaderAction";
 
 export default function DetailPurchasing() {
   const dispatch = useDispatch();
@@ -30,12 +27,24 @@ export default function DetailPurchasing() {
   const [displayEdit, setDisplayEdit] = useState<any>(false);
 
   const { PurchaseOrderHeaders } = useSelector((state: any) => state.PurchaseOrderHeaderState);
-  const PurchaseOrderHeader = PurchaseOrderHeaders.find((item: any) => item.poheId == id);
-  const { purchaseOrderDetails } = PurchaseOrderHeader;
+  // const PurchaseOrderHeader = PurchaseOrderHeaders.data && PurchaseOrderHeaders.data.find((item: any) => item.poheId == id);
+  // const { purchaseOrderDetails } = PurchaseOrderHeader;
+  const { PurchaseOrderHeader } = useSelector((state: any) => state.PurchaseOrderHeaderState);
+
+  console.log(PurchaseOrderHeader);
+
+  const [payload, setPayload] = useState({
+    vendorName: "",
+    page: 1,
+    status: "",
+  });
 
   useEffect(() => {
-    dispatch(GetPurchaseOrderHeaderRequest());
-  }, [refresh]);
+    if (router.isReady) {
+      dispatch(GetPurchaseOrderHeaderRequest(payload));
+      dispatch(FindPurchaseOrderHeaderRequest(id));
+    }
+  }, [refresh, router.isReady]);
 
   const onDelete = async (id: any, stodId: any) => {
     dispatch(DelPurchaseOrderDetailRequest(id, stodId));
@@ -58,7 +67,7 @@ export default function DetailPurchasing() {
       case 3:
         return "Rejected";
       case 4:
-        return "Used";
+        return "Received";
       case 5:
         return "Completed";
     }
@@ -71,21 +80,27 @@ export default function DetailPurchasing() {
     return price.reduce((sum: any, el: any) => sum + el.Salary, 0);
   };
 
-  const maps = purchaseOrderDetails.map((data: any) => data.podePrice);
-  console.log(maps);
+  const maps = PurchaseOrderHeader.purchaseOrderDetails && PurchaseOrderHeader.purchaseOrderDetails.map((data: any) => data.podePrice);
 
-  function calculate() {
-    return maps.reduce((prev: any, cur: any) => prev + convertPrice(cur), 0);
-  }
+  const calculate = () => maps && maps.reduce((prev: any, cur: any) => prev + convertPrice(cur), 0);
 
-  console.log(calculate());
-  console.log(calculate() - calculate() * 0.1);
+  const formatDate = (date: any, weekday: any, year: any) => {
+    const newDate = new Date(date);
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: weekday,
+      year: year,
+      month: "short",
+      day: "numeric",
+    };
+    return newDate.toLocaleString("id", options);
+  };
 
+  console.log(PurchaseOrderHeaders);
   return (
     <div>
       <Layout>
         <div className="p-4 sm:ml-64">
-          {displayEdit && <EditPoDetail refresh={refresh} purchaseOrderDetails={purchaseOrderDetails} podeId={podeId} setDisplay={setDisplayEdit} id={id} setRefresh={setRefresh} />}
+          {displayEdit && <EditPoDetail refresh={refresh} purchaseOrderDetails={PurchaseOrderHeader.purchaseOrderDetails} podeId={podeId} setDisplay={setDisplayEdit} id={id} setRefresh={setRefresh} />}
           {display && <AddPoDetail refresh={refresh} setRefresh={setRefresh} id={id} setDisplay={setDisplay} />}
           <div>
             <div className="mt-20">
@@ -94,13 +109,13 @@ export default function DetailPurchasing() {
                   <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
                     <div className="overflow-hidden min-h-screen">
                       <div className="grid grid-cols-3 gap-4 place-items-start mb-0">
-                        <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">PO Number : {PurchaseOrderHeader.poheNumber}</span>
-                        <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">Vendor : {PurchaseOrderHeader.poheVendor.vendorName}</span>
+                        <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">PO Number : {PurchaseOrderHeader && PurchaseOrderHeader.poheNumber}</span>
+                        <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">Vendor : {PurchaseOrderHeader.poheVendor && PurchaseOrderHeader.poheVendor.vendorName}</span>
                         <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">Sub Total : Rp {calculate()}</span>
                       </div>
                       <div className="mb-0 grid grid-cols-3 gap-4 place-items-start">
-                        <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">PO Date : {PurchaseOrderHeader.poheOrderDate}</span>
-                        <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">Status : {poStatus(PurchaseOrderHeader.poheStatus)}</span>
+                        <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">PO Date : {formatDate(PurchaseOrderHeader && PurchaseOrderHeader.poheOrderDate, undefined, "numeric")}</span>
+                        <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">Status : {poStatus(PurchaseOrderHeader && PurchaseOrderHeader.poheStatus)}</span>
                         <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">
                           Total Amount: Rp {calculate() + calculate() * 0.1} <span className="text-lg underline decoration-pink-500">(tax 10%)</span>
                         </span>
@@ -135,8 +150,8 @@ export default function DetailPurchasing() {
                           </tr>
                         </thead>
                         <tbody>
-                          {purchaseOrderDetails &&
-                            purchaseOrderDetails.map((PoDetail: any) => {
+                          {PurchaseOrderHeader.purchaseOrderDetails &&
+                            PurchaseOrderHeader.purchaseOrderDetails.map((PoDetail: any) => {
                               return (
                                 <>
                                   <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">

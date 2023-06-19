@@ -1,4 +1,4 @@
-import { AddStockRequest } from "@/redux-saga/action/stocksAction";
+import { AddStockRequest } from "@/redux-saga/action/purchasing/stocksAction";
 import { useFormik } from "formik";
 import React from "react";
 import { useDispatch } from "react-redux";
@@ -20,7 +20,7 @@ export default function Modal(props: any) {
       dispatch(AddStockRequest(values));
       props.setDisplay(false);
       window.alert("Data Successfully Insert");
-      props.setRefresh(true);
+      props.setRefresh(!props.refresh);
     },
   });
   return (

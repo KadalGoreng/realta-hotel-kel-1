@@ -1,16 +1,21 @@
-import { AddPurchaseOrderHeaderRequest } from "@/redux-saga/action/purchaseOrderHeaderAction";
-import { GetVendorRequest } from "@/redux-saga/action/vendorAction";
+import { AddPurchaseOrderHeaderRequest } from "@/redux-saga/action/purchasing/purchaseOrderHeaderAction";
+import { GetVendorRequest } from "@/redux-saga/action/purchasing/vendorAction";
 import { useFormik } from "formik";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function PoHeaderModalCreate(props: any) {
   const dispatch = useDispatch();
   const { PurchaseOrderHeaders } = useSelector((state: any) => state.PurchaseOrderHeaderState);
   const { vendors } = useSelector((state: any) => state.vendorState);
+  const [payload, setPayload] = useState({
+    vendorName: "",
+    page: 1,
+    status: "",
+  });
 
   useEffect(() => {
-    dispatch(GetVendorRequest());
+    dispatch(GetVendorRequest(payload));
   }, [props.refresh]);
 
   const formik = useFormik({
@@ -58,8 +63,9 @@ export default function PoHeaderModalCreate(props: any) {
                             name="poheVendor"
                             className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                           >
-                            {vendors &&
-                              vendors.map((target: any) => {
+                            <option selected>Select Stock Name</option>
+                            {vendors.data &&
+                              vendors.data.map((target: any) => {
                                 return (
                                   <>
                                     <option value={target.vendorId}>{target.vendorName}</option>
@@ -83,7 +89,7 @@ export default function PoHeaderModalCreate(props: any) {
                           placeholder="0"
                           className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                         />
-                        <div className="mt-6">
+                        <div className="mt-6 mb-5">
                           <label className="mb-3 block text-base font-medium text-[#07074D]">Status</label>
                           <select
                             onChange={formik.handleChange}
@@ -95,9 +101,19 @@ export default function PoHeaderModalCreate(props: any) {
                             <option value="1">Pending</option>
                             <option value="2">Approve</option>
                             <option value="3">Rejected</option>
-                            <option value="4">Used</option>
+                            <option value="4">Received</option>
                             <option value="5">Completed</option>
                           </select>
+                        </div>
+                        <div className="mb-5">
+                          <label className="mb-3 block text-base font-medium text-[#07074D]">Po Date</label>
+                          <input
+                            id="poheOrderDate"
+                            name="poheOrderDate"
+                            onChange={formik.handleChange}
+                            type="date"
+                            className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                          />
                         </div>
                       </div>
                     </div>

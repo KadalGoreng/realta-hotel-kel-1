@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { EditPurchaseOrderHeaderRequest, FindPurchaseOrderHeaderRequest } from "@/redux-saga/action/purchaseOrderHeaderAction";
-import { EditPurchaseOrderDetailRequest } from "@/redux-saga/action/purchaseOrderDetailAction";
+import { EditPurchaseOrderDetailRequest } from "@/redux-saga/action/purchasing/purchaseOrderDetailAction";
+import { FindPurchaseOrderHeaderRequest } from "@/redux-saga/action/purchasing/purchaseOrderHeaderAction";
+import { GetStockRequest } from "@/redux-saga/action/purchasing/stocksAction";
 
 export default function EditPoDetail(props: any) {
   const dispatch = useDispatch();
@@ -10,9 +11,14 @@ export default function EditPoDetail(props: any) {
   const { PurchaseOrderHeader } = useSelector((state: any) => state.PurchaseOrderHeaderState);
   const purchaseOrderDetail = props.purchaseOrderDetails.find((item: any) => item.podeId == props.podeId);
   const { stocks } = useSelector((state: any) => state.stocksState);
+  const [payload, setPayload] = useState({
+    stockName: "",
+    page: 1,
+  });
 
   useEffect(() => {
     dispatch(FindPurchaseOrderHeaderRequest(props.id));
+    dispatch(GetStockRequest(payload));
   }, []);
 
   const formik = useFormik({
@@ -66,8 +72,8 @@ export default function EditPoDetail(props: any) {
                         className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                       >
                         <option selected>Choose Stock</option>
-                        {stocks &&
-                          stocks.map((stock: any) => {
+                        {stocks.data &&
+                          stocks.data.map((stock: any) => {
                             return (
                               <option key={stock.stockId} value={stock.stockId}>
                                 {stock.stockName}
@@ -115,6 +121,11 @@ export default function EditPoDetail(props: any) {
                         />
                       </div>
                     </div>
+                    {PurchaseOrderHeader && PurchaseOrderHeader.poheStatus === 4 ? (
+                      <div className="w-64 px-3 mb-6 md:mb-6">
+                        <input defaultValue="Generated Barcode" className=" w-full rounded-md border border-[#e0e0e0]  py-3 px-6  font-medium " disabled />
+                      </div>
+                    ) : undefined}
                     <div>
                       <button type="submit" className="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-base font-semibold text-white outline-none">
                         Submit

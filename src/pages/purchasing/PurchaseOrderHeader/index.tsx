@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Layout from "@/component/layout";
 import { useDispatch, useSelector } from "react-redux";
-import { DelPurchaseOrderHeaderRequest, GetPurchaseOrderHeaderRequest } from "@/redux-saga/action/purchaseOrderHeaderAction";
-
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
 import ReactPaginate from "react-paginate";
 import PoHeaderModalCreate from "./PoHeaderModalCreate";
 import SwitchStatusModalEdit from "./SwitchStatusModal";
+import { DelPurchaseOrderHeaderRequest, GetPurchaseOrderHeaderRequest } from "@/redux-saga/action/purchasing/purchaseOrderHeaderAction";
 
 export default function PurchaseOrderHeaderSaga() {
   const dispatch = useDispatch();
@@ -20,15 +19,20 @@ export default function PurchaseOrderHeaderSaga() {
   const { PurchaseOrderHeaders } = useSelector((state: any) => state.PurchaseOrderHeaderState);
   const [id, setId] = useState<any>();
   const [search, setSearch] = useState("");
+  const [payload, setPayload] = useState({
+    vendorName: "",
+    page: 1,
+    status: "",
+  });
 
   function classNames(...classes: any) {
     return classes.filter(Boolean).join(" ");
   }
 
   useEffect(() => {
-    dispatch(GetPurchaseOrderHeaderRequest());
+    dispatch(GetPurchaseOrderHeaderRequest(payload));
     setRefresh(false);
-  }, [refresh]);
+  }, [refresh, payload]);
 
   const onDelete = async (id: any) => {
     dispatch(DelPurchaseOrderHeaderRequest(id));
@@ -43,19 +47,12 @@ export default function PurchaseOrderHeaderSaga() {
     setStatus(statusId);
   };
 
-  const [itemOffset, setItemOffset] = useState(0);
+  const onChangeState = (key: string, value: any) => {
+    setPayload((prev) => ({ ...prev, [key]: value }));
+  };
 
-  const PoSearch = PurchaseOrderHeaders.map((item: any) => item.poheNumber.toLowerCase().indexOf(search.toLowerCase()) > -1 && item);
-  const searchFilter = PoSearch.filter((item: any) => item);
-
-  const endOffset = itemOffset + 5;
-  const currentItems = PurchaseOrderHeaders.slice(itemOffset, endOffset);
-  const itemsSearch = searchFilter.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(PurchaseOrderHeaders.length / 5);
-
-  const handlePageClick = (event: any) => {
-    const newOffset = (event.selected * 5) % PurchaseOrderHeaders.length;
-    setItemOffset(newOffset);
+  const handlePageClick = (e: any) => {
+    onChangeState("page", e.selected + 1);
   };
 
   const poStatus = (status: number) => {
@@ -67,10 +64,21 @@ export default function PurchaseOrderHeaderSaga() {
       case 3:
         return "Rejected";
       case 4:
-        return "Used";
+        return "Received";
       case 5:
         return "Completed";
     }
+  };
+
+  const formatDate = (date: any, weekday: any, year: any) => {
+    const newDate = new Date(date);
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: weekday,
+      year: year,
+      month: "short",
+      day: "numeric",
+    };
+    return newDate.toLocaleString("id", options);
   };
 
   const convertPrice = (price: string) => {
@@ -78,6 +86,10 @@ export default function PurchaseOrderHeaderSaga() {
   };
 
   const totalAmount = (price: any) => price.reduce((e: any, i: any) => e + convertPrice(i.podePrice), 0);
+
+  useEffect(() => {
+    onChangeState("page", 1);
+  }, [payload.vendorName]);
   return (
     <div>
       <Layout>
@@ -97,18 +109,31 @@ export default function PurchaseOrderHeaderSaga() {
                     </svg>
                   </div>
                   <input
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => onChangeState("vendorName", e.target.value)}
                     type="text"
                     id="simple-search"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Po-Order"
-                    required
+                    placeholder="Vendor Target"
+                    // required
                   />
                 </div>
               </form>
             </div>
 
-            <div className="mt-10">
+            <div className="pl-8">
+              <select onChange={(e) => onChangeState("status", e.target.value)} className="select w-full max-w-xs">
+                <option disabled selected>
+                  Status
+                </option>
+                <option value={1}>Pending</option>
+                <option value={2}>Approve</option>
+                <option value={3}>Rejected</option>
+                <option value={4}>Received</option>
+                <option value={5}>Completed</option>
+              </select>
+            </div>
+
+            <div>
               <div className="flex flex-col">
                 <div className="overflow-x-auto sm:mx-0.5 lg:mx-0.5 min-h-screen">
                   <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
@@ -140,13 +165,13 @@ export default function PurchaseOrderHeaderSaga() {
                           </tr>
                         </thead>
                         <tbody>
-                          {PurchaseOrderHeaders &&
-                            itemsSearch.map((poHeader: any) => {
+                          {PurchaseOrderHeaders.data &&
+                            PurchaseOrderHeaders.data.map((poHeader: any) => {
                               return (
                                 <>
                                   <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{poHeader.poheNumber}</td>
-                                    <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{poHeader.poheOrderDate}</td>
+                                    <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{formatDate(poHeader.poheOrderDate, undefined, "numeric")}</td>
                                     <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{poHeader.poheVendor ? poHeader.poheVendor.vendorName : undefined}</td>
                                     {/* <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">1</td> */}
                                     {/* <p>{poHeader.purchaseOrderDetails[0].}</p> */}
@@ -215,15 +240,16 @@ export default function PurchaseOrderHeaderSaga() {
                         breakLabel="..."
                         nextLabel="next >"
                         onPageChange={handlePageClick}
-                        pageRangeDisplayed={2}
-                        pageCount={pageCount}
-                        previousLabel="< previous"
+                        pageRangeDisplayed={1}
+                        pageCount={PurchaseOrderHeaders.totalPages}
+                        previousLabel="< prev"
+                        forcePage={payload.page - 1}
                         containerClassName="flex gap-1 justify-center"
                         renderOnZeroPageCount={null}
-                        activeLinkClassName="bg-red-500"
                         nextLinkClassName="btn btn-sm bg-blue-500 border-none"
-                        pageLinkClassName="btn btn-sm bg-blue-500 border-none"
                         previousLinkClassName="btn btn-sm bg-blue-500 border-none"
+                        activeLinkClassName="bg-red-500"
+                        pageLinkClassName="btn btn-sm bg-blue-500 border-none"
                       />
                     </div>
                   </div>

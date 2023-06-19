@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { EditVendorRequest, FindVendorRequest } from "@/redux-saga/action/vendorAction";
+import { EditVendorRequest, FindVendorRequest } from "@/redux-saga/action/purchasing/vendorAction";
 
 export default function VendorModalEdit(props: any) {
   const dispatch = useDispatch();
@@ -19,6 +19,7 @@ export default function VendorModalEdit(props: any) {
       vendorActive: vendor.vendorActive,
       vendorPriority: vendor.vendorPriority,
       vendorWeburl: vendor.vendorWeburl,
+      vendorRegisterDate: vendor.vendorRegisterDate,
     },
 
     onSubmit: async (values) => {
@@ -120,6 +121,17 @@ export default function VendorModalEdit(props: any) {
                           defaultValue={vendor.vendorWeburl}
                           type="text"
                           placeholder="Vendor WebUrl"
+                          className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                        />
+                      </div>
+                      <div className="mb-5">
+                        <label className="mb-3 block text-base font-medium text-[#07074D]">Register At</label>
+                        <input
+                          id="vendorRegisterDate"
+                          name="vendorRegisterDate"
+                          defaultValue={vendor.vendorRegisterDate}
+                          onChange={formik.handleChange}
+                          type="date"
                           className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                         />
                       </div>

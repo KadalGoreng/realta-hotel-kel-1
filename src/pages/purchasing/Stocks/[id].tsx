@@ -1,19 +1,14 @@
 import React, { useState, useEffect, Fragment } from "react";
 import Layout from "@/component/layout";
 import { useDispatch, useSelector } from "react-redux";
-import { DelStockDetailRequest, FindStockDetailRequest, GetStockDetailByStockIdRequest, GetStockDetailRequest } from "@/redux-saga/action/stockDetailAction";
 import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
 import StatusModalEdit from "./StatusModalEdit";
-import api from "@/api/StockDetailApi";
-import { GetStockRequest } from "@/redux-saga/action/stocksAction";
 import AddDetailInfoStock from "./AddDetailInfoStock";
 import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
-
-// import { DelStockRequest, GetStockRequest } from "@/redux-saga/action/stocksAction";
-// import StocksCreate from "./StocksCreate";
-// import StocksEdit from "./StocksEdit";
+import { FindStockRequest, GetStockRequest } from "@/redux-saga/action/purchasing/stocksAction";
+import { DelStockDetailRequest, GetStockDetailByStockIdRequest } from "@/redux-saga/action/purchasing/stockDetailAction";
 
 export default function StocksSaga() {
   const dispatch = useDispatch();
@@ -27,20 +22,35 @@ export default function StocksSaga() {
   const [display, setDisplay] = useState<any>(false);
   const [refresh, setRefresh] = useState<any>(false);
   const [displayEdit, setDisplayEdit] = useState<any>(false);
-  const { stocks } = useSelector((state: any) => state.stocksState);
-  const stock = stocks.find((item: any) => item.stockId == id);
 
-  const { stockDetails } = stock;
+  const { stockDetailStockId } = useSelector((state: any) => state.stockDetailState);
+  const { stock } = useSelector((state: any) => state.stocksState);
+
+  // const stock = stocks.find((item: any) => item.stockId == id);
 
   function classNames(...classes: any) {
     return classes.filter(Boolean).join(" ");
   }
-  // console.log(stock.stockName);
-  // console.log(stockDetails);
+
+  const [payload, setPayload] = useState({
+    page: 1,
+  });
+
+  const onChangeState = (key: string, value: any) => {
+    setPayload((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handlePageClick = (e: any) => {
+    onChangeState("page", e.selected + 1);
+  };
 
   useEffect(() => {
-    dispatch(GetStockRequest());
-  }, [refresh]);
+    if (router.isReady) {
+      dispatch(GetStockDetailByStockIdRequest(id, payload.page));
+      dispatch(GetStockRequest(payload));
+      dispatch(FindStockRequest(id));
+    }
+  }, [refresh, payload, router]);
 
   console.log(refresh);
 
@@ -71,24 +81,23 @@ export default function StocksSaga() {
     }
   };
 
-  const [itemOffset, setItemOffset] = useState(0);
+  // const [itemOffset, setItemOffset] = useState(0);
 
-  const endOffset = itemOffset + 5;
-  const currentItems = stockDetails.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(stockDetails.length / 5);
+  // const endOffset = itemOffset + 5;
+  // const currentItems = stockDetails && stockDetails.slice(itemOffset, endOffset);
+  // const pageCount = Math.ceil(stockDetails && stockDetails.length / 5);
 
-  const handlePageClick = (event: any) => {
-    const newOffset = (event.selected * 5) % stockDetails.length;
-    setItemOffset(newOffset);
-  };
+  // const handlePageClick = (event: any) => {
+  //   const newOffset = (event.selected * 5) % stockDetails && stockDetails.length;
+  //   setItemOffset(newOffset);
+  // };
 
   return (
     <div>
       <Layout>
         <div className="p-4 sm:ml-64">
           {displayEdit && <StatusModalEdit stockUsed={stockUsed} status={status} stodId={stodId} refresh={refresh} setDisplay={setDisplayEdit} id={id} setRefresh={setRefresh} />}
-          {display && <AddDetailInfoStock stockDetails={stockDetails} refresh={refresh} setRefresh={setRefresh} id={id} setDisplay={setDisplay} />}
-
+          {display && <AddDetailInfoStock stockDetails={stockDetailStockId.data} refresh={refresh} setRefresh={setRefresh} id={id} setDisplay={setDisplay} />}
           <div>
             <div className="mt-20">
               <div className="flex flex-col">
@@ -96,7 +105,7 @@ export default function StocksSaga() {
                   <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
                     <div className="overflow-hidden min-h-screen">
                       <div className="mb-12">
-                        <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">{stock.stockName}</span>
+                        <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">{stock && stock.stockName}</span>
                       </div>
                       <table className="p-0 text-center	min-w-full mb-5">
                         <thead className="bg-blue-400 border-b">
@@ -107,9 +116,7 @@ export default function StocksSaga() {
                             <th scope="col" className="text-center text-sm font-medium text-gray-900 px-6 py-4 text-left">
                               Status
                             </th>
-                            <th scope="col" className="text-center text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                              Notes
-                            </th>
+
                             <th scope="col" className="text-center text-sm font-medium text-gray-900 px-6 py-4 text-left">
                               Po Number
                             </th>
@@ -122,19 +129,17 @@ export default function StocksSaga() {
                           </tr>
                         </thead>
                         <tbody>
-                          {stockDetails &&
-                            currentItems.map((stockDetail: any) => {
+                          {stockDetailStockId.data &&
+                            stockDetailStockId.data.map((stockDetail: any) => {
                               return (
                                 <>
                                   <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
                                     <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{stockDetail.stodBarcodeNumber}</td>
                                     <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{stodStatus(stockDetail.stodStatus)}</td>
 
-                                    <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{stockDetail.stodNotes}</td>
-                                    <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{stockDetail.stodPohe.poheNumber}</td>
-                                    <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">Room-{stockDetail.stodFaci.faciRoomNumber}</td>
+                                    <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{stockDetail.stodPohe ? stockDetail.stodPohe.poheNumber : null}</td>
+                                    <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">Room-{stockDetail.stodFaci ? stockDetail.stodFaci.faciRoomNumber : null}</td>
                                     <td>
-                                      {/* dropDown  */}
                                       <Menu as="div" className="relative inline-block text-left">
                                         <div>
                                           <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
@@ -158,7 +163,7 @@ export default function StocksSaga() {
                                               <Menu.Item>
                                                 {({ active }) => (
                                                   <li
-                                                    onClick={() => onClick(stockDetail.stodId, stockDetail.stodStatus, stockDetail.stodFaci.faciRoomNumber)}
+                                                    onClick={() => onClick(stockDetail.stodId, stockDetail.stodStatus, stockDetail.stodFaci ? stockDetail.stodFaci.faciRoomNumber : null)}
                                                     className={classNames(active ? "cursor-pointer bg-gray-100 text-gray-900" : "text-gray-700", "block px-4 py-2 text-sm")}
                                                   >
                                                     Edit
@@ -181,7 +186,6 @@ export default function StocksSaga() {
                                           </Menu.Items>
                                         </Transition>
                                       </Menu>
-                                      {/* dropDown */}
                                     </td>
                                   </tr>
                                 </>
@@ -193,15 +197,16 @@ export default function StocksSaga() {
                         breakLabel="..."
                         nextLabel="next >"
                         onPageChange={handlePageClick}
-                        pageRangeDisplayed={2}
-                        pageCount={pageCount}
-                        previousLabel="< previous"
+                        pageRangeDisplayed={1}
+                        pageCount={stockDetailStockId.totalPages}
+                        previousLabel="< prev"
+                        forcePage={payload.page - 1}
                         containerClassName="flex gap-1 justify-center"
                         renderOnZeroPageCount={null}
-                        activeLinkClassName="bg-red-500"
                         nextLinkClassName="btn btn-sm bg-blue-500 border-none"
-                        pageLinkClassName="btn btn-sm bg-blue-500 border-none"
                         previousLinkClassName="btn btn-sm bg-blue-500 border-none"
+                        activeLinkClassName="bg-red-500"
+                        pageLinkClassName="btn btn-sm bg-blue-500 border-none"
                       />
                     </div>
                   </div>
@@ -209,7 +214,6 @@ export default function StocksSaga() {
               </div>
             </div>
           </div>
-          {/* )} */}
         </div>
       </Layout>
     </div>

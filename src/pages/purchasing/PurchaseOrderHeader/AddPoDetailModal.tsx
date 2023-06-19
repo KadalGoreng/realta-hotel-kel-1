@@ -1,10 +1,8 @@
 import { useFormik } from "formik";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AddVendorProductRequest } from "@/redux-saga/action/vendorProductAction";
-import { GetStockRequest } from "@/redux-saga/action/stocksAction";
-import { AddPurchaseOrderHeaderRequest } from "@/redux-saga/action/purchaseOrderHeaderAction";
-import { AddPurchaseOrderDetailRequest } from "@/redux-saga/action/purchaseOrderDetailAction";
+import { AddPurchaseOrderDetailRequest } from "@/redux-saga/action/purchasing/purchaseOrderDetailAction";
+import { GetStockRequest } from "@/redux-saga/action/purchasing/stocksAction";
 
 export default function AddPoDetail(props: any) {
   const dispatch = useDispatch();
@@ -30,8 +28,13 @@ export default function AddPoDetail(props: any) {
     },
   });
 
+  const [payload, setPayload] = useState({
+    stockName: "",
+    page: 1,
+  });
+
   useEffect(() => {
-    dispatch(GetStockRequest());
+    dispatch(GetStockRequest(payload));
   }, []);
 
   //   console.log(stocks);
@@ -63,8 +66,8 @@ export default function AddPoDetail(props: any) {
                           className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                         >
                           <option selected>Choose Stock</option>
-                          {stocks &&
-                            stocks.map((stock: any) => {
+                          {stocks.data &&
+                            stocks.data.map((stock: any) => {
                               return (
                                 <option key={stock.stockId} value={stock.stockId}>
                                   {stock.stockName}

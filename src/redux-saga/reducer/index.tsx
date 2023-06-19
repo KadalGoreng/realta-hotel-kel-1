@@ -1,12 +1,13 @@
 import { combineReducers } from "redux";
 
-import VendorReducer from "./vendorReducer";
-import VendorProductReducer from "./vendorProductReducer";
-import StocksReducer from "./stocksReducer";
-import StockDetailReducer from "./stockDetailReducer";
-import PurchaseOrderHeaderReducer from "./purchaseOrderHeaderReducer";
-import PurchaseOrderDetailReducer from "./purchaseOrderDetailReducer";
-import StockPhotoReducer from "./stockPhotoReducer";
+import VendorReducer from "./purchasing/vendorReducer";
+import VendorProductReducer from "./purchasing/vendorProductReducer";
+import StocksReducer from "./purchasing/stocksReducer";
+import StockDetailReducer from "./purchasing/stockDetailReducer";
+import PurchaseOrderHeaderReducer from "./purchasing/purchaseOrderHeaderReducer";
+import PurchaseOrderDetailReducer from "./purchasing/purchaseOrderDetailReducer";
+import StockPhotoReducer from "./purchasing/stockPhotoReducer";
+import FacilitiesReducer from "./hotel/facilitiesReducer";
 
 const rootReducer = combineReducers({
   vendorState: VendorReducer,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   PurchaseOrderHeaderState: PurchaseOrderHeaderReducer,
   PurchaseOrderDetailState: PurchaseOrderDetailReducer,
   StockPhotoState: StockPhotoReducer,
+  FacilitiesState: FacilitiesReducer,
 });
 
 export default rootReducer;

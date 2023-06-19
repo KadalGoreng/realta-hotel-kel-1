@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { EditStockRequest, FindStockRequest } from "@/redux-saga/action/stocksAction";
+import { EditStockRequest, FindStockRequest } from "@/redux-saga/action/purchasing/stocksAction";
 
 export default function ModalEdit(props: any) {
   const dispatch = useDispatch();

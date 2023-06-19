@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import {
-//   GetFacilityPhotosRequest,
-//   AddFacilityPhotosRequest,
-//   DelFacilityPhotosRequest,
-// } from "../../../redux/action/hotel/facilityPhotosAction";
 import { useFormik, FormikProvider, Field } from "formik";
-// import DisplayImage from "./DisplayImage";
-// import PhotoPrimary from "./PhotoPrimary";
-import { AddStockPhotoRequest, DelStockPhotoRequest, FindStockPhotoRequest, GetStockPhotoRequest } from "@/redux-saga/action/stockPhotoAction";
 import { useRouter } from "next/router";
 import DisplayImage from "../UploadPhoto/DisplayImage";
 import PhotoPrimary from "../UploadPhoto/PhotoPrimary";
+import { AddStockPhotoRequest, DelStockPhotoRequest, FindStockPhotoRequest } from "@/redux-saga/action/purchasing/stockPhotoAction";
 
 export default function AddPhotos(props: any) {
   const dispatch = useDispatch();
@@ -64,6 +57,8 @@ export default function AddPhotos(props: any) {
       formik.setFieldValue("file", file);
       setPreviewImg(reader.result);
     };
+    console.log(file);
+
     reader.readAsDataURL(file);
     setUpload(true);
   };
@@ -93,9 +88,9 @@ export default function AddPhotos(props: any) {
             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
               {/*header*/}
               <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                <h3 className="text-3xl font-semibold">Stock Photos{props.id}</h3>
-                <button className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" onClick={() => props.setDisplay(false)}>
-                  <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">×</span>
+                <h3 className="text-3xl font-semibold">Stock Photos {props.id}</h3>
+                <button onClick={() => props.setUpload(false)}>
+                  <h3 className="text-3xl font-semibold">x</h3>
                 </button>
               </div>
               {/*body*/}

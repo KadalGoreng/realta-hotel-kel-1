@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Layout from "@/component/layout";
 import { useDispatch, useSelector } from "react-redux";
-import { DelVendorProductRequest, GetVendorProductRequest } from "@/redux-saga/action/vendorProductAction";
 import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
 import ModalAddItemProduct from "./AddItemProductModal";
-import { GetVendorRequest } from "@/redux-saga/action/vendorAction";
 import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { Fragment } from "react";
 import EditItemProductModal from "./EditItemProductModal";
+import { FindVendorRequest, GetVendorRequest } from "@/redux-saga/action/purchasing/vendorAction";
+import { DelVendorProductRequest, GetVendorProductByVendorIdRequest } from "@/redux-saga/action/purchasing/vendorProductAction";
 
 export default function ProdCategorySaga() {
   const dispatch = useDispatch();
@@ -22,14 +22,15 @@ export default function ProdCategorySaga() {
   const [display, setDisplay] = useState<any>(false);
   const [refresh, setRefresh] = useState<any>(false);
   const [displayEdit, setDisplayEdit] = useState<any>(false);
-  const { vendors } = useSelector((state: any) => state.vendorState);
-  const vendor = vendors.find((item: any) => item.vendorId == id);
-  const { vendorProducts } = vendor;
+  const { vendor } = useSelector((state: any) => state.vendorState);
+  const { vendorProductByVendorId } = useSelector((state: any) => state.vendorProductState);
 
-  console.log(vendor);
-  console.log(vendors);
+  const [payload, setPayload] = useState({
+    vendorName: "",
+    page: 1,
+    status: "",
+  });
 
-  //   const [id, setId] = useState<any>();
   const [search, setSearch] = useState("");
 
   function classNames(...classes: any) {
@@ -37,10 +38,13 @@ export default function ProdCategorySaga() {
   }
 
   useEffect(() => {
-    dispatch(GetVendorRequest());
-    // dispatch(GetVendorProductRequest());
-    // setRefresh();
-  }, [refresh]);
+    if (router.isReady) {
+      dispatch(GetVendorProductByVendorIdRequest(id, payload.page));
+      dispatch(FindVendorRequest(id));
+      // dispatch(GetVendorProductRequest());
+      // setRefresh();
+    }
+  }, [refresh, payload, router]);
 
   const onDelete = async (id: any) => {
     dispatch(DelVendorProductRequest(id));
@@ -56,18 +60,28 @@ export default function ProdCategorySaga() {
     // setId(id);
   };
 
-  const [itemOffset, setItemOffset] = useState(0);
+  // const [itemOffset, setItemOffset] = useState(0);
 
-  const endOffset = itemOffset + 5;
-  const currentItems = vendorProducts.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(vendorProducts.length / 5);
+  // const endOffset = itemOffset + 5;
+  // const currentItems = vendorProducts && vendorProducts.slice(itemOffset, endOffset);
+  // const pageCount = Math.ceil(vendorProducts && vendorProducts.length / 5);
 
-  const handlePageClick = (event: any) => {
-    const newOffset = (event.selected * 5) % vendorProducts.length;
-    setItemOffset(newOffset);
+  // const handlePageClick = (event: any) => {
+  //   const newOffset = (event.selected * 5) % vendorProducts.length;
+  //   setItemOffset(newOffset);
+  // };
+
+  const onChangeState = (key: string, value: any) => {
+    setPayload((prev) => ({ ...prev, [key]: value }));
   };
 
-  console.log(refresh);
+  const handlePageClick = (e: any) => {
+    onChangeState("page", e.selected + 1);
+  };
+
+  const convertPrice = (price: string) => {
+    return parseFloat(price.replace(/[$,RP]/gi, ""));
+  };
   return (
     <div className="pt-20">
       <Layout>
@@ -81,7 +95,7 @@ export default function ProdCategorySaga() {
                 <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
                   <div className="overflow-hidden min-h-screen">
                     <div className="mb-12 p-0 text-center	min-w-full">
-                      <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">{vendor.vendorName}</span>
+                      <span className="text-Black self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">{vendor && vendor.vendorName}</span>
                     </div>
                     <table className="p-0 text-center	min-w-full mb-5">
                       <thead className="bg-blue-400 border-b">
@@ -104,15 +118,15 @@ export default function ProdCategorySaga() {
                         </tr>
                       </thead>
                       <tbody>
-                        {vendorProducts &&
-                          currentItems.map((vepro: any) => {
+                        {vendorProductByVendorId.data &&
+                          vendorProductByVendorId.data.map((vepro: any) => {
                             return (
                               <>
                                 <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
                                   <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{vepro.veproStock.stockName}</td>
                                   <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{vepro.veproQtyStocked}</td>
                                   <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{vepro.veproQtyRemaining}</td>
-                                  <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{vepro.veproPrice}</td>
+                                  <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">Rp {convertPrice(vepro.veproPrice)}</td>
                                   <td>
                                     {/* dropDown  */}
                                     <Menu as="div" className="relative inline-block text-left">
@@ -167,15 +181,16 @@ export default function ProdCategorySaga() {
                       breakLabel="..."
                       nextLabel="next >"
                       onPageChange={handlePageClick}
-                      pageRangeDisplayed={2}
-                      pageCount={pageCount}
-                      previousLabel="< previous"
+                      pageRangeDisplayed={1}
+                      pageCount={vendorProductByVendorId.totalPages}
+                      previousLabel="< prev"
+                      forcePage={payload.page - 1}
                       containerClassName="flex gap-1 justify-center"
                       renderOnZeroPageCount={null}
-                      activeLinkClassName="bg-red-500"
                       nextLinkClassName="btn btn-sm bg-blue-500 border-none"
-                      pageLinkClassName="btn btn-sm bg-blue-500 border-none"
                       previousLinkClassName="btn btn-sm bg-blue-500 border-none"
+                      activeLinkClassName="bg-red-500"
+                      pageLinkClassName="btn btn-sm bg-blue-500 border-none"
                     />
                   </div>
                 </div>

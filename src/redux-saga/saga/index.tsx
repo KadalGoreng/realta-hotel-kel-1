@@ -1,20 +1,22 @@
 import { takeEvery, all } from "redux-saga/effects";
 
-import * as ActionTypeVendor from "../constant/vendorConstant";
-import * as ActionTypeVendorProduct from "../constant/vendorProductConstant";
-import * as ActionTypeStock from "../constant/stocksConstant";
-import * as ActionTypeStockDetail from "../constant/stockDetailConstant";
-import * as ActionTypePurchaseOrderHeader from "../constant/purchaseOrderHeaderConstant";
-import * as ActionTypePurchaseOrderDetail from "../constant/purchaseOrderDetailConstant";
-import * as ActionTypeStockPhoto from "../constant/stockPhotoConstant";
+import * as ActionTypeVendor from "../constant/purchasing/vendorConstant";
+import * as ActionTypeVendorProduct from "../constant/purchasing/vendorProductConstant";
+import * as ActionTypeStock from "../constant/purchasing/stocksConstant";
+import * as ActionTypeStockDetail from "../constant/purchasing/stockDetailConstant";
+import * as ActionTypePurchaseOrderHeader from "../constant/purchasing/purchaseOrderHeaderConstant";
+import * as ActionTypePurchaseOrderDetail from "../constant/purchasing/purchaseOrderDetailConstant";
+import * as ActionTypeFacilities from "../constant/hotel/facilitiesConstant";
+import * as ActionTypeStockPhoto from "../constant/purchasing/stockPhotoConstant";
 
-import { createVendor, deleteVendor, editVendor, findVendor, handleVendor } from "./VendorSaga";
-import { createVendorProduct, deleteVendorProduct, editVendorProduct, findVendorProduct, handleVendorProduct } from "./VendorProductSaga";
-import { createStock, deleteStock, editStock, findStock, handleStock } from "./StocksSaga";
-import { StockDetailByStockId, createStockDetail, deleteStockDetail, editStockDetail, findStockDetail, handleStockDetail } from "./StockDetailSaga";
-import { createPurchaseOrderHeader, deletePurchaseOrderHeader, editPurchaseOrderHeader, findPurchaseOrderHeader, handlePurchaseOrderHeader } from "./PurchaseOrderHeader";
-import { createPurchaseOrderDetail, deletePurchaseOrderDetail, editPurchaseOrderDetail } from "./PurchaseOrderDetailSaga";
-import { createStockPhoto, deleteStockPhoto, editStockPhoto, findStockPhoto, handleStockPhoto } from "./StockPhotoSaga";
+import { createVendor, deleteVendor, editVendor, findVendor, handleVendor } from "./purchasing/VendorSaga";
+import { VendorProductByVendorId, createVendorProduct, deleteVendorProduct, editVendorProduct, findVendorProduct, handleVendorProduct } from "./purchasing/VendorProductSaga";
+import { createStock, deleteStock, editStock, findStock, handleStock } from "./purchasing/StocksSaga";
+import { StockDetailByStockId, createStockDetail, deleteStockDetail, editStockDetail, findStockDetail, handleStockDetail } from "./purchasing/StockDetailSaga";
+import { createPurchaseOrderHeader, deletePurchaseOrderHeader, editPurchaseOrderHeader, findPurchaseOrderHeader, handlePurchaseOrderHeader } from "./purchasing/PurchaseOrderHeader";
+import { createPurchaseOrderDetail, deletePurchaseOrderDetail, editPurchaseOrderDetail } from "./purchasing/PurchaseOrderDetailSaga";
+import { createStockPhoto, deleteStockPhoto, editStockPhoto, findStockPhoto, handleStockPhoto } from "./purchasing/StockPhotoSaga";
+import { handlefacilities } from "./hotel/facilitiesSaga";
 
 function* watchAll() {
   yield all([
@@ -30,6 +32,7 @@ function* watchAll() {
     takeEvery(ActionTypeVendorProduct.FIND_VENDORPRODUCT_REQUEST, findVendorProduct),
     takeEvery(ActionTypeVendorProduct.EDIT_VENDORPRODUCT_REQUEST, editVendorProduct),
     takeEvery(ActionTypeVendorProduct.DEL_VENDORPRODUCT_REQUEST, deleteVendorProduct),
+    takeEvery(ActionTypeVendorProduct.FIND_VENDORPRODUCTBYID_REQUEST, VendorProductByVendorId),
 
     takeEvery(ActionTypeStock.GET_STOCK_REQUEST, handleStock),
     takeEvery(ActionTypeStock.ADD_STOCK_REQUEST, createStock),
@@ -53,6 +56,8 @@ function* watchAll() {
     takeEvery(ActionTypePurchaseOrderDetail.ADD_PURCHASEORDERDETAIL_REQUEST, createPurchaseOrderDetail),
     takeEvery(ActionTypePurchaseOrderDetail.EDIT_PURCHASEORDERDETAIL_REQUEST, editPurchaseOrderDetail),
     takeEvery(ActionTypePurchaseOrderDetail.DEL_PURCHASEORDERDETAIL_REQUEST, deletePurchaseOrderDetail),
+
+    takeEvery(ActionTypeFacilities.GET_FACILITIES_REQUEST, handlefacilities),
 
     takeEvery(ActionTypeStockPhoto.GET_STOCKPHOTO_REQUEST, handleStockPhoto),
     takeEvery(ActionTypeStockPhoto.ADD_STOCKPHOTO_REQUEST, createStockPhoto),

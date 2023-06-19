@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Layout from "@/component/layout";
 import { useDispatch, useSelector } from "react-redux";
-import { DelVendorRequest, GetVendorRequest } from "@/redux-saga/action/vendorAction";
 import ReactPaginate from "react-paginate";
 
 import { Fragment } from "react";
@@ -9,18 +8,11 @@ import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
 import VendorModalCreate from "./VendorModalCreate";
 import VendorModalEdit from "./VendorModalEdit";
+import { DelVendorRequest, GetVendorRequest } from "@/redux-saga/action/purchasing/vendorAction";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
-
-// import { Fragment } from "react";
-// import { Menu, Transition } from "@headlessui/react";
-// import { ChevronDownIcon } from "@heroicons/react/20/solid";
-
-// function classNames(...classes: any) {
-//   return classes.filter(Boolean).join(" ");
-// }
 
 export default function VendorSaga() {
   const dispatch = useDispatch();
@@ -29,6 +21,12 @@ export default function VendorSaga() {
   const [refresh, setRefresh] = useState<any>(false);
   const [displayEdit, setDisplayEdit] = useState<any>(false);
   const [displayFindOne, setDisplayFindOne] = useState(false);
+  const [selectedPage, setSelectedPage] = useState(0);
+  const [payload, setPayload] = useState({
+    vendorName: "",
+    page: 1,
+    status: "",
+  });
 
   const [status, setStatus] = useState<any>(null);
   const [priority, setPriority] = useState<any>(null);
@@ -38,14 +36,10 @@ export default function VendorSaga() {
   const { vendors } = useSelector((state: any) => state.vendorState);
   const [id, setId] = useState<any>();
 
-  const vendorsSearch = vendors.map((item: any) => item.vendorName.toLowerCase().indexOf(search.toLowerCase()) > -1 && item.vendorActive == status && item);
-
-  const searchFilter = vendorsSearch.filter((item: any) => item);
-
   useEffect(() => {
-    dispatch(GetVendorRequest());
+    dispatch(GetVendorRequest(payload));
     setRefresh(false);
-  }, [refresh]);
+  }, [refresh, payload]);
 
   const onDelete = async (id: any) => {
     dispatch(DelVendorRequest(id));
@@ -61,21 +55,19 @@ export default function VendorSaga() {
     setPriority(priorityId);
   };
 
-  const [itemOffset, setItemOffset] = useState(0);
-
-  const endOffset = itemOffset + 10;
-  const currentItems = vendors.slice(itemOffset, endOffset);
-  const itemsSearch = searchFilter.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(search === "" && status === null ? vendors.length / 10 : searchFilter.length / 10);
-
-  const handlePageClick = (event: any) => {
-    // if (search !== "" || status !== null) {
-    //   event.selected = 0;
-    // }
-
-    const newOffset = (event.selected * 10) % vendors.length;
-    setItemOffset(newOffset);
+  const onChangeState = (key: string, value: any) => {
+    setPayload((prev) => ({ ...prev, [key]: value }));
   };
+
+  const handlePageClick = (e: any) => {
+    onChangeState("page", e.selected + 1);
+  };
+
+  useEffect(() => {
+    onChangeState("page", 1);
+  }, [payload.vendorName]);
+
+  console.log(payload);
 
   return (
     <div>
@@ -95,24 +87,26 @@ export default function VendorSaga() {
                     </svg>
                   </div>
                   <input
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => onChangeState("vendorName", e.target.value)}
                     type="text"
                     id="simple-search"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Vendor Name"
-                    required
+                    // required
                   />
                 </div>
               </form>
             </div>
 
-            <select onChange={(e) => setStatus(e.target.value)} className="select w-full max-w-xs">
-              <option disabled selected>
-                Status
-              </option>
-              <option value={1}>Active</option>
-              <option value={0}>Inactive</option>
-            </select>
+            <div className="pl-8">
+              <select onChange={(e) => onChangeState("status", e.target.value)} className="select w-full max-w-xs">
+                <option disabled selected>
+                  Status
+                </option>
+                <option value={1}>Active</option>
+                <option value={0}>Inactive</option>
+              </select>
+            </div>
 
             <div className="flex flex-col">
               <div className="overflow-x-auto sm:mx-0.5 lg:mx-0.5 min-h-screen">
@@ -142,160 +136,89 @@ export default function VendorSaga() {
                         </tr>
                       </thead>
                       <tbody>
-                        {vendors && search === "" && status === null
-                          ? currentItems.map((vendore: any) => (
-                              <>
-                                <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
-                                  <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{vendore.vendorName}</td>
-                                  <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{vendore.vendorActive ? "Active" : "Inactive"}</td>
+                        {vendors.data &&
+                          vendors.data.map((vendore: any) => (
+                            <>
+                              <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
+                                <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{vendore.vendorName}</td>
+                                <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{vendore.vendorActive ? "Active" : "Inactive"}</td>
 
-                                  {/* <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{vendore.vendorPriority}</td> */}
-                                  <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{vendore.vendorPriority ? "Priority" : "No Priority"}</td>
-                                  <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{vendore.vendorRegisterDate}</td>
-                                  <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{vendore.vendorWeburl}</td>
-                                  <td>
-                                    {/* dropDown  */}
-                                    <Menu as="div" className="relative inline-block text-left">
-                                      <div>
-                                        <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                                          <svg className="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
-                                          </svg>
-                                        </Menu.Button>
-                                      </div>
+                                <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{vendore.vendorPriority ? "Priority" : "No Priority"}</td>
+                                <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{vendore.vendorRegisterDate}</td>
+                                <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{vendore.vendorWeburl}</td>
+                                <td>
+                                  <Menu as="div" className="relative inline-block text-left">
+                                    <div>
+                                      <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                        <svg className="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                          <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
+                                        </svg>
+                                      </Menu.Button>
+                                    </div>
 
-                                      <Transition
-                                        as={Fragment}
-                                        enter="transition ease-out duration-100"
-                                        enterFrom="transform opacity-0 scale-95"
-                                        enterTo="transform opacity-100 scale-100"
-                                        leave="transition ease-in duration-75"
-                                        leaveFrom="transform opacity-100 scale-100"
-                                        leaveTo="transform opacity-0 scale-95"
-                                      >
-                                        <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                          <div className="py-1">
-                                            <Menu.Item>
-                                              {({ active }) => (
-                                                <li
-                                                  onClick={() => onClick(vendore.vendorId, vendore.vendorActive, vendore.vendorPriority)}
-                                                  className={classNames(active ? "cursor-pointer bg-gray-100 text-gray-900" : "text-gray-700", "block px-4 py-2 text-sm")}
-                                                >
-                                                  Edit
-                                                </li>
-                                              )}
-                                            </Menu.Item>
-                                          </div>
-                                          <div>
-                                            <Menu.Item>
-                                              {({ active }) => (
-                                                <Link href={`/purchasing/Vendor/${vendore.vendorId}`} className={classNames(active ? "cursor-pointer bg-gray-100 text-gray-900" : "text-gray-700", "block px-4 py-2 text-sm")}>
-                                                  Add Item Product
-                                                </Link>
-                                              )}
-                                            </Menu.Item>
-                                          </div>
-                                          <div>
-                                            <Menu.Item>
-                                              {({ active }) => (
-                                                <li onClick={() => onDelete(vendore.vendorId)} className={classNames(active ? "cursor-pointer bg-gray-100 text-gray-900" : "text-gray-700", "block px-4 py-2 text-sm")}>
-                                                  Delete
-                                                </li>
-                                              )}
-                                            </Menu.Item>
-                                          </div>
-                                        </Menu.Items>
-                                      </Transition>
-                                    </Menu>
-                                    {/* dropDown */}
-                                  </td>
-                                </tr>
-                              </>
-                            ))
-                          : itemsSearch.map((vendore: any) => (
-                              <>
-                                <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
-                                  <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{vendore.vendorName}</td>
-                                  <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{vendore.vendorActive ? "Active" : "Inactive"}</td>
-
-                                  {/* <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{vendore.vendorPriority}</td> */}
-                                  <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{vendore.vendorPriority ? "Priority" : "No Priority"}</td>
-                                  <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{vendore.vendorRegisterDate}</td>
-                                  <td className="text-sm text-black-900 font-dark px-6 py-4 whitespace-nowrap">{vendore.vendorWeburl}</td>
-                                  <td>
-                                    {/* dropDown  */}
-                                    <Menu as="div" className="relative inline-block text-left">
-                                      <div>
-                                        <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                                          <svg className="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
-                                          </svg>
-                                        </Menu.Button>
-                                      </div>
-
-                                      <Transition
-                                        as={Fragment}
-                                        enter="transition ease-out duration-100"
-                                        enterFrom="transform opacity-0 scale-95"
-                                        enterTo="transform opacity-100 scale-100"
-                                        leave="transition ease-in duration-75"
-                                        leaveFrom="transform opacity-100 scale-100"
-                                        leaveTo="transform opacity-0 scale-95"
-                                      >
-                                        <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                          <div className="py-1">
-                                            <Menu.Item>
-                                              {({ active }) => (
-                                                <li
-                                                  onClick={() => onClick(vendore.vendorId, vendore.vendorActive, vendore.vendorPriority)}
-                                                  className={classNames(active ? "cursor-pointer bg-gray-100 text-gray-900" : "text-gray-700", "block px-4 py-2 text-sm")}
-                                                >
-                                                  Edit
-                                                </li>
-                                              )}
-                                            </Menu.Item>
-                                          </div>
-                                          <div>
-                                            <Menu.Item>
-                                              {({ active }) => (
-                                                <Link href="/purchasing/VendorProduct" className={classNames(active ? "cursor-pointer bg-gray-100 text-gray-900" : "text-gray-700", "block px-4 py-2 text-sm")}>
-                                                  Add Item Product
-                                                </Link>
-                                              )}
-                                            </Menu.Item>
-                                          </div>
-                                          <div>
-                                            <Menu.Item>
-                                              {({ active }) => (
-                                                <li onClick={() => onDelete(vendore.vendorId)} className={classNames(active ? "cursor-pointer bg-gray-100 text-gray-900" : "text-gray-700", "block px-4 py-2 text-sm")}>
-                                                  Delete
-                                                </li>
-                                              )}
-                                            </Menu.Item>
-                                          </div>
-                                        </Menu.Items>
-                                      </Transition>
-                                    </Menu>
-                                    {/* dropDown */}
-                                  </td>
-                                </tr>
-                              </>
-                            ))}
+                                    <Transition
+                                      as={Fragment}
+                                      enter="transition ease-out duration-100"
+                                      enterFrom="transform opacity-0 scale-95"
+                                      enterTo="transform opacity-100 scale-100"
+                                      leave="transition ease-in duration-75"
+                                      leaveFrom="transform opacity-100 scale-100"
+                                      leaveTo="transform opacity-0 scale-95"
+                                    >
+                                      <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                        <div className="py-1">
+                                          <Menu.Item>
+                                            {({ active }) => (
+                                              <li
+                                                onClick={() => onClick(vendore.vendorId, vendore.vendorActive, vendore.vendorPriority)}
+                                                className={classNames(active ? "cursor-pointer bg-gray-100 text-gray-900" : "text-gray-700", "block px-4 py-2 text-sm")}
+                                              >
+                                                Edit
+                                              </li>
+                                            )}
+                                          </Menu.Item>
+                                        </div>
+                                        <div>
+                                          <Menu.Item>
+                                            {({ active }) => (
+                                              <Link href={`/purchasing/Vendor/${vendore.vendorId}`} className={classNames(active ? "cursor-pointer bg-gray-100 text-gray-900" : "text-gray-700", "block px-4 py-2 text-sm")}>
+                                                Add Item Product
+                                              </Link>
+                                            )}
+                                          </Menu.Item>
+                                        </div>
+                                        <div>
+                                          <Menu.Item>
+                                            {({ active }) => (
+                                              <li onClick={() => onDelete(vendore.vendorId)} className={classNames(active ? "cursor-pointer bg-gray-100 text-gray-900" : "text-gray-700", "block px-4 py-2 text-sm")}>
+                                                Delete
+                                              </li>
+                                            )}
+                                          </Menu.Item>
+                                        </div>
+                                      </Menu.Items>
+                                    </Transition>
+                                  </Menu>
+                                </td>
+                              </tr>
+                            </>
+                          ))}
                       </tbody>
                     </table>
                     <ReactPaginate
                       breakLabel="..."
                       nextLabel="next >"
                       onPageChange={handlePageClick}
-                      pageRangeDisplayed={2}
-                      pageCount={pageCount}
-                      previousLabel="<previous"
+                      pageRangeDisplayed={1}
+                      pageCount={vendors.totalPages}
+                      previousLabel="< prev"
+                      forcePage={payload.page - 1}
                       containerClassName="flex gap-1 justify-center"
                       renderOnZeroPageCount={null}
-                      activeLinkClassName="bg-red-500"
                       nextLinkClassName="btn btn-sm bg-blue-500 border-none"
-                      pageLinkClassName="btn btn-sm bg-blue-500 border-none"
                       previousLinkClassName="btn btn-sm bg-blue-500 border-none"
+                      activeLinkClassName="bg-red-500"
+                      pageLinkClassName="btn btn-sm bg-blue-500 border-none"
                     />
                   </div>
                 </div>
@@ -304,22 +227,6 @@ export default function VendorSaga() {
           </div>
         </div>
       </Layout>
-      {/* <previous>
-        <ReactPaginate
-          breakLabel="..."
-          nextLabel="next >"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={2}
-          pageCount={pageCount}
-          previousLabel="< previous"
-          containerClassName="flex gap-2 justify-center"
-          renderOnZeroPageCount={null}
-          activeLinkClassName="bg-red-500"
-          nextLinkClassName="btn btn-sm bg-blue-500 border-none"
-          pageLinkClassName="btn btn-sm bg-blue-500 border-none"
-          previousLinkClassName="btn btn-sm bg-blue-500 border-none"
-        />
-      </previous> */}
     </div>
   );
 }

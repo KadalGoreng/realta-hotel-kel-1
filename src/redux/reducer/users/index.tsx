@@ -11,9 +11,9 @@ import RolesReducer from './rolesReducer';
 const rootReducer = combineReducers({
     userState: UserReducer,
     usersState: UsersReducer,
-    userrolesState: UserRolesReducer,
+    UserRolesState: UserRolesReducer,
     userprofilesState: UserProfilesReducer,
-    userpasswordState: UserPasswordReducer,
+    userPasswordState: UserPasswordReducer,
     usermembersState: UserMembersReducer,
     userbonuspointsState: UserBonusPointsReducer,
     rolesState: RolesReducer,

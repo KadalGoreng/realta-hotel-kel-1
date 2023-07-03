@@ -1,8 +1,8 @@
 import * as ActionType from '../../constant/users/rolesConstant';
 
 const init_state = {
-    UserRoles : [],
-    userRoles: [],
+    userroles: [],
+    userrole: [],
 
 };
 
@@ -31,42 +31,43 @@ const RolesReducer = (state = init_state, action: any) => {
             return FindRolesSuccessfully(state, action);
         default:
             return { ...state };
-        }
-    };
-          
+    }
+};
+
 const GetRolesSuccessfully = (state: any, action: any) => {
+    const { payload } = action;
     return {
         ...state,
-        UserRoles: action.payload,
-        };
+        userroles: payload,
     };
-          
+};
+
 const AddRolesSuccessfully = (state: any, action: any) => {
     const { payload } = action;
-        return {
-            ...state,
-            UserRoles: [...state.UserRoles, payload],
-        };
+    return {
+        ...state,
+        userroles: [...state.userroles, payload],
     };
-          
+};
+
 const DelRolesSuccessfully = (state: any, action: any) => {
     return {
         ...state,
-        };
     };
-          
+};
+
 const FindRolesSuccessfully = (state: any, action: any) => {
     const { payload } = action;
-        return {
-            ...state,
-            userRoles: payload,
-        };
+    return {
+        ...state,
+        userrole: payload,
     };
-          
+};
+
 const EditRolesSuccessfully = (state: any, action: any) => {
     return {
         ...state,
-        };
     };
+};
 
 export default RolesReducer;

@@ -1,13 +1,12 @@
 import * as ActionType from '../../constant/users/user-passwordConstant';
 
-const init_state = {
+const INIT_STATE = {
     userPassword: [],
     UserPassword: [],
 
 };
 
-
-const UserPasswordReducer = (state = init_state, action: any) => {
+const UserPasswordReducer = (state = INIT_STATE, action: any) => {
     switch (action.type) {
         case ActionType.GET_USERPASSWORD_REQUEST:
             return { ...state };
@@ -31,41 +30,42 @@ const UserPasswordReducer = (state = init_state, action: any) => {
             return FindUserPasswordSuccessfully(state, action);
         default:
             return { ...state };
-        }
-    };
-          
+    }
+};
+
 const GetUserPasswordSuccessfully = (state: any, action: any) => {
+    const { payload } = action;
     return {
         ...state,
-        userPassword: action.payload,
-        };
+        userPassword: payload,
     };
-          
+};
+
 const AddUserPasswordSuccessfully = (state: any, action: any) => {
     const { payload } = action;
-        return {
-            ...state,
-            userPassword: [...state.userPassword, payload],
-        };
+    return {
+        ...state,
+        userPassword: [...state.userPassword, payload],
     };
-          
+};
+
 const DelUserPasswordSuccessfully = (state: any, action: any) => {
     return {
         ...state,
-        };
     };
-          
+};
+
 const FindUserPasswordSuccessfully = (state: any, action: any) => {
     const { payload } = action;
-        return {
-            ...state,
-            UserPassword: payload,
-        };
+    return {
+        ...state,
+        UserPassword: payload,
     };
-          
+};
+
 const EditUserPasswordSuccessfully = (state: any, action: any) => {
     return {
         ...state,
-        };
     };
+};
 export default UserPasswordReducer;

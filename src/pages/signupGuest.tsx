@@ -39,10 +39,16 @@ return (
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Guest Signup
             </h1>
-    <form className="space-y-4 md:space-y-6" action="#">
+    <form className="space-y-4 md:space-y-6" action="#" onSubmit={formik.handleSubmit}>
         <div>
-            <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone Number</label>
-            <input type="tel" id="userPhoneNumber" name="userPhoneNumber" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="123-45-678" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"  value={formik.values.userPhoneNumber} onChange={formik.handleChange} />
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone Number</label>
+            <input 
+            id="userPhoneNumber"
+            type="text"  
+            name="userPhoneNumber"
+            value={formik.values.userPhoneNumber} 
+            onChange={formik.handleChange}  
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="123-45-678"/>
         </div>
     <div className="mt-6 space-y-2">
         <div className="flex gap-x-2">

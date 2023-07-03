@@ -1,10 +1,12 @@
 import { call, put } from 'redux-saga/effects';
 import UserBonusPoints from '../../../api/users/user-bonus-points';
-import { GetUserBonusPointsSuccess, GetUserBonusPointsFailed, 
-  AddUserBonusPointsSuccess, AddUserBonusPointsFailed, 
-  FindUserBonusPointsSuccess, FindUserBonusPointsFailed, 
-  EditUserBonusPointsSuccess, EditUserBonusPointsFailed, 
-  DelUserBonusPointsSuccess, DelUserBonusPointsFailed } from '../../../redux/action/users/user-bonus-pointsAction';
+import {
+  GetUserBonusPointsSuccess, GetUserBonusPointsFailed,
+  AddUserBonusPointsSuccess, AddUserBonusPointsFailed,
+  FindUserBonusPointsSuccess, FindUserBonusPointsFailed,
+  EditUserBonusPointsSuccess, EditUserBonusPointsFailed,
+  DelUserBonusPointsSuccess, DelUserBonusPointsFailed
+} from '../../../redux/action/users/user-bonus-pointsAction';
 
 function* handleGetUserBonusPoints(): any {
   try {
@@ -55,5 +57,7 @@ function* handleDelUserBonusPoints(action: any): any {
   }
 }
 
-export { handleGetUserBonusPoints, handleCreateUserBonusPoints, 
-    handleFindUserBonusPoints, handleEditUserBonusPoints, handleDelUserBonusPoints };
+export {
+  handleGetUserBonusPoints, handleCreateUserBonusPoints,
+  handleFindUserBonusPoints, handleEditUserBonusPoints, handleDelUserBonusPoints
+};

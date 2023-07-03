@@ -1,10 +1,12 @@
 import { call, put } from 'redux-saga/effects';
 import UserPassword from '../../../api/users/user-password';
-import { GetUserPasswordSuccess, GetUserPasswordFailed, 
-  AddUserPasswordSuccess, AddUserPasswordFailed, 
-  FindUserPasswordSuccess, FindUserPasswordFailed, 
-  EditUserPasswordSuccess, EditUserPasswordFailed, 
-  DelUserPasswordSuccess, DelUserPasswordFailed } 
+import {
+  GetUserPasswordSuccess, GetUserPasswordFailed,
+  AddUserPasswordSuccess, AddUserPasswordFailed,
+  FindUserPasswordSuccess, FindUserPasswordFailed,
+  EditUserPasswordSuccess, EditUserPasswordFailed,
+  DelUserPasswordSuccess, DelUserPasswordFailed
+}
   from '../../../redux/action/users/user-passwordAction';
 
 function* handleGetUserPassword(): any {
@@ -56,5 +58,7 @@ function* handleDelUserPassword(action: any): any {
   }
 }
 
-export { handleGetUserPassword, handleCreateUserPassword, 
-    handleFindUserPassword, handleEditUserPassword, handleDelUserPassword };
+export {
+  handleGetUserPassword, handleCreateUserPassword,
+  handleFindUserPassword, handleEditUserPassword, handleDelUserPassword
+};

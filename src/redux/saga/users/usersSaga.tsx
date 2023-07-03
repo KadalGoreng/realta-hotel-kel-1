@@ -1,10 +1,17 @@
 import { call, put } from 'redux-saga/effects';
 import Users from '../../../api/users/users';
-import { GetUsersSuccess, GetUsersFailed, 
-  AddUsersSuccess, AddUsersFailed, 
-  FindUsersSuccess, FindUsersFailed, 
-  EditUsersSuccess, EditUsersFailed, 
-  DelUsersSuccess, DelUsersFailed } from '../../../redux/action/users/usersAction';
+import {
+  GetUsersSuccess,
+  GetUsersFailed,
+  AddUsersSuccess,
+  AddUsersFailed,
+  FindUsersSuccess,
+  FindUsersFailed,
+  EditUsersSuccess,
+  EditUsersFailed,
+  DelUsersSuccess,
+  DelUsersFailed
+} from '../../../redux/action/users/usersAction';
 
 function* handleGetUsers(): any {
   try {

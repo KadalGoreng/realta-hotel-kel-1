@@ -1,24 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik, FormikProvider } from "formik";
-import { FindUserPasswordRequest, EditUserPasswordRequest } from "../../../../redux/action/users/user-passwordAction";
+import { FindUserPasswordRequest, EditUserPasswordRequest }
+  from "../../../../redux/action/users/user-passwordAction";
 
 export default function Edit(props: any) {
-    const [showModal, setShowModal] = useState(false);
-    const [id, setId] = useState<number>();
-    const dispatch = useDispatch();
-    const { userPassword } = useSelector((state: any) => state.userpasswordState);
+  const [showModal, setShowModal] = useState(false);
+  const [id, setId] = useState<number>();
+  const dispatch = useDispatch();
+  // const { UserPassword } = useSelector((state: any) => state.userPasswordState);
 
-useEffect(() => {
-    dispatch(FindUserPasswordRequest(id));
-}, [dispatch, id, showModal]);
+  useEffect(() => {
+    dispatch(FindUserPasswordRequest(props.id));
+  }, [dispatch, props.id, showModal]);
 
-const formik = useFormik({
+  // console.log(props.id);
+
+  const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-        uspaUserId: props.id,
-        uspaPasswordhash: userPassword.uspaPasswordhash,
-        uspaPasswordsalt: userPassword.uspaPasswordsalt,
+      uspaUserId: props.id,
+      uspaPasswordhash: '',
+      uspaPasswordsalt: '',
     },
     onSubmit: async (values) => {
       const payload = {
@@ -26,27 +29,27 @@ const formik = useFormik({
         uspaPasswordhash: values.uspaPasswordhash,
         uspaPasswordsalt: values.uspaPasswordsalt,
       }
-        dispatch(EditUserPasswordRequest(payload));
-        props.setRefresh(true);
-        setShowModal(false);
+      dispatch(EditUserPasswordRequest(payload));
+      props.setRefresh(true);
+      setShowModal(false);
     },
-});
+  });
 
-const editButton = () => {
+  const editButton = () => {
     setId(props.id);
     setShowModal(true);
-};
+  };
 
-const modal = () => {
+  const modal = () => {
     props.setRefresh(true);
     setShowModal(false);
   };
 
 
-return (
+  return (
     <>
       <button
-        className="p-2 bg-emerald-700 text-white active:bg-emerald-700 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
         type="button"
         onClick={editButton}
       >
@@ -84,9 +87,9 @@ return (
                             type="password"
                             name="uspaPasswordhash"
                             id="uspaPasswordhash"
-                            onChange={formik.handleChange}
-                            value={formik.values.uspaPasswordhash}
-                            placeholder="••••••••"
+                            disabled placeholder='********'
+                            // onChange={formik.handleChange}
+                            // value={formik.values.uspaPasswordhash}
                           />
                         </div>
                       </div>
@@ -124,14 +127,14 @@ return (
                       </div>
                       <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
                         <button
-                          className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                          className="bg-green-700 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                           type="button"
                           onClick={modal}
                         >
                           Close
                         </button>
                         <button
-                          className="bg-sky-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                          className="bg-blue-700 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                           type="submit"
                         >
                           Save

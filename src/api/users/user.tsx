@@ -2,18 +2,18 @@ import axios from "axios";
 import config from "@/config/config";
 import { getCookie } from "cookies-next";
 
-const signup = async (params: any) => {
+const signup = async (payload: any) => {
     try {
-        const result = await axios.post(`${config.domain}/user/signup`, params);
+        const result = await axios.post(`${config.domain}/user/signup`, payload);
         return result;
     } catch (error) {
         return error;
     }
 }
 
-const signin = async (params: any) => {
+const signin = async (payload: any) => {
     try {
-        const result = await axios.post(`${config.domain}/user/auth/login`, params);
+        const result = await axios.post(`${config.domain}/user/auth/login`, payload);
         return result;
     } catch (error) {
         return error;

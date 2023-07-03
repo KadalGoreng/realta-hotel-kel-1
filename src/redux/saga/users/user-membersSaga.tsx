@@ -1,10 +1,12 @@
 import { call, put } from 'redux-saga/effects';
 import UserMembers from '../../../api/users/user-members';
-import { GetUserMembersSuccess, GetUserMembersFailed, 
-  AddUserMembersSuccess, AddUserMembersFailed, 
-  FindUserMembersSuccess, FindUserMembersFailed, 
-  EditUserMembersSuccess, EditUserMembersFailed, 
-  DelUserMembersSuccess, DelUserMembersFailed } 
+import {
+  GetUserMembersSuccess, GetUserMembersFailed,
+  AddUserMembersSuccess, AddUserMembersFailed,
+  FindUserMembersSuccess, FindUserMembersFailed,
+  EditUserMembersSuccess, EditUserMembersFailed,
+  DelUserMembersSuccess, DelUserMembersFailed
+}
   from '../../../redux/action/users/user-membersAction';
 
 function* handleGetUserMembers(): any {
@@ -56,5 +58,7 @@ function* handleDelUserMembers(action: any): any {
   }
 }
 
-export { handleGetUserMembers, handleCreateUserMembers, 
-    handleFindUserMembers, handleEditUserMembers, handleDelUserMembers };
+export {
+  handleGetUserMembers, handleCreateUserMembers,
+  handleFindUserMembers, handleEditUserMembers, handleDelUserMembers
+};

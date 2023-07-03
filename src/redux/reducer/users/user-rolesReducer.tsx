@@ -1,71 +1,71 @@
-import * as ActionType from '../../constant/users/user-profilesConstant';
+import * as ActionType from '../../constant/users/user-rolesConstant';
 
-const init_state = {
-    userProfiles: [],
-    UserProfiles: [],
+const INIT_STATE = {
+    userRoles: [],
+    UserRoles: []
 
 };
 
-
-const UserProfilesReducer = (state = init_state, action: any) => {
+const UserRolesReducer = (state = INIT_STATE, action: any) => {
     switch (action.type) {
-        case ActionType.GET_USERPROFILES_REQUEST:
+        case ActionType.GET_USERROLES_REQUEST:
             return { ...state };
-        case ActionType.GET_USERPROFILES_SUCCESS:
-            return GetUserProfilesRolesSuccessfully(state, action);
-        case ActionType.ADD_USERPROFILES_REQUEST:
+        case ActionType.GET_USERROLES_SUCCESS:
+            return GetUserRolesSuccessfully(state, action);
+        case ActionType.ADD_USERROLES_REQUEST:
             return { ...state };
-        case ActionType.ADD_USERPROFILES_SUCCESS:
-            return AddUserProfilesRolesSuccessfully(state, action);
-        case ActionType.EDIT_USERPROFILES_REQUEST:
+        case ActionType.ADD_USERROLES_SUCCESS:
+            return AddUserRolesSuccessfully(state, action);
+        case ActionType.EDIT_USERROLES_REQUEST:
             return { ...state };
-        case ActionType.EDIT_USERPROFILES_SUCCESS:
-            return EditUserProfilesRolesSuccessfully(state, action);
-        case ActionType.DEL_USERPROFILES_REQUEST:
+        case ActionType.EDIT_USERROLES_SUCCESS:
+            return EditUserRolesSuccessfully(state, action);
+        case ActionType.DEL_USERROLES_REQUEST:
             return { ...state };
-        case ActionType.DEL_USERPROFILES_SUCCESS:
-            return DelUserProfilesRolesSuccessfully(state, action);
-        case ActionType.FIND_USERPROFILES_REQUEST:
+        case ActionType.DEL_USERROLES_SUCCESS:
+            return DelUserRolesSuccessfully(state, action);
+        case ActionType.FIND_USERROLES_REQUEST:
             return { ...state };
-        case ActionType.FIND_USERPROFILES_SUCCESS:
-            return FindUserProfilesRolesSuccessfully(state, action);
+        case ActionType.FIND_USERROLES_SUCCESS:
+            return FindUserRolesSuccessfully(state, action);
         default:
             return { ...state };
-        }
-    };
-          
-const GetUserProfilesRolesSuccessfully = (state: any, action: any) => {
-    return {
-        ...state,
-        userProfiles: action.payload,
-        };
-    };
-          
-const AddUserProfilesRolesSuccessfully = (state: any, action: any) => {
+    }
+};
+
+const GetUserRolesSuccessfully = (state: any, action: any) => {
     const { payload } = action;
-        return {
-            ...state,
-            userProfiles: [...state.userProfiles, payload],
-        };
-    };
-          
-const DelUserProfilesRolesSuccessfully = (state: any, action: any) => {
     return {
         ...state,
-        };
+        userRoles: payload,
     };
-          
-const FindUserProfilesRolesSuccessfully = (state: any, action: any) => {
+};
+
+const AddUserRolesSuccessfully = (state: any, action: any) => {
     const { payload } = action;
-        return {
-            ...state,
-            UserProfiles: payload,
-        };
-    };
-          
-const EditUserProfilesRolesSuccessfully = (state: any, action: any) => {
     return {
         ...state,
-        };
+        userRoles: [...state.userRoles, payload],
     };
-export default UserProfilesReducer;
+};
+
+const DelUserRolesSuccessfully = (state: any, action: any) => {
+    return {
+        ...state,
+    };
+};
+
+const FindUserRolesSuccessfully = (state: any, action: any) => {
+    const { payload } = action;
+    return {
+        ...state,
+        UserRoles: payload,
+    };
+};
+
+const EditUserRolesSuccessfully = (state: any, action: any) => {
+    return {
+        ...state,
+    };
+};
+export default UserRolesReducer;

@@ -1,18 +1,18 @@
-import {call,put} from 'redux-saga/effects'
-import user from '../../../api/users/user';
-import { UserSigninFailed, UserSigninSuccess, UserSignoutFailed, UserSignoutSuccess, UserSignupFailed, UserSignupSuccess} from '../../../redux/action/users/userAction'
+import { call, put } from 'redux-saga/effects'
+import User from '../../../api/users/user';
+import { UserSigninFailed, UserSigninSuccess, UserSignoutFailed, UserSignoutSuccess, UserSignupFailed, UserSignupSuccess } from '../../../redux/action/users/userAction'
 import { setCookie, deleteCookie } from 'cookies-next';
 
 function* handleSignin(action: any): any {
     const { payload } = action
     try {
-        const result = yield call(user.signin, payload)
+        const result = yield call(User.signin, payload)
         if (Object.keys(result.data).length === 0) {
             yield put(UserSigninFailed({ message: 'user or password not match, try again' }))
         }
         else {
             setCookie('access_token', result.data.access_token)
-            const profile = yield call(user.profile)
+            const profile = yield call(User.profile)
             setCookie('profile', JSON.stringify(profile.data))
             yield put(UserSigninSuccess(profile.data))
         }
@@ -24,7 +24,7 @@ function* handleSignin(action: any): any {
 function* handleSignup(action: any): any {
     const { payload } = action
     try {
-        const result = yield call(user.signup, payload)
+        const result = yield call(User.signup, payload)
         yield put(UserSignupSuccess(result.data))
     } catch (error) {
         yield put(UserSignupFailed(error))

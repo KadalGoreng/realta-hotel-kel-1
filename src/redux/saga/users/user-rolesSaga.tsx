@@ -1,10 +1,12 @@
 import { call, put } from 'redux-saga/effects';
 import UserRoles from '../../../api/users/user-roles';
-import { GetUserRolesSuccess, GetUserRolesFailed, 
-  AddUserRolesSuccess, AddUserRolesFailed, 
-  FindUserRolesSuccess, FindUserRolesFailed, 
-  EditUserRolesSuccess, EditUserRolesFailed, 
-  DelUserRolesSuccess, DelUserRolesFailed } 
+import {
+  GetUserRolesSuccess, GetUserRolesFailed,
+  AddUserRolesSuccess, AddUserRolesFailed,
+  FindUserRolesSuccess, FindUserRolesFailed,
+  EditUserRolesSuccess, EditUserRolesFailed,
+  DelUserRolesSuccess, DelUserRolesFailed
+}
   from '../../../redux/action/users/user-rolesAction';
 
 function* handleGetUserRoles(): any {
@@ -56,5 +58,7 @@ function* handleDelUserRoles(action: any): any {
   }
 }
 
-export { handleGetUserRoles, handleCreateUserRoles, 
-    handleFindUserRoles, handleEditUserRoles, handleDelUserRoles };
+export {
+  handleGetUserRoles, handleCreateUserRoles,
+  handleFindUserRoles, handleEditUserRoles, handleDelUserRoles
+};

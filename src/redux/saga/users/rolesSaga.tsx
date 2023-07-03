@@ -1,10 +1,12 @@
 import { call, put } from 'redux-saga/effects';
 import Roles from '../../../api/users/roles';
-import { GetRolesSuccess, GetRolesFailed, 
-  AddRolesSuccess, AddRolesFailed, 
-  FindRolesSuccess, FindRolesFailed, 
-  EditRolesSuccess, EditRolesFailed, 
-  DelRolesSuccess, DelRolesFailed } from '../../../redux/action/users/rolesAction';
+import {
+  GetRolesSuccess, GetRolesFailed,
+  AddRolesSuccess, AddRolesFailed,
+  FindRolesSuccess, FindRolesFailed,
+  EditRolesSuccess, EditRolesFailed,
+  DelRolesSuccess, DelRolesFailed
+} from '../../../redux/action/users/rolesAction';
 
 function* handleGetRoles(): any {
   try {
@@ -55,5 +57,7 @@ function* handleDelRoles(action: any): any {
   }
 }
 
-export { handleGetRoles, handleCreateRoles, 
-    handleFindRoles, handleEditRoles, handleDelRoles };
+export {
+  handleGetRoles, handleCreateRoles,
+  handleFindRoles, handleEditRoles, handleDelRoles
+};

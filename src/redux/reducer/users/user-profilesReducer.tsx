@@ -1,8 +1,8 @@
 import * as ActionType from '../../constant/users/user-profilesConstant';
 
 const init_state = {
-    userProfiles: [],
-    UserProfiles: [],
+    userprofiles: [],
+    userprofile: [],
 
 };
 
@@ -31,41 +31,42 @@ const UserProfilesReducer = (state = init_state, action: any) => {
             return FindUserProfilesRolesSuccessfully(state, action);
         default:
             return { ...state };
-        }
-    };
-          
+    }
+};
+
 const GetUserProfilesRolesSuccessfully = (state: any, action: any) => {
+    const { payload } = action;
     return {
         ...state,
-        userProfiles: action.payload,
-        };
+        userprofiles: payload,
     };
-          
+};
+
 const AddUserProfilesRolesSuccessfully = (state: any, action: any) => {
     const { payload } = action;
-        return {
-            ...state,
-            userProfiles: [...state.userProfiles, payload],
-        };
+    return {
+        ...state,
+        userprofiles: [...state.userprofiles, payload],
     };
-          
+};
+
 const DelUserProfilesRolesSuccessfully = (state: any, action: any) => {
     return {
         ...state,
-        };
     };
-          
+};
+
 const FindUserProfilesRolesSuccessfully = (state: any, action: any) => {
     const { payload } = action;
-        return {
-            ...state,
-            UserProfiles: payload,
-        };
+    return {
+        ...state,
+        userprofile: payload,
     };
-          
+};
+
 const EditUserProfilesRolesSuccessfully = (state: any, action: any) => {
     return {
         ...state,
-        };
     };
+};
 export default UserProfilesReducer;
